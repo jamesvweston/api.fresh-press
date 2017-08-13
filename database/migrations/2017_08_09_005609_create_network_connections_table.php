@@ -16,6 +16,8 @@ class CreateNetworkConnectionsTable extends Migration
         Schema::create('network_connections', function (Blueprint $table) {
             $table->increments('id');
             $table->string('affiliate_id', 50)->index()->nullable()->default(null);
+            $table->integer('publisher_id')->unsigned()->nullable()->default(null)->index();
+            $table->boolean('is_sync')->default(false)->index();
 
             $table->tinyInteger('network_id')->unsigned()->index();
             $table->foreign('network_id')->references('id')->on('networks');

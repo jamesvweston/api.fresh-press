@@ -25,6 +25,16 @@ class NetworkConnection implements \JsonSerializable
     protected $affiliate_id;
 
     /**
+     * @var int|null
+     */
+    protected $publisher_id;
+
+    /**
+     * @var bool
+     */
+    protected $is_sync;
+
+    /**
      * @var Network
      */
     protected $network;
@@ -55,6 +65,8 @@ class NetworkConnection implements \JsonSerializable
     public function __construct($data = [])
     {
         $this->affiliate_id             = AU::get($data['affiliate_id']);
+        $this->publisher_id             = AU::get($data['publisher_id']);
+        $this->is_sync                  = AU::get($data['is_sync'], false);
         $this->network                  = AU::get($data['network']);
         $this->influencer               = AU::get($data['influencer']);
         $this->sync_failed_at           = AU::get($data['sync_failed_at']);
@@ -69,6 +81,8 @@ class NetworkConnection implements \JsonSerializable
     {
         $object['id']                   = $this->getId();
         $object['affiliate_id']         = $this->getAffiliateId();
+        $object['publisher_id']         = $this->getPublisherId();
+        $object['is_sync']              = $this->getIsSync();
         $object['network']              = $this->getNetwork()->jsonSerialize();
         $object['influencer']           = $this->getInfluencer()->jsonSerialize();
 
@@ -97,6 +111,38 @@ class NetworkConnection implements \JsonSerializable
     public function setAffiliateId($affiliate_id)
     {
         $this->affiliate_id = $affiliate_id;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getPublisherId()
+    {
+        return $this->publisher_id;
+    }
+
+    /**
+     * @param int|null $publisher_id
+     */
+    public function setPublisherId($publisher_id)
+    {
+        $this->publisher_id = $publisher_id;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsSync()
+    {
+        return $this->is_sync;
+    }
+
+    /**
+     * @param bool $is_sync
+     */
+    public function setIsSync($is_sync)
+    {
+        $this->is_sync = $is_sync;
     }
 
     /**

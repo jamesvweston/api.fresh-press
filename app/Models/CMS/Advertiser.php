@@ -7,16 +7,31 @@ use App\Models\Contracts\Validatable;
 use App\Models\Market\Campaign;
 use App\Models\Market\Opportunity;
 use App\Models\Market\ProductLine;
+use App\Models\Traits\Deletable;
+use App\Models\Traits\TimeStamps;
 use Doctrine\Common\Collections\ArrayCollection;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
-class Advertiser extends User implements \JsonSerializable, Validatable
+class Advertiser implements \JsonSerializable, Validatable
 {
+
+    use TimeStamps, Deletable;
+
+
+    /**
+     * @var int
+     */
+    protected $id;
 
     /**
      * @var string|null
      */
     protected $name;
+
+    /**
+     * @var User
+     */
+    protected $user;
 
     /**
      * @var ArrayCollection
@@ -39,9 +54,8 @@ class Advertiser extends User implements \JsonSerializable, Validatable
      */
     public function __construct($data = [])
     {
-        parent::__construct($data);
-
         $this->name                     = AU::get($data['name']);
+        $this->user                     = AU::get($data['user']);
         $this->campaigns                = AU::get($data['campaigns'], new ArrayCollection());
         $this->opportunities            = AU::get($data['opportunities'], new ArrayCollection());
         $this->product_lines            = AU::get($data['product_lines'], new ArrayCollection());
@@ -49,7 +63,7 @@ class Advertiser extends User implements \JsonSerializable, Validatable
 
     public function validate()
     {
-        parent::validate();
+
     }
 
     /**
@@ -57,10 +71,18 @@ class Advertiser extends User implements \JsonSerializable, Validatable
      */
     public function jsonSerialize()
     {
-        $object                         = parent::jsonSerialize();
+        $object['id']                   = $this->getId();
         $object['name']                 = $this->getName();
 
         return $object;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
@@ -77,6 +99,22 @@ class Advertiser extends User implements \JsonSerializable, Validatable
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
     }
 
     /**

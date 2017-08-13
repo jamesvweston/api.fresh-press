@@ -8,11 +8,26 @@ use App\Models\Locations\Address;
 use App\Models\Market\Sphere;
 use App\Models\Networks\FavoriteMerchant;
 use App\Models\Networks\NetworkConnection;
+use App\Models\Traits\Deletable;
+use App\Models\Traits\TimeStamps;
 use Doctrine\Common\Collections\ArrayCollection;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
-class Influencer extends User implements \JsonSerializable, Validatable
+class Influencer implements \JsonSerializable, Validatable
 {
+
+    use TimeStamps, Deletable;
+
+
+    /**
+     * @var int
+     */
+    protected $id;
+
+    /**
+     * @var User
+     */
+    protected $user;
 
     /**
      * @var Address|null
@@ -39,8 +54,7 @@ class Influencer extends User implements \JsonSerializable, Validatable
      */
     public function __construct($data = [])
     {
-        parent::__construct($data);
-
+        $this->user                     = AU::get($data['user']);
         $this->billing_address          = AU::get($data['billing_address']);
         $this->favorite_merchants       = AU::get($data['favorite_merchants'], new ArrayCollection());
         $this->network_connections      = AU::get($data['network_connections'], new ArrayCollection());
@@ -49,7 +63,7 @@ class Influencer extends User implements \JsonSerializable, Validatable
 
     public function validate()
     {
-        parent::validate();
+
     }
 
     /**
@@ -57,9 +71,33 @@ class Influencer extends User implements \JsonSerializable, Validatable
      */
     public function jsonSerialize()
     {
-        $object                         = parent::jsonSerialize();
+        $object['id']                   = $this->getId();
 
         return $object;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
     }
 
     /**

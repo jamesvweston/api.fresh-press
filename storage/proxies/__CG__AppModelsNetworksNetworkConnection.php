@@ -64,10 +64,10 @@ class NetworkConnection extends \App\Models\Networks\NetworkConnection implement
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'affiliate_id', 'network', 'influencer', 'sync_failed_at', 'sync_failed_message', 'fields', 'created_at', 'updated_at'];
+            return ['__isInitialized__', 'id', 'affiliate_id', 'publisher_id', 'is_sync', 'network', 'influencer', 'sync_failed_at', 'sync_failed_message', 'fields', 'created_at', 'updated_at'];
         }
 
-        return ['__isInitialized__', 'id', 'affiliate_id', 'network', 'influencer', 'sync_failed_at', 'sync_failed_message', 'fields', 'created_at', 'updated_at'];
+        return ['__isInitialized__', 'id', 'affiliate_id', 'publisher_id', 'is_sync', 'network', 'influencer', 'sync_failed_at', 'sync_failed_message', 'fields', 'created_at', 'updated_at'];
     }
 
     /**
@@ -219,6 +219,50 @@ class NetworkConnection extends \App\Models\Networks\NetworkConnection implement
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAffiliateId', [$affiliate_id]);
 
         return parent::setAffiliateId($affiliate_id);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPublisherId()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPublisherId', []);
+
+        return parent::getPublisherId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setPublisherId($publisher_id)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPublisherId', [$publisher_id]);
+
+        return parent::setPublisherId($publisher_id);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getIsSync()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIsSync', []);
+
+        return parent::getIsSync();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setIsSync($is_sync)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIsSync', [$is_sync]);
+
+        return parent::setIsSync($is_sync);
     }
 
     /**

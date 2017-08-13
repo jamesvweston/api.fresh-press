@@ -21,7 +21,6 @@ class CreateUsersTable extends Migration
             $table->string('password', 500);
             $table->boolean('email_is_verified')->default(false)->index();
 
-            $table->tinyInteger('user_type_id')->unsigned()->index();
             $table->datetime('created_at')->default(DB::raw('CURRENT_TIMESTAMP'))->index();
             $table->datetime('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))->index();
             $table->datetime('deleted_at')->nullable()->default(null)->index();

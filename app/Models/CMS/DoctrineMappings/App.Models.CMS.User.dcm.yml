@@ -2,13 +2,6 @@ App\Models\CMS\User:
   type:               entity
   table:              users
   repositoryClass:    App\Repositories\CMS\UserRepository
-  inheritanceType:    JOINED
-  discriminatorColumn:
-      name:           user_type_id
-      type:           integer
-  discriminatorMap:
-      1:              Advertiser
-      2:              Influencer
 
   id:
     id:

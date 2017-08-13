@@ -9,7 +9,7 @@ use App\Models\Traits\TimeStamps;
 use Doctrine\Common\Collections\ArrayCollection;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
-abstract class User implements \JsonSerializable, Validatable
+class User implements \JsonSerializable, Validatable
 {
 
     use TimeStamps, Deletable;

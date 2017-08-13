@@ -64,10 +64,10 @@ class Advertiser extends \App\Models\CMS\Advertiser implements \Doctrine\ORM\Pro
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'name', 'campaigns', 'opportunities', 'product_lines', 'id', 'first_name', 'last_name', 'email', 'password', 'roles', 'created_at', 'updated_at', 'deleted_at'];
+            return ['__isInitialized__', 'id', 'name', 'user', 'campaigns', 'opportunities', 'product_lines', 'created_at', 'updated_at', 'deleted_at'];
         }
 
-        return ['__isInitialized__', 'name', 'campaigns', 'opportunities', 'product_lines', 'id', 'first_name', 'last_name', 'email', 'password', 'roles', 'created_at', 'updated_at', 'deleted_at'];
+        return ['__isInitialized__', 'id', 'name', 'user', 'campaigns', 'opportunities', 'product_lines', 'created_at', 'updated_at', 'deleted_at'];
     }
 
     /**
@@ -198,6 +198,21 @@ class Advertiser extends \App\Models\CMS\Advertiser implements \Doctrine\ORM\Pro
     /**
      * {@inheritDoc}
      */
+    public function getId()
+    {
+        if ($this->__isInitialized__ === false) {
+            return (int)  parent::getId();
+        }
+
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', []);
+
+        return parent::getId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getName()
     {
 
@@ -215,6 +230,28 @@ class Advertiser extends \App\Models\CMS\Advertiser implements \Doctrine\ORM\Pro
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setName', [$name]);
 
         return parent::setName($name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getUser()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUser', []);
+
+        return parent::getUser();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setUser($user)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setUser', [$user]);
+
+        return parent::setUser($user);
     }
 
     /**
@@ -281,142 +318,6 @@ class Advertiser extends \App\Models\CMS\Advertiser implements \Doctrine\ORM\Pro
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'addCampaign', [$campaign]);
 
         return parent::addCampaign($campaign);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function toArray()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'toArray', []);
-
-        return parent::toArray();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getId()
-    {
-        if ($this->__isInitialized__ === false) {
-            return (int)  parent::getId();
-        }
-
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', []);
-
-        return parent::getId();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getFirstName()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFirstName', []);
-
-        return parent::getFirstName();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setFirstName($first_name)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFirstName', [$first_name]);
-
-        return parent::setFirstName($first_name);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getLastName()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getLastName', []);
-
-        return parent::getLastName();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setLastName($last_name)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setLastName', [$last_name]);
-
-        return parent::setLastName($last_name);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getEmail()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEmail', []);
-
-        return parent::getEmail();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setEmail($email)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setEmail', [$email]);
-
-        return parent::setEmail($email);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getPassword()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPassword', []);
-
-        return parent::getPassword();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setPassword($password)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPassword', [$password]);
-
-        return parent::setPassword($password);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getRoles()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getRoles', []);
-
-        return parent::getRoles();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function addRole(\App\Models\CMS\Role $role)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addRole', [$role]);
-
-        return parent::addRole($role);
     }
 
     /**

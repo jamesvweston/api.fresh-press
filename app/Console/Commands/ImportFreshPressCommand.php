@@ -86,16 +86,6 @@ class ImportFreshPressCommand extends Command
      */
     private $ignored_advertiser_ids = '192';
 
-    /**
-     * @var array
-     */
-    private $advertiser_ids         = [];
-
-    /**
-     * @var array
-     */
-    private $influencer_ids         = [];
-
 
 
     public function __construct()
@@ -123,16 +113,20 @@ class ImportFreshPressCommand extends Command
             '--seed' => 1
         ]);
         $this->handleInitialActions();
+        $this->importUsers();
+        $this->importUsersAdminRole();
         $this->importAdvertisers();
-        $this->importCampaigns();
         $this->importInfluencers();
-        //  $this->importNetworkConnections();
+        $this->importInfluencerBilling();
+        $this->importInfluencerFavorites();
+        $this->importCampaigns();
         $this->importSpheres();
         $this->importSphereCategories();
         $this->importPortfolios();
         $this->importProductLines();
         $this->insertProductLinePlatforms();
         $this->importOpportunities();
+        $this->importNetworkConnections();
     }
 
     private function handleInitialActions ()
@@ -159,9 +153,55 @@ class ImportFreshPressCommand extends Command
         }
     }
 
+    private function importUsers ()
+    {
+        $this->info('Importing users...');
+
+        $user_data                      = [];
+        $fp_users_result                = DB::connection('fresh_press')->select('select * from users order by id asc');
+        foreach ($fp_users_result AS $fp_user)
+        {
+            $user_data[]                = [
+                'id'                    => $fp_user->id,
+                'email'                 => $fp_user->email,
+                'first_name'            => $fp_user->first_name,
+                'last_name'             => $fp_user->last_name,
+                'password'              => $fp_user->password,
+                'email_is_verified'     => $fp_user->verified,
+                'created_at'            => $fp_user->created_at,
+                'updated_at'            => $fp_user->updated_at,
+                'deleted_at'            => $fp_user->deleted_at,
+            ];
+        }
+
+        DB::table('users')->insert($user_data);
+
+        $this->info('Finished importing users...');
+    }
+
+    private function importUsersAdminRole ()
+    {
+        $this->info('Importing user admin role...');
+
+        $admin_role_data                = [];
+        $fp_admin_users_result          = DB::connection('fresh_press')->select('select user_id from users_groups where user_group_id = 3 GROUP BY user_id');
+        foreach ($fp_admin_users_result AS $fp_admin_user)
+        {
+            $admin_role_data[]          = [
+                'user_id'               => $fp_admin_user->user_id,
+                'role_id'               => 1,
+            ];
+        }
+        DB::table('user_roles')->insert($admin_role_data);
+
+        $this->info('Finished importing user admin role...');
+    }
+
     private function importAdvertisers ()
     {
-        $this->info('Importing Advertisers...');
+        $this->info('Importing advertisers...');
+
+        $advertiser_data                = [];
         $fp_advertisers                 = DB::connection('fresh_press')->select('select * from advertisers where id NOT IN (' . $this->ignored_advertiser_ids . ') order by id asc');
         foreach ($fp_advertisers AS $fp_advertiser)
         {
@@ -181,70 +221,49 @@ class ImportFreshPressCommand extends Command
             }
             $fp_user                    = $fp_user[0];
 
-            $advertiser                         = new Advertiser();
-            if (trim($fp_advertiser->name) == '')
-                $advertiser->setName(null);
-            else
-                $advertiser->setName($fp_advertiser->name);
-
-            $advertiser->setEmail($fp_user->email);
-            $advertiser->setFirstName($fp_user->first_name);
-            $advertiser->setLastName($fp_user->last_name);
-            $advertiser->setPassword($fp_user->password);
-            $advertiser->setEmailIsVerified($fp_user->verified);
-            $advertiser->setCreatedAt($this->getDate($fp_advertiser->created_at));
-            $advertiser->setUpdatedAt($this->getDate($fp_advertiser->updated_at));
-            $advertiser->setDeletedAt($this->getDate($fp_advertiser->deleted_at));
-
-            if ($this->isAdmin($fp_user->id))
-            {
-                $admin_role             = $this->role_repo->getAdmin();
-                $advertiser->addRole($admin_role);
-            }
-
-            //  Need to save and commit here to map ids
-            $this->advertiser_repo->saveAndCommit($advertiser);
-            $this->advertiser_ids[]  = [
-                'fp'        => $fp_advertiser->id,
-                'api'       => $advertiser,
+            $advertiser_data[]          = [
+                'id'                    => $fp_advertiser->id,
+                'name'                  => trim($fp_advertiser->name) == '' ? null : $fp_advertiser->name,
+                'user_id'               => $fp_user->id,
+                'created_at'            => $fp_advertiser->created_at,
+                'updated_at'            => $fp_advertiser->updated_at,
+                'deleted_at'            => $fp_advertiser->deleted_at,
             ];
         }
+        DB::table('advertisers')->insert($advertiser_data);
+
         $this->info('Finished Importing Advertisers...');
     }
 
     private function importInfluencers ()
     {
-        $this->info('Importing Influencers...');
-        $fp_influencers                 = DB::connection('fresh_press')->select('select * from users where id NOT IN (select au.user_id FROM advertisers a JOIN advertisers_users au ON au.advertiser_id = a.id) order by id asc');
+        $this->info('Importing influencers...');
+
+        $influencer_data                = [];
+        $fp_influencers                 = DB::connection('fresh_press')->select('select u.* from users u JOIN users_groups ug ON ug.user_id = u.id WHERE ug.user_group_id = 1 order by u.id asc');
         foreach ($fp_influencers AS $fp_user)
         {
-            $influencer                 = new Influencer();
+            $influencer_data[]          = [
+                'id'                    => $fp_user->id,
+                'user_id'               => $fp_user->id,
+                'created_at'            => $fp_user->created_at,
+                'updated_at'            => $fp_user->updated_at,
+                'deleted_at'            => $fp_user->deleted_at,
+            ];
+        }
+        DB::table('influencers')->insert($influencer_data);
 
-            $influencer->setEmail($fp_user->email);
-            $influencer->setFirstName($fp_user->first_name);
-            $influencer->setLastName($fp_user->last_name);
-            $influencer->setPassword($fp_user->password);
-            $influencer->setEmailIsVerified($fp_user->verified);
-            $influencer->setCreatedAt($this->getDate($fp_user->created_at));
-            $influencer->setUpdatedAt($this->getDate($fp_user->updated_at));
-            $influencer->setDeletedAt($this->getDate($fp_user->deleted_at));
+        $this->info('Finished importing influencers...');
+    }
 
-            if ($this->isAdmin($fp_user->id))
-            {
-                $admin_role             = $this->role_repo->getAdmin();
-                $influencer->addRole($admin_role);
-            }
+    private function importInfluencerBilling ()
+    {
+        $this->info('Importing influencer billing data...');
 
-            $fp_favorites_result        = DB::connection('fresh_press')->select('select * from favorites where user_id = ' . $fp_user->id);
-            foreach ($fp_favorites_result AS $fp_favorite)
-            {
-                $favorite_merchant      = new FavoriteMerchant();
-                $favorite_merchant->setFmtcMasterMerchantId($fp_favorite->fmtc_master_merchant_id);
-                $influencer->addFavoriteMerchant($favorite_merchant);
-            }
-
-
-
+        $fp_influencers                 = DB::connection('fresh_press')->select('select u.* from users u JOIN users_groups ug ON ug.user_id = u.id WHERE ug.user_group_id = 1 order by u.id asc');
+        foreach ($fp_influencers AS $fp_user)
+        {
+            $influencer                 = $this->influencer_repo->find($fp_user->id);
 
             if (is_null($fp_user->billing_address))
             {
@@ -272,40 +291,56 @@ class ImportFreshPressCommand extends Command
                 $influencer->setBillingAddress($billing_address);
             }
 
+            $this->influencer_repo->save($influencer);
+        }
+        $this->influencer_repo->commit();
 
+        $this->info('Finished importing influencer billing data...');
+    }
 
+    private function importInfluencerFavorites ()
+    {
+        //   TODO: Find out if influencers should be the only ones that have favorite_merchants
+        $this->info('Importing favorite_merchants...');
 
-
-            $this->influencer_repo->saveAndCommit($influencer);
-            $this->influencer_ids[]  = [
-                'fp'        => $fp_user->id,
-                'api'       => $influencer,
+        $favorite_merchant_data     = [];
+        $fp_favorites_result        = DB::connection('fresh_press')->select('select f.* from favorites f JOIN users_groups ug ON ug.user_id = f.user_id WHERE ug.user_group_id = 1 order by f.id asc');
+        foreach ($fp_favorites_result AS $fp_favorite)
+        {
+            $favorite_merchant_data[]   = [
+                'id'                => $fp_favorite->id,
+                'fmtc_master_merchant_id'   => $fp_favorite->fmtc_master_merchant_id,
+                'influencer_id'     => $fp_favorite->user_id,
             ];
         }
-        $this->info('Finished Importing Influencers...');
+        DB::table('favorite_merchants')->insert($favorite_merchant_data);
+
+        $this->info('Finished importing favorite_merchants...');
     }
 
     private function importNetworkConnections ()
     {
+        $this->info('Importing network_connections...');
+        $network_connection_data        = [];
         $fp_network_connections_result  = DB::connection('fresh_press')->select('select * from network_connections');
         foreach ($fp_network_connections_result AS $fp_network_connection)
         {
-            $influencer                 = $this->getInfluencerFromMapping($fp_network_connection->user_id);
-
-            $network_connection_data    = [
+            $network_connection_data[]  = [
                 'id'                    => $fp_network_connection->id,
                 'affiliate_id'          => trim($fp_network_connection->affiliate_id) == null ? null : $fp_network_connection->affiliate_id,
+                'publisher_id'          => $fp_network_connection->publisher_id,
+                'is_sync'               => $fp_network_connection->is_sync,
                 'network_id'            => $fp_network_connection->network_id,
-                'influencer_id'         => $influencer->getId(),
+                'influencer_id'         => $fp_network_connection->user_id,
                 'sync_failed_at'        => $fp_network_connection->sync_failed_at,
                 'sync_failed_message'   => trim($fp_network_connection->sync_failed_message) == '' ? null : $fp_network_connection->sync_failed_message,
                 'created_at'            => $fp_network_connection->created_at,
                 'updated_at'            => $fp_network_connection->updated_at,
             ];
-
-            //  $network_connection_id      = DB::table('network_connections')->insertGetId($network_connection_data);
         }
+        DB::table('network_connections')->insert($network_connection_data);
 
+        $this->info('Finished importing network_connections...');
     }
 
     private function importSpheres ()
@@ -317,8 +352,6 @@ class ImportFreshPressCommand extends Command
         foreach ($fp_spheres_result AS $fp_sphere)
         {
             $fp_sphere_owner_result             = DB::connection('fresh_press')->select('select DISTINCT user_id from spheres_users where sphere_id = ' . $fp_sphere->id)[0];
-            $influencer                         = $this->getInfluencerFromMapping($fp_sphere_owner_result->user_id);
-
             $country_id                         = null;
             if ($fp_sphere->country_id != null)
             {
@@ -332,7 +365,7 @@ class ImportFreshPressCommand extends Command
                 'percent_male'                  => $fp_sphere->percent_male,
                 'percent_female'                => $fp_sphere->percent_female,
                 'logo'                          => $fp_sphere->logo,
-                'influencer_id'                 => $influencer->getId(),
+                'influencer_id'                 => $fp_sphere_owner_result->user_id,
                 'age_range_id'                  => $fp_sphere->age_range_id == 0 ? null : $fp_sphere->age_range_id,
                 'country_id'                    => $country_id,
                 'created_at'                    => $fp_sphere->created_at,
@@ -404,13 +437,12 @@ class ImportFreshPressCommand extends Command
         {
             $fp_advertiser_id               = DB::connection('fresh_press')->select('select advertiser_id from product_lines where id = ' . $fp_campaign->product_line_id);
             $fp_advertiser_id               = $fp_advertiser_id[0]->advertiser_id;
-            $advertiser                     = $this->getAdvertiserFromMapping($fp_advertiser_id);
 
             $campaign_data[]                = [
                 'id'                        => $fp_campaign->id,
                 'name'                      => $fp_campaign->name,
                 'description'               => $fp_campaign->description == '' || $fp_campaign->description == null ? null : $fp_campaign->description,
-                'advertiser_id'             => $advertiser->getId(),
+                'advertiser_id'             => $fp_advertiser_id,
                 'created_at'                => $fp_campaign->created_at,
                 'updated_at'                => $fp_campaign->updated_at,
                 'deleted_at'                => $fp_campaign->deleted_at,
@@ -432,13 +464,6 @@ class ImportFreshPressCommand extends Command
         $fp_product_lines_result            = DB::connection('fresh_press')->select('select * from product_lines where id NOT IN (' . $productLinesWithNoAdvertiser . ') order by id asc');
         foreach ($fp_product_lines_result AS $fp_product_line)
         {
-            $advertiser                     = $this->getAdvertiserFromMapping($fp_product_line->advertiser_id);
-            if (is_null($advertiser))
-            {
-                $this->info('Could not find product_line.advertiser_id = ' . $fp_product_line->advertiser_id);
-                continue;
-            }
-
             $product_line_data[]            = [
                 'id'                        => $fp_product_line->id,
                 'name'                      => $fp_product_line->name,
@@ -451,7 +476,7 @@ class ImportFreshPressCommand extends Command
                 'instagram'                 => is_null($fp_product_line->instagram) || trim($fp_product_line->instagram) == '' ? null : $fp_product_line->instagram,
                 'news_url'                  => is_null($fp_product_line->news_url) || trim($fp_product_line->news_url) == '' ? null : $fp_product_line->news_url,
                 'keywords'                  => is_null($fp_product_line->keywords) || trim($fp_product_line->keywords) == '' ? null : $fp_product_line->keywords,
-                'advertiser_id'             => $advertiser->getId(),
+                'advertiser_id'             => $fp_product_line->advertiser_id,
                 'created_at'                => $fp_product_line->created_at,
                 'updated_at'                => $fp_product_line->updated_at,
                 'deleted_at'                => $fp_product_line->deleted_at,
@@ -483,14 +508,16 @@ class ImportFreshPressCommand extends Command
     private function importOpportunities ()
     {
         $this->info('Importing opportunities....');
+
+        $opportunity_data               = [];
         $fp_opportunities_result        = DB::connection('fresh_press')->select('select * from opportunities');
         foreach ($fp_opportunities_result AS $fp_opportunity)
         {
             $fp_campaign                = DB::connection('fresh_press')->select('select * from campaigns where id = ' . $fp_opportunity->campaign_id)[0];
             $fp_product_line            = DB::connection('fresh_press')->select('select * from product_lines where id = ' . $fp_campaign->product_line_id)[0];
 
-            $advertiser                 = $this->getAdvertiserFromMapping($fp_product_line->advertiser_id);
-            $opportunity                = [
+
+            $opportunity_data[]         = [
                 'id'                    => $fp_opportunity->id,
                 'name'                  => $fp_opportunity->title,
                 'cover_photo'           => trim($fp_opportunity->cover_photo) == '' ? null : $fp_opportunity->cover_photo,
@@ -508,21 +535,15 @@ class ImportFreshPressCommand extends Command
                 'paused_at'             => $fp_opportunity->paused_at,
                 'submitted_at'          => $fp_opportunity->submitted_at == null ? null : $fp_opportunity->submitted_at . ' 00:00:00',
                 'rejected_at'           => $fp_opportunity->rejected_at == null ? null : $fp_opportunity->rejected_at . ' 00:00:00',
-                'advertiser_id'         => $advertiser->getId(),
+                'advertiser_id'         => $fp_product_line->advertiser_id,
                 'campaign_id'           => $fp_campaign->id,
                 'product_line_id'       => $fp_product_line->id,
                 'deliverable_type_id'   => $fp_opportunity->deliverable_type_id,
             ];
-            $opportunity_id             = DB::table('opportunities')->insertGetId($opportunity);
-            $opportunity                = $this->opportunity_repo->find($opportunity_id);
         }
-        $this->info('Finished importing opportunities....');
-    }
+        DB::table('opportunities')->insert($opportunity_data);
 
-    private function isAdmin ($fp_user_id)
-    {
-        $fp_users_group_result          = DB::connection('fresh_press')->select('select * from users_groups where user_group_id = 3 AND user_id = ' . $fp_user_id);
-        return sizeof($fp_users_group_result) > 0 ? true : false;
+        $this->info('Finished importing opportunities....');
     }
 
     /**
@@ -534,48 +555,6 @@ class ImportFreshPressCommand extends Command
         $bad_product_lines              = $bad_product_lines[0];
 
         return $bad_product_lines == '' ? null : $bad_product_lines->ids;
-    }
-
-    /**
-     * @param   int $fp_advertiser_id
-     * @return  Advertiser
-     */
-    private function getAdvertiserFromMapping ($fp_advertiser_id)
-    {
-        foreach ($this->advertiser_ids AS $mapping)
-        {
-            if ($mapping['fp'] == $fp_advertiser_id)
-            {
-                return $mapping['api'];
-            }
-        }
-    }
-
-    /**
-     * @param   int $fp_influencer_id
-     * @return  Influencer
-     */
-    private function getInfluencerFromMapping ($fp_influencer_id)
-    {
-        foreach ($this->influencer_ids AS $mapping)
-        {
-            if ($mapping['fp'] == $fp_influencer_id)
-            {
-                return $mapping['api'];
-            }
-        }
-    }
-
-    private function getDate ($date)
-    {
-        if ($date == null)
-            return null;
-        else if ($date == 'null')
-            return null;
-        else if ($date == '0000-00-00 00:00:00')
-            return null;
-        else
-            return new \DateTime($date);
     }
 
     /**

@@ -23,6 +23,19 @@ App\Models\Networks\NetworkConnection:
       length:         50
       options:
         default:      null
+    publisher_id:
+      column:         publisher_id
+      type:           integer
+      nullable:       true
+      options:
+        default:      null
+        unsigned:     true
+    is_sync:
+      column:         is_sync
+      type:           boolean
+      nullable:       false
+      options:
+        default:      false
     sync_failed_at:
       column:         sync_failed_at
       type:           datetime

@@ -3,12 +3,53 @@ App\Models\CMS\Influencer:
   table:              influencers
   repositoryClass:    App\Repositories\CMS\InfluencerRepository
 
+  id:
+    id:
+      column:         id
+      type:           integer
+      nullable:       false
+      options:
+        unsigned:     true
+      comment:        'Influencer id'
+      id:             true
+      generator:
+        strategy:     IDENTITY
+
+  fields:
+    created_at:
+      column:         created_at
+      type:           datetime
+      nullable:       false
+      options:
+        default:      CURRENT_datetime
+    updated_at:
+      column:         updated_at
+      type:           datetime
+      nullable:       false
+      options:
+        default:      CURRENT_datetime
+    deleted_at:
+      column:         deleted_at
+      type:           datetime
+      nullable:       true
+      options:
+        default:      null
+
   oneToOne:
     billing_address:
       targetEntity:   App\Models\Locations\Address
       fetch:          LAZY
       nullable:       true
       cascade:        ["persist", "remove"]
+
+  manyToOne:
+    user:
+      targetEntity:   User
+      nullable:       false
+      fetch:          EAGER
+      joinColumn:
+        name:         user_id
+        referencedColumnName: id
 
   oneToMany:
     network_connections:
