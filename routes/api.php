@@ -73,6 +73,7 @@ Route::group(['prefix'     => 'opportunities'], function () {
 
     Route::get('/', 'Market\OpportunityController@index');
     Route::get('/{id}', 'Market\OpportunityController@show');
+    Route::get('/{id}/bids', 'Market\OpportunityController@getBids');
     Route::get('/{id}/compensation_models', 'Market\OpportunityController@getCompensationModels');
 
 });
