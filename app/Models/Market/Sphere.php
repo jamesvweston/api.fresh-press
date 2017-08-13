@@ -254,11 +254,33 @@ class Sphere implements \JsonSerializable
     }
 
     /**
+     * @param   SphereCategory $sphere_category
+     * @return  bool
+     */
+    public function hasCategory (SphereCategory $sphere_category)
+    {
+        foreach ($this->getCategories() AS $category)
+        {
+            if ($category->getId() == $sphere_category->getId())
+                return true;
+        }
+        return false;
+    }
+
+    /**
      * @param SphereCategory $category
      */
     public function addCategory (SphereCategory $category)
     {
         $this->categories->add($category);
+    }
+
+    /**
+     * @param SphereCategory $category
+     */
+    public function removeCategory (SphereCategory $category)
+    {
+        $this->categories->removeElement($category);
     }
 
     /**
