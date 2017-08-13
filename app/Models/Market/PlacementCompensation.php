@@ -71,4 +71,12 @@ class PlacementCompensation extends CompensationModel implements \JsonSerializab
         $this->suggested_rate = $suggested_rate;
     }
 
+    /**
+     * @return string
+     */
+    public function getType ()
+    {
+        return 'PlacementCompensation';
+    }
+
 }

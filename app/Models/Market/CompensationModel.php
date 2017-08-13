@@ -29,6 +29,7 @@ abstract class CompensationModel implements \JsonSerializable
     public function jsonSerialize()
     {
         $object['id']                   = $this->getId();
+        $object['type']                 = $this->getType();
 
         return $object;
     }
@@ -56,5 +57,10 @@ abstract class CompensationModel implements \JsonSerializable
     {
         $this->opportunity = $opportunity;
     }
+
+    /**
+     * @return string
+     */
+    abstract function getType ();
 
 }

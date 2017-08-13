@@ -71,4 +71,12 @@ class ProductCompensation extends CompensationModel implements \JsonSerializable
         $this->value = $value;
     }
 
+    /**
+     * @return string
+     */
+    public function getType ()
+    {
+        return 'ProductCompensation';
+    }
+
 }

@@ -33,6 +33,12 @@ class OpportunityController extends Controller
         return response($opportunity);
     }
 
+    public function getCompensationModels (Request $request)
+    {
+        $opportunity                       = $this->getFromRoute($request);
+        return response($opportunity->getCompensationModels());
+    }
+
     /**
      * @param   Request $request
      * @return  Opportunity

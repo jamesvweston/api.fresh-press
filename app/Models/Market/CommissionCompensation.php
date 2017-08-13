@@ -195,4 +195,12 @@ class CommissionCompensation extends CompensationModel implements \JsonSerializa
         $this->affiliate_links->add($affiliate_link);
     }
 
+    /**
+     * @return string
+     */
+    public function getType ()
+    {
+        return 'CommissionCompensation';
+    }
+
 }

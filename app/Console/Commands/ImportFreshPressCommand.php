@@ -27,6 +27,11 @@ class ImportFreshPressCommand extends Command
     private $FRESH_PRESS_USER_ID        = 7;
 
     /**
+     * @var bool
+     */
+    private $FRESH_PRESS_GROUP_ADDED;
+
+    /**
      * The name and signature of the console command.
      *
      * @var string
@@ -101,7 +106,7 @@ class ImportFreshPressCommand extends Command
         $this->call('migrate:refresh', [
             '--seed' => 1
         ]);
-        $this->handleInitialActions();
+        $this->performInitialActions();
         $this->importUsers();
         $this->importUsersAdminRole();
         $this->importAdvertisers();
@@ -117,15 +122,19 @@ class ImportFreshPressCommand extends Command
         $this->importOpportunities();
         $this->importOpportunityCompensationModels();
         $this->importNetworkConnections();
+
+
+        $this->performFinalActions();
     }
 
-    private function handleInitialActions ()
+    private function performInitialActions ()
     {
         //   If the fresh press user does not have the influencer role give it to them
-        $fp_user_roles = $fp_users_group_result = DB::connection('fresh_press')->select('select * from users_groups where user_group_id = 1 AND user_id = ' . $this->FRESH_PRESS_USER_ID);
+        $fp_user_roles                  = DB::connection('fresh_press')->select('select * from users_groups where user_group_id = 1 AND user_id = ' . $this->FRESH_PRESS_USER_ID);
         if (empty($fp_user_roles))
         {
             $this->info('The fresh press user does not have the influencer group. Giving it to them');
+            $this->FRESH_PRESS_GROUP_ADDED  = true;
             $now                = new \Carbon\Carbon();
             $now->format('Y-m-d h:m:s');
             DB::connection('fresh_press')->table('users_groups')->insert(
@@ -139,7 +148,22 @@ class ImportFreshPressCommand extends Command
         }
         else
         {
+            $this->FRESH_PRESS_GROUP_ADDED  = false;
             $this->info('The fresh press user already has the influencer role.');
+        }
+    }
+
+    private function performFinalActions ()
+    {
+        //  If we added the influencer group to fresh press remove it
+        if ($this->FRESH_PRESS_GROUP_ADDED)
+        {
+            $this->info('We added the influencer group to fresh press. Removing it to leave no trace of our activity');
+            $fp_user_roles                  = DB::connection('fresh_press')->select('select * from users_groups where user_group_id = 1 AND user_id = ' . $this->FRESH_PRESS_USER_ID);
+            foreach ($fp_user_roles AS $user_role)
+            {
+                DB::connection('fresh_press')->table('users_groups')->delete($user_role->id);
+            }
         }
     }
 
