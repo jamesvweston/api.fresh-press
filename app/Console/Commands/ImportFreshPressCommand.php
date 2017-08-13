@@ -3,35 +3,20 @@
 namespace App\Console\Commands;
 
 
-use App\Models\CMS\Advertiser;
-use App\Models\CMS\Influencer;
 use App\Models\Locations\Address;
 use App\Models\Locations\Country;
 use App\Models\Market\AffiliateLink;
-use App\Models\Market\AgeRange;
-use App\Models\Market\Campaign;
 use App\Models\Market\CommissionCompensation;
 use App\Models\Market\PlacementCompensation;
-use App\Models\Market\Portfolio;
 use App\Models\Market\ProductCompensation;
-use App\Models\Market\ProductLine;
-use App\Models\Market\Sphere;
-use App\Models\Networks\FavoriteMerchant;
-use App\Models\Networks\NetworkConnection;
 use App\Repositories\CMS\AdvertiserRepository;
 use App\Repositories\CMS\InfluencerRepository;
 use App\Repositories\CMS\RoleRepository;
 use App\Repositories\Locations\CountryRepository;
-use App\Repositories\Market\AgeRangeRepository;
 use App\Repositories\Market\OpportunityRepository;
-use App\Repositories\Market\PlatformRepository;
 use App\Repositories\Market\PortfolioTypeRepository;
-use App\Repositories\Market\ProductLineRepository;
-use App\Repositories\Market\SphereCategoryRepository;
-use App\Repositories\Market\SphereRepository;
 use Illuminate\Console\Command;
 use DB;
-use EntityManager;
 
 class ImportFreshPressCommand extends Command
 {
