@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Doctrine\Networks;
+namespace App\Repositories\Networks;
 
 
 use App\Models\Networks\Network;

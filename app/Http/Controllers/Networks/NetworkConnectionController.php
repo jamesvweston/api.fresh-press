@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Networks;
 
 use App\Models\Networks\NetworkConnection;
-use App\Repositories\Doctrine\Networks\NetworkConnectionRepository;
+use App\Repositories\Networks\NetworkConnectionRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

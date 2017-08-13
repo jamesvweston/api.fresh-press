@@ -19,12 +19,14 @@ use App\Models\Market\Sphere;
 use App\Models\Market\SphereCategory;
 use App\Models\Networks\Network;
 use App\Models\Networks\NetworkConnection;
+use App\Models\Outlets\Outlet;
+use App\Models\Outlets\OutletConnection;
 use App\Repositories\CMS\AdvertiserRepository;
 use App\Repositories\CMS\InfluencerRepository;
 use App\Repositories\CMS\RoleRepository;
 use App\Repositories\CMS\UserRepository;
-use App\Repositories\Doctrine\Networks\NetworkConnectionRepository;
-use App\Repositories\Doctrine\Networks\NetworkRepository;
+use App\Repositories\Networks\NetworkConnectionRepository;
+use App\Repositories\Networks\NetworkRepository;
 use App\Repositories\Locations\CountryRepository;
 use App\Repositories\Market\AgeRangeRepository;
 use App\Repositories\Market\CampaignRepository;
@@ -35,6 +37,8 @@ use App\Repositories\Market\PortfolioTypeRepository;
 use App\Repositories\Market\ProductLineRepository;
 use App\Repositories\Market\SphereCategoryRepository;
 use App\Repositories\Market\SphereRepository;
+use App\Repositories\Outlets\OutletConnectionRepository;
+use App\Repositories\Outlets\OutletRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Illuminate\Support\ServiceProvider;
 
@@ -97,6 +101,20 @@ class RepositoryServiceProvider extends ServiceProvider
             return new NetworkRepository(
                 $app['em'],
                 new ClassMetadata(Network::class));
+        });
+
+        $this->app->bind(OutletConnectionRepository::class, function($app)
+        {
+            return new OutletConnectionRepository(
+                $app['em'],
+                new ClassMetadata(OutletConnection::class));
+        });
+
+        $this->app->bind(OutletRepository::class, function($app)
+        {
+            return new OutletRepository(
+                $app['em'],
+                new ClassMetadata(Outlet::class));
         });
 
         $this->app->bind(OpportunityRepository::class, function($app)

@@ -64,10 +64,10 @@ class Influencer extends \App\Models\CMS\Influencer implements \Doctrine\ORM\Pro
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'user', 'billing_address', 'network_connections', 'spheres', 'favorite_merchants', 'created_at', 'updated_at', 'deleted_at'];
+            return ['__isInitialized__', 'id', 'user', 'billing_address', 'network_connections', 'outlet_connections', 'spheres', 'favorite_merchants', 'created_at', 'updated_at', 'deleted_at'];
         }
 
-        return ['__isInitialized__', 'id', 'user', 'billing_address', 'network_connections', 'spheres', 'favorite_merchants', 'created_at', 'updated_at', 'deleted_at'];
+        return ['__isInitialized__', 'id', 'user', 'billing_address', 'network_connections', 'outlet_connections', 'spheres', 'favorite_merchants', 'created_at', 'updated_at', 'deleted_at'];
     }
 
     /**
@@ -279,6 +279,28 @@ class Influencer extends \App\Models\CMS\Influencer implements \Doctrine\ORM\Pro
     /**
      * {@inheritDoc}
      */
+    public function getOutletConnections()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOutletConnections', []);
+
+        return parent::getOutletConnections();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addOutletConnection(\App\Models\Outlets\OutletConnection $outlet_connection)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addOutletConnection', [$outlet_connection]);
+
+        return parent::addOutletConnection($outlet_connection);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getNetworkConnections()
     {
 
@@ -334,34 +356,12 @@ class Influencer extends \App\Models\CMS\Influencer implements \Doctrine\ORM\Pro
     /**
      * {@inheritDoc}
      */
-    public function setCreatedAt($created_at)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCreatedAt', [$created_at]);
-
-        return parent::setCreatedAt($created_at);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getUpdatedAt()
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUpdatedAt', []);
 
         return parent::getUpdatedAt();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setUpdatedAt($updated_at)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setUpdatedAt', [$updated_at]);
-
-        return parent::setUpdatedAt($updated_at);
     }
 
     /**

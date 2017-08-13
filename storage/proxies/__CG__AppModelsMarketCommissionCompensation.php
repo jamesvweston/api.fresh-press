@@ -330,12 +330,23 @@ class CommissionCompensation extends \App\Models\Market\CommissionCompensation i
     /**
      * {@inheritDoc}
      */
-    public function setAffiliateLinks($affiliate_links)
+    public function addAffiliateLink(\App\Models\Market\AffiliateLink $affiliate_link)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAffiliateLinks', [$affiliate_links]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addAffiliateLink', [$affiliate_link]);
 
-        return parent::setAffiliateLinks($affiliate_links);
+        return parent::addAffiliateLink($affiliate_link);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getType()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getType', []);
+
+        return parent::getType();
     }
 
     /**

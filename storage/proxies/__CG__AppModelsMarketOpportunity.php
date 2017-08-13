@@ -64,10 +64,10 @@ class Opportunity extends \App\Models\Market\Opportunity implements \Doctrine\OR
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'name', 'cover_photo', 'keywords', 'notes', 'pitch', 'rejected_reason', 'deliverable_deadline_days', 'apply_by', 'published_at', 'closed_at', 'paused_at', 'submitted_at', 'rejected_at', 'advertiser', 'campaign', 'product_line', 'deliverable_type', 'compensation_models', 'created_at', 'updated_at', 'deleted_at'];
+            return ['__isInitialized__', 'id', 'name', 'cover_photo', 'keywords', 'notes', 'pitch', 'rejected_reason', 'deliverable_deadline_days', 'apply_by', 'published_at', 'closed_at', 'paused_at', 'submitted_at', 'rejected_at', 'advertiser', 'campaign', 'product_line', 'deliverable_type', 'creatives', 'compensation_models', 'bids', 'created_at', 'updated_at', 'deleted_at'];
         }
 
-        return ['__isInitialized__', 'id', 'name', 'cover_photo', 'keywords', 'notes', 'pitch', 'rejected_reason', 'deliverable_deadline_days', 'apply_by', 'published_at', 'closed_at', 'paused_at', 'submitted_at', 'rejected_at', 'advertiser', 'campaign', 'product_line', 'deliverable_type', 'compensation_models', 'created_at', 'updated_at', 'deleted_at'];
+        return ['__isInitialized__', 'id', 'name', 'cover_photo', 'keywords', 'notes', 'pitch', 'rejected_reason', 'deliverable_deadline_days', 'apply_by', 'published_at', 'closed_at', 'paused_at', 'submitted_at', 'rejected_at', 'advertiser', 'campaign', 'product_line', 'deliverable_type', 'creatives', 'compensation_models', 'bids', 'created_at', 'updated_at', 'deleted_at'];
     }
 
     /**
@@ -576,6 +576,72 @@ class Opportunity extends \App\Models\Market\Opportunity implements \Doctrine\OR
     /**
      * {@inheritDoc}
      */
+    public function getBids()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getBids', []);
+
+        return parent::getBids();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addBid(\App\Models\Market\Bid $bid)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addBid', [$bid]);
+
+        return parent::addBid($bid);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCreatives()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCreatives', []);
+
+        return parent::getCreatives();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addCreative(\App\Models\Market\OpportunityCreative $creative)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addCreative', [$creative]);
+
+        return parent::addCreative($creative);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCompensationModels()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCompensationModels', []);
+
+        return parent::getCompensationModels();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addCompensationModel(\App\Models\Market\CompensationModel $compensation_model)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addCompensationModel', [$compensation_model]);
+
+        return parent::addCompensationModel($compensation_model);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getCreatedAt()
     {
 
@@ -587,34 +653,12 @@ class Opportunity extends \App\Models\Market\Opportunity implements \Doctrine\OR
     /**
      * {@inheritDoc}
      */
-    public function setCreatedAt($created_at)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCreatedAt', [$created_at]);
-
-        return parent::setCreatedAt($created_at);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getUpdatedAt()
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUpdatedAt', []);
 
         return parent::getUpdatedAt();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setUpdatedAt($updated_at)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setUpdatedAt', [$updated_at]);
-
-        return parent::setUpdatedAt($updated_at);
     }
 
     /**

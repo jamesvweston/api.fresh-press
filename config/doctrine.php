@@ -33,6 +33,7 @@ return [
                 base_path('app/Models/Locations/DoctrineMappings'),
                 base_path('app/Models/Market/DoctrineMappings'),
                 base_path('app/Models/Networks/DoctrineMappings'),
+                base_path('app/Models/Outlets/DoctrineMappings'),
             ],
             'repository'    => 'App\Repositories\Doctrine\BaseRepository',
             'proxies'       => [

@@ -323,34 +323,12 @@ class Portfolio extends \App\Models\Market\Portfolio implements \Doctrine\ORM\Pr
     /**
      * {@inheritDoc}
      */
-    public function setCreatedAt($created_at)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCreatedAt', [$created_at]);
-
-        return parent::setCreatedAt($created_at);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getUpdatedAt()
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUpdatedAt', []);
 
         return parent::getUpdatedAt();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setUpdatedAt($updated_at)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setUpdatedAt', [$updated_at]);
-
-        return parent::setUpdatedAt($updated_at);
     }
 
 }

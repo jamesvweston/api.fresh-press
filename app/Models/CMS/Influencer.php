@@ -8,6 +8,7 @@ use App\Models\Locations\Address;
 use App\Models\Market\Sphere;
 use App\Models\Networks\FavoriteMerchant;
 use App\Models\Networks\NetworkConnection;
+use App\Models\Outlets\OutletConnection;
 use App\Models\Traits\Deletable;
 use App\Models\Traits\TimeStamps;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -42,6 +43,11 @@ class Influencer implements \JsonSerializable, Validatable
     /**
      * @var ArrayCollection
      */
+    protected $outlet_connections;
+
+    /**
+     * @var ArrayCollection
+     */
     protected $spheres;
 
     /**
@@ -57,6 +63,7 @@ class Influencer implements \JsonSerializable, Validatable
         $this->user                     = AU::get($data['user']);
         $this->billing_address          = AU::get($data['billing_address']);
         $this->favorite_merchants       = AU::get($data['favorite_merchants'], new ArrayCollection());
+        $this->outlet_connections       = AU::get($data['outlet_connections'], new ArrayCollection());
         $this->network_connections      = AU::get($data['network_connections'], new ArrayCollection());
         $this->spheres                  = AU::get($data['spheres'], new ArrayCollection());
     }
@@ -131,6 +138,23 @@ class Influencer implements \JsonSerializable, Validatable
     {
         $favorite_merchant->setInfluencer($this);
         $this->favorite_merchants->add($favorite_merchant);
+    }
+
+    /**
+     * @return OutletConnection[]
+     */
+    public function getOutletConnections ()
+    {
+        return $this->outlet_connections->toArray();
+    }
+
+    /**
+     * @param OutletConnection $outlet_connection
+     */
+    public function addOutletConnection (OutletConnection $outlet_connection)
+    {
+        $outlet_connection->setInfluencer($this);
+        $this->outlet_connections->add($outlet_connection);
     }
 
     /**

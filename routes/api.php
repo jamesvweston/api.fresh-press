@@ -69,6 +69,14 @@ Route::group(['prefix'     => 'networks'], function () {
 });
 
 
+Route::group(['prefix'     => 'outlets'], function () {
+
+    Route::get('/', 'Outlets\OutletController@index');
+    Route::get('/{id}', 'Outlets\OutletController@show');
+
+});
+
+
 Route::group(['prefix'     => 'opportunities'], function () {
 
     Route::get('/', 'Market\OpportunityController@index');
