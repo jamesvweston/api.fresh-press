@@ -108,6 +108,11 @@ class Opportunity implements \JsonSerializable
     /**
      * @var ArrayCollection
      */
+    protected $creatives;
+
+    /**
+     * @var ArrayCollection
+     */
     protected $compensation_models;
 
     /**
@@ -138,8 +143,9 @@ class Opportunity implements \JsonSerializable
         $this->campaign                 = AU::get($data['campaign']);
         $this->product_line             = AU::get($data['product_line']);
         $this->deliverable_type         = AU::get($data['deliverable_type']);
-        $this->compensation_models      = AU::get($data['compensation_models'], new ArrayCollection());
         $this->bids                     = AU::get($data['bids'], new ArrayCollection());
+        $this->creatives                = AU::get($data['creatives'], new ArrayCollection());
+        $this->compensation_models      = AU::get($data['compensation_models'], new ArrayCollection());
     }
 
     /**
@@ -450,23 +456,6 @@ class Opportunity implements \JsonSerializable
     }
 
     /**
-     * @return CompensationModel[]
-     */
-    public function getCompensationModels ()
-    {
-        return $this->compensation_models->toArray();
-    }
-
-    /**
-     * @param CompensationModel $compensation_model
-     */
-    public function addCompensationModel (CompensationModel $compensation_model)
-    {
-        $compensation_model->setOpportunity($this);
-        $this->compensation_models->add($compensation_model);
-    }
-
-    /**
      * @return Bid[]
      */
     public function getBids ()
@@ -481,6 +470,40 @@ class Opportunity implements \JsonSerializable
     {
         $bid->setOpportunity($this);
         $this->bids->add($bid);
+    }
+
+    /**
+     * @return OpportunityCreative[]
+     */
+    public function getCreatives ()
+    {
+        return $this->creatives->toArray();
+    }
+
+    /**
+     * @param OpportunityCreative $creative
+     */
+    public function addCreative (OpportunityCreative $creative)
+    {
+        $creative->setOpportunity($this);
+        $this->creatives->add($creative);
+    }
+
+    /**
+     * @return CompensationModel[]
+     */
+    public function getCompensationModels ()
+    {
+        return $this->compensation_models->toArray();
+    }
+
+    /**
+     * @param CompensationModel $compensation_model
+     */
+    public function addCompensationModel (CompensationModel $compensation_model)
+    {
+        $compensation_model->setOpportunity($this);
+        $this->compensation_models->add($compensation_model);
     }
 
 }
