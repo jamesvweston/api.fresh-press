@@ -125,6 +125,7 @@ class ImportFreshPressCommand extends Command
         $this->insertProductLinePlatforms();
         $this->importOpportunities();
         $this->importOpportunityCompensationModels();
+        $this->importOpportunityCreatives();
         $this->importNetworkConnections();
         $this->importBids();
 
@@ -627,6 +628,26 @@ class ImportFreshPressCommand extends Command
         $this->opportunity_repo->commit();
 
         $this->info('Finished importing opportunity compensation_models....');
+    }
+
+    private function importOpportunityCreatives ()
+    {
+        $this->info('Importing opportunity_creatives....');
+
+        $creative_data                  = [];
+        $fp_creative_result             = DB::connection('fresh_press')->select('select * from opportunity_creatives');
+        foreach ($fp_creative_result AS $fp_creative)
+        {
+            $creative_data[]            = [
+                'id'                    => $fp_creative->id,
+                'url'                   => $fp_creative->url,
+                'opportunity_id'        => $fp_creative->opportunity_id,
+            ];
+        }
+
+        DB::table('opportunity_creatives')->insert($creative_data);
+
+        $this->info('Finished importing opportunity_creatives....');
     }
 
     private function importBids ()
