@@ -9,7 +9,7 @@ class ProductCompensation extends CompensationModel implements \JsonSerializable
 {
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $description;
 
@@ -40,7 +40,7 @@ class ProductCompensation extends CompensationModel implements \JsonSerializable
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getDescription()
     {
@@ -48,7 +48,7 @@ class ProductCompensation extends CompensationModel implements \JsonSerializable
     }
 
     /**
-     * @param string $description
+     * @param string|null $description
      */
     public function setDescription($description)
     {

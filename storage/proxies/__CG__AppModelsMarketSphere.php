@@ -400,12 +400,34 @@ class Sphere extends \App\Models\Market\Sphere implements \Doctrine\ORM\Proxy\Pr
     /**
      * {@inheritDoc}
      */
+    public function hasCategory(\App\Models\Market\SphereCategory $sphere_category)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'hasCategory', [$sphere_category]);
+
+        return parent::hasCategory($sphere_category);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function addCategory(\App\Models\Market\SphereCategory $category)
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'addCategory', [$category]);
 
         return parent::addCategory($category);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeCategory(\App\Models\Market\SphereCategory $category)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeCategory', [$category]);
+
+        return parent::removeCategory($category);
     }
 
     /**

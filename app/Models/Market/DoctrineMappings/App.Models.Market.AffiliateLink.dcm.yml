@@ -1,0 +1,38 @@
+App\Models\Market\AffiliateLink:
+  type:               entity
+  table:              affiliate_links
+  repositoryClass:    App\Repositories\Market\AffiliateLinkRepository
+
+  id:
+    id:
+      column:         id
+      type:           integer
+      nullable:       false
+      options:
+        unsigned:     true
+      comment:        'AffiliateLink id'
+      id:             true
+      generator:
+        strategy:     IDENTITY
+
+  fields:
+    landing_page:
+      column:         landing_page
+      type:           string
+      nullable:       false
+    affiliate_link:
+      column:         affiliate_link
+      type:           string
+      nullable:       true
+      options:
+        default:      null
+
+  manyToOne:
+    commission_compensation:
+      targetEntity:   CommissionCompensation
+      nullable:       false
+      fetch:          LAZY
+      inversedBy:     affiliate_links
+      joinColumn:
+        name:         commission_compensation_id
+        referencedColumnName: id

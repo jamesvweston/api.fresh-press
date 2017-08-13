@@ -15,7 +15,7 @@ class CreateCompensationProductsTable extends Migration
     {
         Schema::create('compensation_products', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('description');
+            $table->text('description')->nullable()->default(null);
             $table->decimal('value', 8, 2);
         });
     }

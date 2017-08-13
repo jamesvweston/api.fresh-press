@@ -38,7 +38,9 @@ App\Models\Market\CommissionCompensation:
       column:         affiliate_program_name
       type:           string
       nullable:       false
+
+  oneToMany:
     affiliate_links:
-      column:         affiliate_links
-      type:           string
-      nullable:       false
+      targetEntity:   AffiliateLink
+      mappedBy:       commission_compensation
+      cascade:        ["persist", "remove"]

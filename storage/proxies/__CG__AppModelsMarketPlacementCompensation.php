@@ -64,10 +64,10 @@ class PlacementCompensation extends \App\Models\Market\PlacementCompensation imp
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'is_negotiable', 'suggested_rate', 'id'];
+            return ['__isInitialized__', 'is_negotiable', 'suggested_rate', 'id', 'opportunity'];
         }
 
-        return ['__isInitialized__', 'is_negotiable', 'suggested_rate', 'id'];
+        return ['__isInitialized__', 'is_negotiable', 'suggested_rate', 'id', 'opportunity'];
     }
 
     /**
@@ -241,6 +241,28 @@ class PlacementCompensation extends \App\Models\Market\PlacementCompensation imp
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', []);
 
         return parent::getId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getOpportunity()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOpportunity', []);
+
+        return parent::getOpportunity();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setOpportunity($opportunity)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setOpportunity', [$opportunity]);
+
+        return parent::setOpportunity($opportunity);
     }
 
 }

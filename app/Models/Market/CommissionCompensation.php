@@ -3,6 +3,7 @@
 namespace App\Models\Market;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
 class CommissionCompensation extends CompensationModel implements \JsonSerializable
@@ -41,7 +42,7 @@ class CommissionCompensation extends CompensationModel implements \JsonSerializa
     protected $affiliate_program_name;
 
     /**
-     * @var string
+     * @var ArrayCollection
      */
     protected $affiliate_links;
 
@@ -56,7 +57,7 @@ class CommissionCompensation extends CompensationModel implements \JsonSerializa
         $this->average_order_value      = AU::get($data['average_order_value']);
         $this->affiliate_network        = AU::get($data['affiliate_network']);
         $this->affiliate_program_name   = AU::get($data['affiliate_program_name']);
-        $this->affiliate_links          = AU::get($data['affiliate_links']);
+        $this->affiliate_links          = AU::get($data['affiliate_links'], new ArrayCollection());
     }
 
     /**
@@ -71,7 +72,12 @@ class CommissionCompensation extends CompensationModel implements \JsonSerializa
         $object['average_order_value']  = $this->getAverageOrderValue();
         $object['affiliate_network']    = $this->getAffiliateNetwork();
         $object['affiliate_program_name']=$this->getAffiliateProgramName();
-        $object['affiliate_links']      = $this->getAffiliateLinks();
+
+        $object['affiliate_links']      = [];
+        foreach ($this->getAffiliateLinks() AS $affiliate_link)
+        {
+            $object['affiliate_links'][] = $affiliate_link->jsonSerialize();
+        }
 
         return $object;
     }
@@ -173,19 +179,20 @@ class CommissionCompensation extends CompensationModel implements \JsonSerializa
     }
 
     /**
-     * @return string
+     * @return AffiliateLink[]
      */
     public function getAffiliateLinks()
     {
-        return $this->affiliate_links;
+        return $this->affiliate_links->toArray();
     }
 
     /**
-     * @param string $affiliate_links
+     * @param AffiliateLink $affiliate_link
      */
-    public function setAffiliateLinks($affiliate_links)
+    public function addAffiliateLink(AffiliateLink $affiliate_link)
     {
-        $this->affiliate_links = $affiliate_links;
+        $affiliate_link->setCommissionCompensation($this);
+        $this->affiliate_links->add($affiliate_link);
     }
 
 }

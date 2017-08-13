@@ -7,7 +7,7 @@ App\Models\Market\ProductCompensation:
     description:
       column:         description
       type:           string
-      nullable:       false
+      nullable:       true
     value:
       column:         value
       type:           decimal

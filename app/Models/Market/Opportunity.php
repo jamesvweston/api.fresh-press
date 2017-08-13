@@ -6,6 +6,7 @@ namespace App\Models\Market;
 use App\Models\CMS\Advertiser;
 use App\Models\Traits\Deletable;
 use App\Models\Traits\TimeStamps;
+use Doctrine\Common\Collections\ArrayCollection;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
 class Opportunity implements \JsonSerializable
@@ -104,6 +105,11 @@ class Opportunity implements \JsonSerializable
      */
     protected $deliverable_type;
 
+    /**
+     * @var ArrayCollection
+     */
+    protected $compensation_models;
+
 
     /**
      * @param array $data
@@ -127,6 +133,7 @@ class Opportunity implements \JsonSerializable
         $this->campaign                 = AU::get($data['campaign']);
         $this->product_line             = AU::get($data['product_line']);
         $this->deliverable_type         = AU::get($data['deliverable_type']);
+        $this->compensation_models      = AU::get($data['compensation_models'], new ArrayCollection());
     }
 
     /**
@@ -434,6 +441,23 @@ class Opportunity implements \JsonSerializable
     public function setDeliverableType($deliverable_type)
     {
         $this->deliverable_type = $deliverable_type;
+    }
+
+    /**
+     * @return CompensationModel[]
+     */
+    public function getCompensationModels ()
+    {
+        return $this->compensation_models->toArray();
+    }
+
+    /**
+     * @param CompensationModel $compensation_model
+     */
+    public function addCompensationModel (CompensationModel $compensation_model)
+    {
+        $compensation_model->setOpportunity($this);
+        $this->compensation_models->add($compensation_model);
     }
 
 }

@@ -13,10 +13,14 @@ abstract class CompensationModel implements \JsonSerializable
      */
     protected $id;
 
+    /**
+     * @var Opportunity
+     */
+    protected $opportunity;
 
     public function __construct($data = [])
     {
-
+        $this->opportunity              = AU::get($data['opportunity']);
     }
 
     /**
@@ -35,6 +39,22 @@ abstract class CompensationModel implements \JsonSerializable
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return Opportunity
+     */
+    public function getOpportunity()
+    {
+        return $this->opportunity;
+    }
+
+    /**
+     * @param Opportunity $opportunity
+     */
+    public function setOpportunity($opportunity)
+    {
+        $this->opportunity = $opportunity;
     }
 
 }

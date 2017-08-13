@@ -21,7 +21,6 @@ class CreateCompensationCommissionsTable extends Migration
             $table->decimal('average_order_value', 8, 2);
             $table->string('affiliate_network');
             $table->string('affiliate_program_name');
-            $table->text('affiliate_links');
         });
     }
 

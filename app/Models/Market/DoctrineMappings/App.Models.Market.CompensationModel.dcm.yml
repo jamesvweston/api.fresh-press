@@ -22,3 +22,13 @@ App\Models\Market\CompensationModel:
       id:             true
       generator:
         strategy:     IDENTITY
+
+  manyToOne:
+    opportunity:
+      targetEntity:   Opportunity
+      nullable:       false
+      fetch:          LAZY
+      inversedBy:     compensation_models
+      joinColumn:
+        name:         opportunity_id
+        referencedColumnName: id

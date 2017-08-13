@@ -147,3 +147,9 @@ App\Models\Market\Opportunity:
       joinColumn:
         name:         product_line_id
         referencedColumnName: id
+
+  oneToMany:
+    compensation_models:
+      targetEntity:   CompensationModel
+      mappedBy:       opportunity
+      cascade:        ["persist", "remove"]

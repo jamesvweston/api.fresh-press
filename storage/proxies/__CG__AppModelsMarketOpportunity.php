@@ -64,10 +64,10 @@ class Opportunity extends \App\Models\Market\Opportunity implements \Doctrine\OR
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'name', 'cover_photo', 'keywords', 'notes', 'pitch', 'rejected_reason', 'deliverable_deadline_days', 'apply_by', 'published_at', 'closed_at', 'paused_at', 'submitted_at', 'rejected_at', 'advertiser', 'campaign', 'product_line', 'deliverable_type', 'created_at', 'updated_at', 'deleted_at'];
+            return ['__isInitialized__', 'id', 'name', 'cover_photo', 'keywords', 'notes', 'pitch', 'rejected_reason', 'deliverable_deadline_days', 'apply_by', 'published_at', 'closed_at', 'paused_at', 'submitted_at', 'rejected_at', 'advertiser', 'campaign', 'product_line', 'deliverable_type', 'compensation_models', 'created_at', 'updated_at', 'deleted_at'];
         }
 
-        return ['__isInitialized__', 'id', 'name', 'cover_photo', 'keywords', 'notes', 'pitch', 'rejected_reason', 'deliverable_deadline_days', 'apply_by', 'published_at', 'closed_at', 'paused_at', 'submitted_at', 'rejected_at', 'advertiser', 'campaign', 'product_line', 'deliverable_type', 'created_at', 'updated_at', 'deleted_at'];
+        return ['__isInitialized__', 'id', 'name', 'cover_photo', 'keywords', 'notes', 'pitch', 'rejected_reason', 'deliverable_deadline_days', 'apply_by', 'published_at', 'closed_at', 'paused_at', 'submitted_at', 'rejected_at', 'advertiser', 'campaign', 'product_line', 'deliverable_type', 'compensation_models', 'created_at', 'updated_at', 'deleted_at'];
     }
 
     /**

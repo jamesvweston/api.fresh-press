@@ -7,9 +7,13 @@ use App\Models\CMS\Advertiser;
 use App\Models\CMS\Influencer;
 use App\Models\Locations\Address;
 use App\Models\Locations\Country;
+use App\Models\Market\AffiliateLink;
 use App\Models\Market\AgeRange;
 use App\Models\Market\Campaign;
+use App\Models\Market\CommissionCompensation;
+use App\Models\Market\PlacementCompensation;
 use App\Models\Market\Portfolio;
+use App\Models\Market\ProductCompensation;
 use App\Models\Market\ProductLine;
 use App\Models\Market\Sphere;
 use App\Models\Networks\FavoriteMerchant;
@@ -126,6 +130,7 @@ class ImportFreshPressCommand extends Command
         $this->importProductLines();
         $this->insertProductLinePlatforms();
         $this->importOpportunities();
+        $this->importOpportunityCompensationModels();
         $this->importNetworkConnections();
     }
 
@@ -544,6 +549,66 @@ class ImportFreshPressCommand extends Command
         DB::table('opportunities')->insert($opportunity_data);
 
         $this->info('Finished importing opportunities....');
+    }
+
+    private function importOpportunityCompensationModels ()
+    {
+        $fp_opportunities_result        = DB::connection('fresh_press')->select('select * from opportunities');
+        foreach ($fp_opportunities_result AS $fp_opportunity)
+        {
+            $opportunity                = $this->opportunity_repo->find($fp_opportunity->id);
+            if ($fp_opportunity->is_fee)
+            {
+                $placement_compensation = new PlacementCompensation();
+                if ($fp_opportunity->is_fee_suggested)
+                {
+                    $placement_compensation->setIsNegotiable(false);
+                    $placement_compensation->setSuggestedRate($fp_opportunity->is_fee_suggested_rate);
+                }
+                else
+                {
+                    $placement_compensation->setIsNegotiable(true);
+                }
+                $opportunity->addCompensationModel($placement_compensation);
+            }
+            if ($fp_opportunity->is_hybrid)
+            {
+                //  These are bad records with meaningless data
+                if (is_null($fp_opportunity->is_hybrid_rate) && is_null($fp_opportunity->is_hybrid_rate_type) && is_null($fp_opportunity->is_hybrid_conversion_type) && is_null($fp_opportunity->is_hybrid_avg_value) && is_null($fp_opportunity->is_hybrid_network) && is_null($fp_opportunity->is_hybrid_program))
+                    continue;
+                $commission_compensation    = new CommissionCompensation();
+                $commission_compensation->setRate($fp_opportunity->is_hybrid_rate);
+                $commission_compensation->setRateType($fp_opportunity->is_hybrid_rate_type);
+                $commission_compensation->setConversionType($fp_opportunity->is_hybrid_conversion_type);
+                $commission_compensation->setAverageOrderValue($fp_opportunity->is_hybrid_avg_value);
+                $commission_compensation->setAffiliateNetwork($fp_opportunity->is_hybrid_network);
+                $commission_compensation->setAffiliateProgramName($fp_opportunity->is_hybrid_program);
+
+                $fp_affiliate_links_result  = DB::connection('fresh_press')->select('select * from opportunity_affiliate_links where opportunity_id = ' . $fp_opportunity->id);
+                foreach ($fp_affiliate_links_result AS $fp_affiliate_link)
+                {
+                    $affiliate_link         = new AffiliateLink();
+                    $affiliate_link->setLandingPage($fp_affiliate_link->landing_page);
+                    $affiliate_link->setAffiliateLink($fp_affiliate_link->affiliate_link);
+                    $commission_compensation->addAffiliateLink($affiliate_link);
+                }
+
+                $opportunity->addCompensationModel($commission_compensation);
+            }
+            //   select is_product, is_product_value, is_product_description from opportunities;
+            if (!is_null($fp_opportunity->is_product))
+            {
+                if ($fp_opportunity->is_product == 0)
+                    continue;
+                $product_compensation       = new ProductCompensation();
+                $product_compensation->setDescription($fp_opportunity->is_product_description);
+                $product_compensation->setValue($fp_opportunity->is_product_value);
+
+                $opportunity->addCompensationModel($product_compensation);
+            }
+            $this->opportunity_repo->save($opportunity);
+        }
+        $this->opportunity_repo->commit();
     }
 
     /**

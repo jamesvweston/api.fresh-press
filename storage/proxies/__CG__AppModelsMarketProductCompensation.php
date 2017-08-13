@@ -64,10 +64,10 @@ class ProductCompensation extends \App\Models\Market\ProductCompensation impleme
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'description', 'value', 'id'];
+            return ['__isInitialized__', 'description', 'value', 'id', 'opportunity'];
         }
 
-        return ['__isInitialized__', 'description', 'value', 'id'];
+        return ['__isInitialized__', 'description', 'value', 'id', 'opportunity'];
     }
 
     /**
@@ -241,6 +241,28 @@ class ProductCompensation extends \App\Models\Market\ProductCompensation impleme
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', []);
 
         return parent::getId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getOpportunity()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOpportunity', []);
+
+        return parent::getOpportunity();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setOpportunity($opportunity)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setOpportunity', [$opportunity]);
+
+        return parent::setOpportunity($opportunity);
     }
 
 }
