@@ -1,0 +1,60 @@
+App\Models\Market\Portfolio:
+  type:               entity
+  table:              portfolios
+  repositoryClass:    App\Repositories\Market\PortfolioRepository
+
+  id:
+    id:
+      column:         id
+      type:           integer
+      nullable:       false
+      options:
+        unsigned:     true
+      comment:        'Portfolio id'
+      id:             true
+      generator:
+        strategy:     IDENTITY
+
+  fields:
+  fields:
+    description:
+      column:         description
+      type:           string
+      nullable:       false
+    url:
+      column:         url
+      type:           string
+      nullable:       false
+    is_unverified_outlet:
+      column:         is_unverified_outlet
+      type:           boolean
+      nullable:       false
+    created_at:
+      column:         created_at
+      type:           datetime
+      nullable:       false
+      options:
+        default:      CURRENT_datetime
+    updated_at:
+      column:         updated_at
+      type:           datetime
+      nullable:       false
+      options:
+        default:      CURRENT_datetime
+
+  manyToOne:
+    sphere:
+      targetEntity:   Sphere
+      nullable:       false
+      fetch:          LAZY
+      inversedBy:     portfolios
+      joinColumn:
+        name:         sphere_id
+        referencedColumnName: id
+    portfolio_type:
+      targetEntity:   PortfolioType
+      nullable:       false
+      fetch:          EAGER
+      joinColumn:
+        name:         portfolio_type_id
+        referencedColumnName: id

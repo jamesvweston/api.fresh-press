@@ -1,0 +1,102 @@
+App\Models\Market\Sphere:
+  type:               entity
+  table:              spheres
+  repositoryClass:    App\Repositories\Market\SphereRepository
+
+  id:
+    id:
+      column:         id
+      type:           integer
+      nullable:       false
+      options:
+        unsigned:     true
+      comment:        'Sphere id'
+      id:             true
+      generator:
+        strategy:     IDENTITY
+
+  fields:
+    title:
+      column:         title
+      type:           string
+      nullable:       false
+    description:
+      column:         description
+      type:           string
+      nullable:       false
+    percent_male:
+      column:         percent_male
+      type:           integer
+      nullable:       false
+    percent_female:
+      column:         percent_female
+      type:           integer
+      nullable:       false
+    logo:
+      column:         logo
+      type:           string
+      nullable:       true
+      options:
+        default:      null
+    created_at:
+      column:         created_at
+      type:           datetime
+      nullable:       false
+      options:
+        default:      CURRENT_datetime
+    updated_at:
+      column:         updated_at
+      type:           datetime
+      nullable:       false
+      options:
+        default:      CURRENT_datetime
+    deleted_at:
+      column:         deleted_at
+      type:           datetime
+      nullable:       true
+      options:
+        default:      null
+
+  manyToOne:
+    influencer:
+      targetEntity:   App\Models\CMS\Influencer
+      nullable:       false
+      fetch:          LAZY
+      inversedBy:     spheres
+      joinColumn:
+        name:         influencer_id
+        referencedColumnName: id
+    age_range:
+      targetEntity:   AgeRange
+      nullable:       true
+      fetch:          EAGER
+      joinColumn:
+        name:         age_range_id
+        referencedColumnName: id
+    country:
+      targetEntity:   App\Models\Locations\Country
+      nullable:       true
+      fetch:          EAGER
+      joinColumn:
+        name:         country_id
+        referencedColumnName: id
+
+  oneToMany:
+    portfolios:
+      targetEntity:   Portfolio
+      mappedBy:       sphere
+      cascade:        ["persist", "remove"]
+
+  manyToMany:
+    categories:
+      fetch:          LAZY
+      targetEntity:   App\Models\Market\SphereCategory
+      cascade:        ["persist", "remove"]
+      joinTable:
+        name:         spheres_categories
+        joinColumns:
+          sphere_id:
+            referencedColumnName: id
+        inverseJoinColumns:
+          sphere_category_id:
+            referencedColumnName: id

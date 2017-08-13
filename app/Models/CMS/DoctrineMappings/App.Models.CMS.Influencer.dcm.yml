@@ -1,0 +1,25 @@
+App\Models\CMS\Influencer:
+  type:               entity
+  table:              influencers
+  repositoryClass:    App\Repositories\CMS\InfluencerRepository
+
+  oneToOne:
+    billing_address:
+      targetEntity:   App\Models\Locations\Address
+      fetch:          LAZY
+      nullable:       true
+      cascade:        ["persist", "remove"]
+
+  oneToMany:
+    network_connections:
+      targetEntity:   App\Models\Networks\NetworkConnection
+      mappedBy:       influencer
+      cascade:        ["persist", "remove"]
+    spheres:
+      targetEntity:   App\Models\Market\Sphere
+      mappedBy:       influencer
+      cascade:        ["persist", "remove"]
+    favorite_merchants:
+      targetEntity:   App\Models\Networks\FavoriteMerchant
+      mappedBy:       influencer
+      cascade:        ["persist", "remove"]

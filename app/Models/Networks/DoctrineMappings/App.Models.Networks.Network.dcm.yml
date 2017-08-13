@@ -1,0 +1,64 @@
+App\Models\Networks\Network:
+  type:               entity
+  table:              networks
+  repositoryClass:    App\Repositories\Networks\NetworkRepository
+
+  id:
+    id:
+      column:         id
+      type:           integer
+      nullable:       false
+      options:
+        unsigned:     true
+        comment:      'Network id'
+      id:             true
+      generator:
+        strategy:     IDENTITY
+
+  fields:
+    label:
+      column:         label
+      type:           string
+      nullable:       false
+      length:         20
+      options:
+        fixed:        false
+        comment:      "Network unique label"
+    shorthand:
+      column:         shorthand
+      type:           string
+      nullable:       false
+      length:         5
+      options:
+        fixed:        false
+        comment:      "Network unique shorthand"
+    logo:
+      column:         logo
+      type:           string
+      nullable:       false
+      length:         10
+      options:
+        fixed:        false
+        comment:      "Network logo"
+    sub_id_key:
+      column:         sub_id_key
+      type:           string
+      nullable:       true
+      length:         20
+      options:
+        fixed:        false
+        comment:      "Network sub_id_key"
+        default:      null
+    fmtc_network_id:
+      column:         fmtc_network_id
+      type:           integer
+      nullable:       true
+      options:
+        unsigned:     true
+        default:      null
+
+  oneToMany:
+    fields:
+      targetEntity:   NetworkField
+      mappedBy:       network
+      cascade:        ["persist", "remove"]

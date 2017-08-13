@@ -1,0 +1,23 @@
+App\Models\Market\PortfolioType:
+  type:               entity
+  table:              portfolio_types
+  repositoryClass:    App\Repositories\Market\PortfolioTypeRepository
+
+  id:
+    id:
+      column:         id
+      type:           integer
+      nullable:       false
+      options:
+        unsigned:     true
+      comment:        'PortfolioType id'
+      id:             true
+      generator:
+        strategy:     IDENTITY
+
+  fields:
+    name:
+      column:         name
+      type:           string
+      nullable:       false
+      length:         50

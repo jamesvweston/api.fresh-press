@@ -1,0 +1,149 @@
+App\Models\Market\Opportunity:
+  type:               entity
+  table:              opportunities
+  repositoryClass:    App\Repositories\Market\OpportunityRepository
+
+  id:
+    id:
+      column:         id
+      type:           integer
+      nullable:       false
+      options:
+        unsigned:     true
+      comment:        'Opportunity id'
+      id:             true
+      generator:
+        strategy:     IDENTITY
+
+  fields:
+    name:
+      column:         name
+      type:           string
+      nullable:       false
+    cover_photo:
+      column:         cover_photo
+      type:           string
+      nullable:       true
+      options:
+        default:      null
+    keywords:
+      column:         keywords
+      type:           string
+      nullable:       true
+      options:
+        default:      null
+    notes:
+      column:         notes
+      type:           string
+      nullable:       true
+      options:
+        default:      null
+    pitch:
+      column:         pitch
+      type:           string
+      nullable:       true
+      options:
+        default:      null
+    rejected_reason:
+      column:         rejected_reason
+      type:           string
+      nullable:       true
+      options:
+        default:      null
+    deliverable_deadline_days:
+      column:         deliverable_deadline_days
+      type:           integer
+      nullable:       false
+      options:
+        unsigned:     true
+    apply_by:
+      column:         apply_by
+      type:           datetime
+      nullable:       true
+      options:
+        default:      null
+    published_at:
+      column:         published_at
+      type:           datetime
+      nullable:       true
+      options:
+        default:      null
+    closed_at:
+      column:         closed_at
+      type:           datetime
+      nullable:       true
+      options:
+        default:      null
+    paused_at:
+      column:         paused_at
+      type:           datetime
+      nullable:       true
+      options:
+        default:      null
+    submitted_at:
+      column:         submitted_at
+      type:           datetime
+      nullable:       true
+      options:
+        default:      null
+    submitted_at:
+      column:         submitted_at
+      type:           datetime
+      nullable:       true
+      options:
+        default:      null
+    rejected_at:
+      column:         rejected_at
+      type:           datetime
+      nullable:       false
+      options:
+        default:      CURRENT_datetime
+    created_at:
+      column:         created_at
+      type:           datetime
+      nullable:       false
+      options:
+        default:      CURRENT_datetime
+    updated_at:
+      column:         updated_at
+      type:           datetime
+      nullable:       false
+      options:
+        default:      CURRENT_datetime
+    deleted_at:
+      column:         deleted_at
+      type:           datetime
+      nullable:       true
+      options:
+        default:      null
+
+  manyToOne:
+    advertiser:
+      targetEntity:   App\Models\CMS\Advertiser
+      nullable:       false
+      fetch:          EAGER
+      inversedBy:     opportunities
+      joinColumn:
+        name:         advertiser_id
+        referencedColumnName: id
+    campaign:
+      targetEntity:   Campaign
+      nullable:       false
+      fetch:          EAGER
+      joinColumn:
+        name:         campaign_id
+        referencedColumnName: id
+    deliverable_type:
+      targetEntity:   DeliverableType
+      nullable:       false
+      fetch:          EAGER
+      joinColumn:
+        name:         deliverable_type_id
+        referencedColumnName: id
+    product_line:
+      targetEntity:   ProductLine
+      nullable:       false
+      fetch:          EAGER
+      joinColumn:
+        name:         product_line_id
+        referencedColumnName: id

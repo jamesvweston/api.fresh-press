@@ -1,0 +1,34 @@
+App\Models\Locations\Country:
+  type:               entity
+  table:              countries
+  repositoryClass:    App\Repositories\Locations\CountryRepository
+
+  id:
+    id:
+      column:         id
+      type:           integer
+      nullable:       false
+      options:
+        unsigned:     true
+        comment:      'Country id'
+      id:             true
+      generator:
+        strategy:     IDENTITY
+
+  fields:
+    name:
+      column:         name
+      type:           string
+      nullable:       false
+      length:         50
+      options:
+        fixed:        false
+        comment:      "Country unique name"
+    code:
+      column:         code
+      type:           string
+      nullable:       false
+      length:         2
+      options:
+        fixed:        true
+        comment:      "Country unique code"

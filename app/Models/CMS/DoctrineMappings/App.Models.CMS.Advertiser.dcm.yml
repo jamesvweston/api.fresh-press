@@ -1,0 +1,24 @@
+App\Models\CMS\Advertiser:
+  type:               entity
+  table:              advertisers
+  repositoryClass:    App\Repositories\CMS\AdvertiserRepository
+
+  fields:
+    name:
+      column:         name
+      type:           string
+      nullable:       true
+
+  oneToMany:
+    campaigns:
+      targetEntity:   App\Models\Market\Campaign
+      mappedBy:       advertiser
+      cascade:        ["persist", "remove"]
+    opportunities:
+      targetEntity:   App\Models\Market\Opportunity
+      mappedBy:       advertiser
+      cascade:        ["persist", "remove"]
+    product_lines:
+      targetEntity:   App\Models\Market\ProductLine
+      mappedBy:       advertiser
+      cascade:        ["persist", "remove"]

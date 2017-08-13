@@ -1,0 +1,83 @@
+App\Models\Locations\Address:
+  type:               entity
+  table:              addresses
+  repositoryClass:    App\Repositories\Locations\AddressRepository
+
+  id:
+    id:
+      column:         id
+      type:           integer
+      nullable:       false
+      options:
+        unsigned:     true
+      comment:        'Address id'
+      id:             true
+      generator:
+        strategy:     IDENTITY
+
+  fields:
+    street1:
+      column:         street1
+      type:           string
+      nullable:       false
+      length:         100
+      options:
+        comment:      "Street line 1 for the address"
+    street2:
+      column:         street2
+      type:           string
+      nullable:       true
+      length:         100
+      options:
+        comment:      "Street line 2 for the address"
+        default:      null
+    city:
+      column:         city
+      type:           string
+      nullable:       false
+      length:         100
+      options:
+        comment:      "City for the address"
+    postal_code:
+      column:         postal_code
+      type:           string
+      nullable:       false
+      length:         20
+      options:
+        comment:      "Postal code for the address"
+    phone:
+      column:         phone
+      type:           string
+      nullable:       true
+      length:         20
+      options:
+        comment:      "Phone number for the address"
+        default:      null
+    state_province:
+      column:         state_province
+      type:           string
+      nullable:       false
+      length:         100
+      options:
+        comment:      "Province for the address"
+    created_at:
+      column:         created_at
+      type:           datetime
+      nullable:       false
+      options:
+        default:      CURRENT_datetime
+    updated_at:
+      column:         updated_at
+      type:           datetime
+      nullable:       false
+      options:
+        default:      CURRENT_datetime
+
+  manyToOne:
+    country:
+      targetEntity:   Country
+      nullable:       false
+      fetch:          EAGER
+      joinColumn:
+        name:         country_id
+        referencedColumnName: id

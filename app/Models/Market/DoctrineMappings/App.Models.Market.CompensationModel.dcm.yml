@@ -1,0 +1,24 @@
+App\Models\Market\CompensationModel:
+  type:               entity
+  table:              compensation_models
+  repositoryClass:    App\Repositories\Market\CompensationModelRepository
+  inheritanceType:    JOINED
+  discriminatorColumn:
+      name:           compensation_model_type_id
+      type:           integer
+  discriminatorMap:
+      1:              CommissionCompensation
+      2:              PlacementCompensation
+      3:              ProductCompensation
+
+  id:
+    id:
+      column:         id
+      type:           integer
+      nullable:       false
+      options:
+        unsigned:     true
+      comment:        'CommissionCompensation id'
+      id:             true
+      generator:
+        strategy:     IDENTITY

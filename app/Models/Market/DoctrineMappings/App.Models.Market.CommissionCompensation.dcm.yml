@@ -1,0 +1,44 @@
+App\Models\Market\CommissionCompensation:
+  type:               entity
+  table:              compensation_commissions
+  repositoryClass:    App\Repositories\Market\CommissionCompensationRepository
+
+  fields:
+    rate:
+      column:         rate
+      type:           decimal
+      nullable:       false
+      precision:      8
+      scale:          2
+      options:
+        unsigned:     true
+        fixed:        false
+    rate_type:
+      column:         rate_type
+      type:           string
+      nullable:       false
+    conversion_type:
+      column:         conversion_type
+      type:           string
+      nullable:       false
+    average_order_value:
+      column:         average_order_value
+      type:           decimal
+      nullable:       false
+      precision:      8
+      scale:          2
+      options:
+        unsigned:     true
+        fixed:        false
+    affiliate_network:
+      column:         affiliate_network
+      type:           string
+      nullable:       false
+    affiliate_program_name:
+      column:         affiliate_program_name
+      type:           string
+      nullable:       false
+    affiliate_links:
+      column:         affiliate_links
+      type:           string
+      nullable:       false
