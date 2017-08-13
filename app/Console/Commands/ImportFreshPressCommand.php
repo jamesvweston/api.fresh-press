@@ -31,6 +31,12 @@ use EntityManager;
 
 class ImportFreshPressCommand extends Command
 {
+
+    /**
+     * @var int
+     */
+    private $FRESH_PRESS_USER_ID        = 7;
+
     /**
      * The name and signature of the console command.
      *
@@ -49,11 +55,6 @@ class ImportFreshPressCommand extends Command
      * @var AdvertiserRepository
      */
     private $advertiser_repo;
-
-    /**
-     * @var AgeRangeRepository
-     */
-    private $age_range_repo;
 
     /**
      * @var CountryRepository
@@ -76,29 +77,9 @@ class ImportFreshPressCommand extends Command
     private $opportunity_repo;
 
     /**
-     * @var PlatformRepository
-     */
-    private $platform_repo;
-
-    /**
      * @var PortfolioTypeRepository
      */
     private $portfolio_type_repo;
-
-    /**
-     * @var ProductLineRepository
-     */
-    private $product_line_repo;
-
-    /**
-     * @var SphereCategoryRepository
-     */
-    private $sphere_category_repo;
-
-    /**
-     * @var SphereRepository
-     */
-    private $sphere_repo;
 
     /**
      * @var string
@@ -128,33 +109,54 @@ class ImportFreshPressCommand extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(AdvertiserRepository $advertiser_repo, CountryRepository $country_repo, InfluencerRepository $influencer_repo, RoleRepository $role_repo,
+                           OpportunityRepository $opportunity_repo, PortfolioTypeRepository $portfolio_type_repo)
     {
-        $this->advertiser_repo          = EntityManager::getRepository('App\Models\CMS\Advertiser');
-        $this->age_range_repo           = EntityManager::getRepository('App\Models\Market\AgeRange');
-        $this->country_repo             = EntityManager::getRepository('App\Models\Locations\Country');
-        $this->influencer_repo          = EntityManager::getRepository('App\Models\CMS\Influencer');
-        $this->role_repo                = EntityManager::getRepository('App\Models\CMS\Role');
-        $this->opportunity_repo         = EntityManager::getRepository('App\Models\Market\Opportunity');
-        $this->platform_repo            = EntityManager::getRepository('App\Models\Market\Platform');
-        $this->portfolio_type_repo      = EntityManager::getRepository('App\Models\Market\PortfolioType');
-        $this->product_line_repo        = EntityManager::getRepository('App\Models\Market\ProductLine');
-        $this->sphere_category_repo     = EntityManager::getRepository('App\Models\Market\SphereCategory');
-        $this->sphere_repo              = EntityManager::getRepository('App\Models\Market\Sphere');
+        $this->advertiser_repo          = $advertiser_repo;
+        $this->country_repo             = $country_repo;
+        $this->influencer_repo          = $influencer_repo;
+        $this->role_repo                = $role_repo;
+        $this->opportunity_repo         = $opportunity_repo;
+        $this->portfolio_type_repo      = $portfolio_type_repo;
 
         $this->call('migrate:refresh', [
             '--seed' => 1
         ]);
+        $this->handleInitialActions();
         $this->importAdvertisers();
         $this->importCampaigns();
         $this->importInfluencers();
-        $this->importNetworkConnections();
+        //  $this->importNetworkConnections();
         $this->importSpheres();
         $this->importSphereCategories();
         $this->importPortfolios();
         $this->importProductLines();
         $this->insertProductLinePlatforms();
         $this->importOpportunities();
+    }
+
+    private function handleInitialActions ()
+    {
+        //   If the fresh press user does not have the influencer role give it to them
+        $fp_user_roles = $fp_users_group_result = DB::connection('fresh_press')->select('select * from users_groups where user_group_id = 1 AND user_id = ' . $this->FRESH_PRESS_USER_ID);
+        if (empty($fp_user_roles))
+        {
+            $this->info('The fresh press user does not have the influencer group. Giving it to them');
+            $now                = new \Carbon\Carbon();
+            $now->format('Y-m-d h:m:s');
+            DB::connection('fresh_press')->table('users_groups')->insert(
+                [
+                    'user_id'           => $this->FRESH_PRESS_USER_ID,
+                    'user_group_id'     => 1,
+                    'created_at'        => $now,
+                    'updated_at'        => $now,
+                ]
+            );
+        }
+        else
+        {
+            $this->info('The fresh press user already has the influencer role.');
+        }
     }
 
     private function importAdvertisers ()
@@ -289,6 +291,7 @@ class ImportFreshPressCommand extends Command
         foreach ($fp_network_connections_result AS $fp_network_connection)
         {
             $influencer                 = $this->getInfluencerFromMapping($fp_network_connection->user_id);
+
             $network_connection_data    = [
                 'id'                    => $fp_network_connection->id,
                 'affiliate_id'          => trim($fp_network_connection->affiliate_id) == null ? null : $fp_network_connection->affiliate_id,
@@ -573,16 +576,6 @@ class ImportFreshPressCommand extends Command
             return null;
         else
             return new \DateTime($date);
-    }
-
-    /**
-     * @param   int         $id
-     * @return  AgeRange
-     */
-    private function getAgeRange ($id)
-    {
-        $result                     = $this->age_range_repo->find($id);
-        return $result;
     }
 
     /**
