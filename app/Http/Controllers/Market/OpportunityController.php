@@ -45,6 +45,12 @@ class OpportunityController extends Controller
         return response($opportunity->getCompensationModels());
     }
 
+    public function getCreatives (Request $request)
+    {
+        $opportunity                       = $this->getFromRoute($request);
+        return response($opportunity->getCreatives());
+    }
+
     /**
      * @param   Request $request
      * @return  Opportunity
