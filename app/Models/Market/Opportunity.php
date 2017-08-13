@@ -110,6 +110,11 @@ class Opportunity implements \JsonSerializable
      */
     protected $compensation_models;
 
+    /**
+     * @var ArrayCollection
+     */
+    protected $bids;
+
 
     /**
      * @param array $data
@@ -134,6 +139,7 @@ class Opportunity implements \JsonSerializable
         $this->product_line             = AU::get($data['product_line']);
         $this->deliverable_type         = AU::get($data['deliverable_type']);
         $this->compensation_models      = AU::get($data['compensation_models'], new ArrayCollection());
+        $this->bids                     = AU::get($data['bids'], new ArrayCollection());
     }
 
     /**
@@ -458,6 +464,23 @@ class Opportunity implements \JsonSerializable
     {
         $compensation_model->setOpportunity($this);
         $this->compensation_models->add($compensation_model);
+    }
+
+    /**
+     * @return Bid[]
+     */
+    public function getBids ()
+    {
+        return $this->bids->toArray();
+    }
+
+    /**
+     * @param Bid $bid
+     */
+    public function addBid (Bid $bid)
+    {
+        $bid->setOpportunity($this);
+        $this->bids->add($bid);
     }
 
 }

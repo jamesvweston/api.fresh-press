@@ -59,8 +59,8 @@ class Address implements \JsonSerializable, Validatable
      */
     public function __construct($data = [])
     {
-        $this->setCreatedAt(new \DateTime());
-        $this->setUpdatedAt(new \DateTime());
+        $this->created_at               = new \DateTime();
+        $this->updated_at               = new \DateTime();
         $this->street1                  = AU::get($data['street1']);
         $this->street2                  = AU::get($data['street2']);
         $this->city                     = AU::get($data['city']);

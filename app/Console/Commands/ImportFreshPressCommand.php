@@ -106,7 +106,11 @@ class ImportFreshPressCommand extends Command
         $this->call('migrate:refresh', [
             '--seed' => 1
         ]);
+
+
         $this->performInitialActions();
+
+
         $this->importUsers();
         $this->importUsersAdminRole();
         $this->importAdvertisers();
@@ -122,6 +126,7 @@ class ImportFreshPressCommand extends Command
         $this->importOpportunities();
         $this->importOpportunityCompensationModels();
         $this->importNetworkConnections();
+        $this->importBids();
 
 
         $this->performFinalActions();
@@ -562,6 +567,8 @@ class ImportFreshPressCommand extends Command
 
     private function importOpportunityCompensationModels ()
     {
+        $this->info('Importing opportunity compensation_models....');
+
         $fp_opportunities_result        = DB::connection('fresh_press')->select('select * from opportunities');
         foreach ($fp_opportunities_result AS $fp_opportunity)
         {
@@ -618,6 +625,40 @@ class ImportFreshPressCommand extends Command
             $this->opportunity_repo->save($opportunity);
         }
         $this->opportunity_repo->commit();
+
+        $this->info('Finished importing opportunity compensation_models....');
+    }
+
+    private function importBids ()
+    {
+        $this->info('Importing bids....');
+
+        $bid_data                       = [];
+        $fp_bids_result                 = DB::connection('fresh_press')->select('select * from bids');
+        foreach ($fp_bids_result AS $fp_bid)
+        {
+            $sphere                     = DB::select('select * from spheres where id = ' . $fp_bid->sphere_id)[0];
+            $bid_data[]                 = [
+                'id'                    => $fp_bid->id,
+                'amount'                => $fp_bid->amount,
+                'message'               => trim($fp_bid->message) == '' ? null : $fp_bid->message,
+                'product_address'       => trim($fp_bid->product_address) == '' ? null : $fp_bid->product_address,
+                'product_choices'       => trim($fp_bid->product_choices) == '' ? null : $fp_bid->product_choices,
+                'reject_reason'         => trim($fp_bid->reject_reason) == '' ? null : $fp_bid->reject_reason,
+                'freshpress_cut'        => is_null($fp_bid->freshpress_cut) ? 0.00 : $fp_bid->freshpress_cut,
+                'influencer_id'         => $sphere->influencer_id,
+                'opportunity_id'        => $fp_bid->opportunity_id,
+                'accepted_at'           => $fp_bid->accepted_at,
+                'rejected_at'           => $fp_bid->rejected_at,
+                'created_at'            => $fp_bid->created_at,
+                'updated_at'            => $fp_bid->updated_at,
+                'deleted_at'            => $fp_bid->deleted_at,
+            ];
+        }
+
+        DB::table('bids')->insert($bid_data);
+
+        $this->info('Finished importing bids....');
     }
 
     /**

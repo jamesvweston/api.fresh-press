@@ -153,3 +153,7 @@ App\Models\Market\Opportunity:
       targetEntity:   CompensationModel
       mappedBy:       opportunity
       cascade:        ["persist", "remove"]
+    bids:
+      targetEntity:   Bid
+      mappedBy:       opportunity
+      cascade:        ["persist", "remove"]

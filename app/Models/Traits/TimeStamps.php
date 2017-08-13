@@ -25,27 +25,11 @@ trait TimeStamps
     }
 
     /**
-     * @param \DateTime $created_at
-     */
-    public function setCreatedAt($created_at)
-    {
-        $this->created_at = $created_at;
-    }
-
-    /**
      * @return \DateTime
      */
     public function getUpdatedAt()
     {
         return $this->updated_at;
-    }
-
-    /**
-     * @param \DateTime $updated_at
-     */
-    public function setUpdatedAt($updated_at)
-    {
-        $this->updated_at = $updated_at;
     }
 
 }
