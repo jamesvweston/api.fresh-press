@@ -3,15 +3,20 @@
 namespace App\Models\Market;
 
 
+/**
+ * @SWG\Definition()
+ */
 class PortfolioType implements \JsonSerializable
 {
 
     /**
+     * @SWG\Property()
      * @var int
      */
     protected $id;
 
     /**
+     * @SWG\Property()
      * @var string
      */
     protected $name;

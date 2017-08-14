@@ -138,6 +138,41 @@
 
 
 /**
+ * @SWG\Post(
+ *      path="/advertisers/{id}/campaigns",
+ *      summary="Create a Campaign for an Advertiser",
+ *      description="Create Campaign",
+ *      tags={"advertisers"},
+ *      operationId="CreateCampaign",
+ *      produces={"application/json"},
+ *      @SWG\Parameter(
+ *          name="id",
+ *          in="path",
+ *          type="integer",
+ *          required=true,
+ *          description="Advertiser Id"
+ *     ),
+ *      @SWG\Parameter(
+ *          name="body",
+ *          in="body",
+ *          description="Campaign Object",
+ *          required=false,
+ *          @SWG\Schema(ref="#/definitions/CreateCampaign")
+ *      ),
+ *      @SWG\Response(
+ *         response=201,
+ *         description="Successful operation",
+ *         @SWG\Schema(ref="#/definitions/Campaign")
+ *     ),
+ *      @SWG\Response(
+ *          response=403,
+ *          description="Unauthorized to complete this operation"
+ *      ),
+ * )
+ */
+
+
+/**
  * @SWG\Get(
  *      path="/advertisers/{id}/opportunities",
  *      summary="Get Opportunities for an Advertiser",
@@ -191,6 +226,41 @@
  *          @SWG\Items(ref="#/definitions/ProductLine")
  *      )
  *      ),
+ *      @SWG\Response(
+ *          response=403,
+ *          description="Unauthorized to complete this operation"
+ *      ),
+ * )
+ */
+
+
+/**
+ * @SWG\Post(
+ *      path="/advertisers/{id}/product_lines",
+ *      summary="Create a ProductLine for an Advertiser",
+ *      description="Create ProductLine",
+ *      tags={"advertisers"},
+ *      operationId="CreateProductLine",
+ *      produces={"application/json"},
+ *      @SWG\Parameter(
+ *          name="id",
+ *          in="path",
+ *          type="integer",
+ *          required=true,
+ *          description="Advertiser Id"
+ *     ),
+ *      @SWG\Parameter(
+ *          name="body",
+ *          in="body",
+ *          description="ProductLine Object",
+ *          required=false,
+ *          @SWG\Schema(ref="#/definitions/CreateProductLine")
+ *      ),
+ *      @SWG\Response(
+ *         response=201,
+ *         description="Successful operation",
+ *         @SWG\Schema(ref="#/definitions/ProductLine")
+ *     ),
  *      @SWG\Response(
  *          response=403,
  *          description="Unauthorized to complete this operation"

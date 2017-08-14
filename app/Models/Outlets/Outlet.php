@@ -3,15 +3,20 @@
 namespace App\Models\Outlets;
 
 
+/**
+ * @SWG\Definition()
+ */
 class Outlet implements \JsonSerializable
 {
 
     /**
+     * @SWG\Property()
      * @var int
      */
     protected $id;
 
     /**
+     * @SWG\Property()
      * @var string
      */
     protected $name;
