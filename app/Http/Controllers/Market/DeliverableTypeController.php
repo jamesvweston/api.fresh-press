@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Market\DeliverableType;
 use App\Repositories\Market\DeliverableTypeRepository;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class DeliverableTypeController extends Controller
 {

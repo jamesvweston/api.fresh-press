@@ -12,6 +12,9 @@ use App\Models\Traits\TimeStamps;
 use Doctrine\Common\Collections\ArrayCollection;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
+/**
+ * @SWG\Definition()
+ */
 class Advertiser implements \JsonSerializable, Validatable
 {
 
@@ -19,11 +22,13 @@ class Advertiser implements \JsonSerializable, Validatable
 
 
     /**
+     * @SWG\Property()
      * @var int
      */
     protected $id;
 
     /**
+     * @SWG\Property()
      * @var string|null
      */
     protected $name;

@@ -8,6 +8,9 @@ use App\Models\Traits\TimeStamps;
 use Doctrine\Common\Collections\ArrayCollection;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
+/**
+ * @SWG\Definition()
+ */
 class NetworkConnection implements \JsonSerializable
 {
 
@@ -15,26 +18,31 @@ class NetworkConnection implements \JsonSerializable
 
 
     /**
+     * @SWG\Property(example="1")
      * @var int
      */
     protected $id;
 
     /**
+     * @SWG\Property()
      * @var string|null
      */
     protected $affiliate_id;
 
     /**
+     * @SWG\Property()
      * @var int|null
      */
     protected $publisher_id;
 
     /**
+     * @SWG\Property()
      * @var bool
      */
     protected $is_sync;
 
     /**
+     * @SWG\Property()
      * @var Network
      */
     protected $network;
@@ -84,7 +92,6 @@ class NetworkConnection implements \JsonSerializable
         $object['publisher_id']         = $this->getPublisherId();
         $object['is_sync']              = $this->getIsSync();
         $object['network']              = $this->getNetwork()->jsonSerialize();
-        $object['influencer']           = $this->getInfluencer()->jsonSerialize();
 
         return $object;
     }

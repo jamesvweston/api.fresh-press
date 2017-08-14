@@ -11,6 +11,7 @@ use App\Models\Locations\Country;
 use App\Models\Market\AgeRange;
 use App\Models\Market\Campaign;
 use App\Models\Market\DeliverableType;
+use App\Models\Market\GigStatus;
 use App\Models\Market\Opportunity;
 use App\Models\Market\Platform;
 use App\Models\Market\PortfolioType;
@@ -25,6 +26,7 @@ use App\Repositories\CMS\AdvertiserRepository;
 use App\Repositories\CMS\InfluencerRepository;
 use App\Repositories\CMS\RoleRepository;
 use App\Repositories\CMS\UserRepository;
+use App\Repositories\Market\GigStatusRepository;
 use App\Repositories\Networks\NetworkConnectionRepository;
 use App\Repositories\Networks\NetworkRepository;
 use App\Repositories\Locations\CountryRepository;
@@ -80,6 +82,13 @@ class RepositoryServiceProvider extends ServiceProvider
             return new DeliverableTypeRepository(
                 $app['em'],
                 new ClassMetadata(DeliverableType::class));
+        });
+
+        $this->app->bind(GigStatusRepository::class, function($app)
+        {
+            return new GigStatusRepository(
+                $app['em'],
+                new ClassMetadata(GigStatus::class));
         });
 
         $this->app->bind(InfluencerRepository::class, function($app)

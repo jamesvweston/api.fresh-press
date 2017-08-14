@@ -7,6 +7,9 @@ use App\Models\Contracts\Validatable;
 use App\Models\Traits\TimeStamps;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
+/**
+ * @SWG\Definition()
+ */
 class Address implements \JsonSerializable, Validatable
 {
 
@@ -14,41 +17,49 @@ class Address implements \JsonSerializable, Validatable
 
 
     /**
+     * @SWG\Property()
      * @var int
      */
     protected $id;
 
     /**
+     * @SWG\Property()
      * @var string
      */
     protected $street1;
 
     /**
+     * @SWG\Property()
      * @var string|null
      */
     protected $street2;
 
     /**
+     * @SWG\Property()
      * @var string
      */
     protected $city;
 
     /**
+     * @SWG\Property()
      * @var string
      */
     protected $postal_code;
 
     /**
+     * @SWG\Property()
      * @var string|null
      */
     protected $phone;
 
     /**
+     * @SWG\Property()
      * @var string
      */
     protected $state_province;
 
     /**
+     * @SWG\Property()
      * @var Country
      */
     protected $country;

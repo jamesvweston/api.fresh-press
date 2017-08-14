@@ -8,6 +8,9 @@ use App\Models\Traits\Deletable;
 use App\Models\Traits\TimeStamps;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
+/**
+ * @SWG\Definition()
+ */
 class Campaign implements \JsonSerializable
 {
 
@@ -15,16 +18,19 @@ class Campaign implements \JsonSerializable
 
 
     /**
+     * @SWG\Property()
      * @var int
      */
     protected $id;
 
     /**
+     * @SWG\Property()
      * @var string
      */
     protected $name;
 
     /**
+     * @SWG\Property()
      * @var string|null
      */
     protected $description;

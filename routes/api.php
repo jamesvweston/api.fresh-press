@@ -41,6 +41,13 @@ Route::group(['prefix'     => 'deliverable_types'], function () {
 });
 
 
+Route::group(['prefix'     => 'gig_statuses'], function () {
+
+    Route::get('/', 'Market\GigStatusController@index');
+    Route::get('/{id}', 'Market\GigStatusController@show');
+});
+
+
 Route::group(['prefix'     => 'influencers'], function () {
 
     Route::get('/', 'CMS\InfluencerController@index');

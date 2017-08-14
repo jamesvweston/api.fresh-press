@@ -9,6 +9,9 @@ use App\Models\Traits\TimeStamps;
 use Doctrine\Common\Collections\ArrayCollection;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
+/**
+ * @SWG\Definition()
+ */
 class User implements \JsonSerializable, Validatable
 {
 
@@ -16,21 +19,25 @@ class User implements \JsonSerializable, Validatable
 
 
     /**
+     * @SWG\Property(example="1")
      * @var int
      */
     protected $id;
 
     /**
+     * @SWG\Property(example="John")
      * @var string
      */
     protected $first_name;
 
     /**
+     * @SWG\Property(example="Doe")
      * @var string
      */
     protected $last_name;
 
     /**
+     * @SWG\Property(example="john.doe@whatever.com")
      * @var string
      */
     protected $email;

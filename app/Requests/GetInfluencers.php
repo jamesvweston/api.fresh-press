@@ -6,32 +6,7 @@ namespace App\Requests;
 use App\Requests\Traits\QueryCreatedDates;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
-/**
- * @SWG\Get(
- *      path="/influencers",
- *      summary="Get a list of influencers",
- *      tags={"influencers"},
- *      operationId="GetInfluencers",
- *      produces={"application/json"},
- *      @SWG\Parameter(
- *          name="ids",
- *          in="query",
- *          type="string",
- *          required=false,
- *          description="Influencer ids"
- *      ),
- *      @SWG\Parameter(ref="#/parameters/created_from"),
- *      @SWG\Parameter(ref="#/parameters/created_to"),
- *      @SWG\Parameter(ref="#/parameters/page"),
- *      @SWG\Parameter(ref="#/parameters/per_page"),
- *      @SWG\Parameter(ref="#/parameters/order_by"),
- *      @SWG\Parameter(ref="#/parameters/direction"),
- *      @SWG\Response(
- *          response=200,
- *          description="Successful operation"
- *      ),
- * )
- */
+
 class GetInfluencers extends BaseIndexRequest
 {
 

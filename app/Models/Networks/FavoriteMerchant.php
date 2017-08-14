@@ -6,10 +6,14 @@ namespace App\Models\Networks;
 use App\Models\CMS\Influencer;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
+/**
+ * @SWG\Definition()
+ */
 class FavoriteMerchant implements \JsonSerializable
 {
 
     /**
+     * @SWG\Property(example="1")
      * @var int
      */
     protected $id;
@@ -20,6 +24,7 @@ class FavoriteMerchant implements \JsonSerializable
     protected $influencer;
 
     /**
+     * @SWG\Property(example="100")
      * @var int
      */
     protected $fmtc_master_merchant_id;

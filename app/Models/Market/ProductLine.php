@@ -9,6 +9,9 @@ use App\Models\Traits\TimeStamps;
 use Doctrine\Common\Collections\ArrayCollection;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
+/**
+ * @SWG\Definition()
+ */
 class ProductLine implements \JsonSerializable
 {
 
@@ -16,56 +19,67 @@ class ProductLine implements \JsonSerializable
 
 
     /**
+     * @SWG\Property()
      * @var int
      */
     protected $id;
 
     /**
+     * @SWG\Property()
      * @var string
      */
     protected $name;
 
     /**
+     * @SWG\Property()
      * @var string|null
      */
     protected $alias;
 
     /**
+     * @SWG\Property()
      * @var string
      */
     protected $description;
 
     /**
+     * @SWG\Property()
      * @var string
      */
     protected $logo;
 
     /**
+     * @SWG\Property()
      * @var string|null
      */
     protected $website;
 
     /**
+     * @SWG\Property()
      * @var string|null
      */
     protected $facebook;
 
     /**
+     * @SWG\Property()
      * @var string|null
      */
     protected $twitter;
 
     /**
+     * @SWG\Property()
      * @var string|null
      */
     protected $instagram;
 
     /**
+     * @SWG\Property()
      * @var string|null
      */
     protected $news_url;
 
     /**
+     * @SWG\Property()
      * @var string|null
      */
     protected $keywords;

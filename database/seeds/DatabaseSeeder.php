@@ -21,5 +21,6 @@ class DatabaseSeeder extends Seeder
         $this->call(PlatformSeeder::class);
         $this->call(PortfolioTypeSeeder::class);
         $this->call(OutletSeeder::class);
+        $this->call(GigStatusSeeder::class);
     }
 }

@@ -5,25 +5,32 @@ namespace App\Models\Networks;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
+/**
+ * @SWG\Definition()
+ */
 class Network implements \JsonSerializable
 {
 
     /**
+     * @SWG\Property(example="1")
      * @var int
      */
     protected $id;
 
     /**
+     * @SWG\Property()
      * @var string
      */
     protected $label;
 
     /**
+     * @SWG\Property()
      * @var string
      */
     protected $shorthand;
 
     /**
+     * @SWG\Property()
      * @var string
      */
     protected $logo;

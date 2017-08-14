@@ -6,7 +6,7 @@ namespace App\Models\Market;
 /**
  * @SWG\Definition()
  */
-class DeliverableType implements \JsonSerializable
+class GigStatus implements \JsonSerializable
 {
 
     /**

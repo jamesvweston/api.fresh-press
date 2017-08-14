@@ -3,12 +3,21 @@
 namespace App\Requests;
 
 
-class GetCountries extends BaseIndexRequest
+use App\Requests\Traits\QueryNames;
+use jamesvweston\Utilities\ArrayUtil AS AU;
+
+
+class GetGigStatuses extends BaseIndexRequest
 {
+
+    use QueryNames;
+
 
     public function __construct($data = [])
     {
         parent::__construct($data);
+
+        $this->setNames(AU::get($data['names']));
     }
 
     public function validate()
@@ -21,7 +30,7 @@ class GetCountries extends BaseIndexRequest
      */
     public function getDefaultOrderBy()
     {
-        return 'country.id';
+        return 'gig_status.id';
     }
 
     /**
@@ -29,7 +38,7 @@ class GetCountries extends BaseIndexRequest
      */
     public function getOrderByFields()
     {
-        return ['country.id', 'country.name', 'country.code'];
+        return ['gig_status.id', 'gig_status.name'];
     }
 
 }

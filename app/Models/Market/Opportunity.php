@@ -9,6 +9,9 @@ use App\Models\Traits\TimeStamps;
 use Doctrine\Common\Collections\ArrayCollection;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
+/**
+ * @SWG\Definition()
+ */
 class Opportunity implements \JsonSerializable
 {
 
@@ -16,91 +19,109 @@ class Opportunity implements \JsonSerializable
 
 
     /**
+     * @SWG\Property()
      * @var int
      */
     protected $id;
 
     /**
+     * @SWG\Property()
      * @var string
      */
     protected $name;
 
     /**
+     * @SWG\Property()
      * @var string|null
      */
     protected $cover_photo;
 
     /**
+     * @SWG\Property()
      * @var string|null
      */
     protected $keywords;
 
     /**
+     * @SWG\Property()
      * @var string|null
      */
     protected $notes;
 
     /**
+     * @SWG\Property()
      * @var string|null
      */
     protected $pitch;
 
     /**
+     * @SWG\Property()
      * @var string|null
      */
     protected $rejected_reason;
 
     /**
+     * @SWG\Property()
      * @var int
      */
     protected $deliverable_deadline_days;
 
     /**
+     * @SWG\Property(ref="#/definitions/DateTime")
      * @var \DateTime|null
      */
     protected $apply_by;
 
     /**
+     * @SWG\Property(ref="#/definitions/DateTime")
      * @var \DateTime|null
      */
     protected $published_at;
 
     /**
+     * @SWG\Property(ref="#/definitions/DateTime")
      * @var \DateTime|null
      */
     protected $closed_at;
 
     /**
+     * @SWG\Property(ref="#/definitions/DateTime")
      * @var \DateTime|null
      */
     protected $paused_at;
 
     /**
+     * @SWG\Property(ref="#/definitions/DateTime")
      * @var \DateTime|null
      */
     protected $submitted_at;
 
     /**
+     * @SWG\Property(ref="#/definitions/DateTime")
      * @var \DateTime|null
      */
     protected $rejected_at;
 
     /**
+     * @SWG\Property()
      * @var Advertiser
      */
     protected $advertiser;
 
     /**
+     * @SWG\Property()
      * @var Campaign
      */
     protected $campaign;
 
     /**
+     * @SWG\Property()
      * @var ProductLine
      */
     protected $product_line;
 
     /**
+     * @SWG\Property()
      * @var DeliverableType
      */
     protected $deliverable_type;

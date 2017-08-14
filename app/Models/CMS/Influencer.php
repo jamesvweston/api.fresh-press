@@ -13,6 +13,9 @@ use App\Models\Traits\TimeStamps;
 use Doctrine\Common\Collections\ArrayCollection;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
+/**
+ * @SWG\Definition()
+ */
 class Influencer implements \JsonSerializable, Validatable
 {
 
@@ -20,6 +23,7 @@ class Influencer implements \JsonSerializable, Validatable
 
 
     /**
+     * @SWG\Property()
      * @var int
      */
     protected $id;

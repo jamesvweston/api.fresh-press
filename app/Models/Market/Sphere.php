@@ -11,6 +11,9 @@ use App\Models\Traits\TimeStamps;
 use Doctrine\Common\Collections\ArrayCollection;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
+/**
+ * @SWG\Definition()
+ */
 class Sphere implements \JsonSerializable
 {
 
@@ -18,31 +21,37 @@ class Sphere implements \JsonSerializable
 
 
     /**
+     * @SWG\Property()
      * @var int
      */
     protected $id;
 
     /**
+     * @SWG\Property()
      * @var string
      */
     protected $title;
 
     /**
+     * @SWG\Property()
      * @var string
      */
     protected $description;
 
     /**
+     * @SWG\Property()
      * @var int
      */
     protected $percent_male;
 
     /**
+     * @SWG\Property()
      * @var int
      */
     protected $percent_female;
 
     /**
+     * @SWG\Property()
      * @var string|null
      */
     protected $logo;
@@ -53,11 +62,13 @@ class Sphere implements \JsonSerializable
     protected $influencer;
 
     /**
+     * @SWG\Property()
      * @var AgeRange|null
      */
     protected $age_range;
 
     /**
+     * @SWG\Property()
      * @var Country|null
      */
     protected $country;
@@ -110,6 +121,7 @@ class Sphere implements \JsonSerializable
         $object['description']          = $this->getDescription();
         $object['percent_male']         = $this->getPercentMale();
         $object['percent_female']       = $this->getPercentFemale();
+        $object['logo']                 = $this->getLogo();
         $object['age_range']            = is_null($this->getAgeRange()) ? null : $this->getAgeRange()->jsonSerialize();
         $object['country']              = is_null($this->getCountry()) ? null : $this->getCountry()->jsonSerialize();
 

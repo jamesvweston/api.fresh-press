@@ -3,20 +3,26 @@
 namespace App\Models\Locations;
 
 
+/**
+ * @SWG\Definition()
+ */
 class Country implements \JsonSerializable
 {
 
     /**
+     * @SWG\Property()
      * @var int
      */
     protected $id;
 
     /**
+     * @SWG\Property()
      * @var string
      */
     protected $name;
 
     /**
+     * @SWG\Property()
      * @var string
      */
     protected $code;

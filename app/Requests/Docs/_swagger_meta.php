@@ -90,4 +90,24 @@
  *      required=false,
  *      type="string"
  *     ),
+ *
+ * @SWG\Definition(
+ *      definition="DateTime",
+ *      @SWG\Property(
+ *          property="date",
+ *          type="string",
+ *          example="2016-04-28 15:10:39.000000"
+ *      ),
+ *      @SWG\Property(
+ *          property="timezone_type",
+ *          type="int",
+ *          example="3"
+ *      ),
+ *      @SWG\Property(
+ *          property="timezone",
+ *          type="string",
+ *          example="UTC"
+ *      )
+ *  )
+ *
  */
