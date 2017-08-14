@@ -19,13 +19,6 @@ Route::group(['prefix'     => 'age_ranges'], function () {
 });
 
 
-Route::group(['prefix'     => 'campaigns'], function () {
-
-    Route::get('/', 'Market\CampaignController@index');
-    Route::get('/{id}', 'Market\CampaignController@show');
-});
-
-
 Route::group(['prefix'     => 'countries'], function () {
 
     Route::get('/', 'Locations\CountryController@index');
