@@ -183,6 +183,8 @@ return [
          */
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         LaravelDoctrine\ORM\DoctrineServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
+
 
     ],
 
@@ -237,6 +239,7 @@ return [
         /*
          * Third-Party Aliases...
          */
+        'Debugbar'      => Barryvdh\Debugbar\Facade::class,
         'Doctrine'      => LaravelDoctrine\ORM\Facades\Doctrine::class,
         'EntityManager' => LaravelDoctrine\ORM\Facades\EntityManager::class,
         'Registry'      => LaravelDoctrine\ORM\Facades\Registry::class,
