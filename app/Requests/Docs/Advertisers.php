@@ -204,6 +204,41 @@
 
 
 /**
+ * @SWG\Post(
+ *      path="/advertisers/{id}/opportunities",
+ *      summary="Create a Opportunity for an Advertiser",
+ *      description="Create Opportunity",
+ *      tags={"advertisers"},
+ *      operationId="CreateOpportunity",
+ *      produces={"application/json"},
+ *      @SWG\Parameter(
+ *          name="id",
+ *          in="path",
+ *          type="integer",
+ *          required=true,
+ *          description="Advertiser Id"
+ *     ),
+ *      @SWG\Parameter(
+ *          name="body",
+ *          in="body",
+ *          description="Opportunity Object",
+ *          required=false,
+ *          @SWG\Schema(ref="#/definitions/CreateOpportunity")
+ *      ),
+ *      @SWG\Response(
+ *         response=201,
+ *         description="Successful operation",
+ *         @SWG\Schema(ref="#/definitions/Opportunity")
+ *     ),
+ *      @SWG\Response(
+ *          response=403,
+ *          description="Unauthorized to complete this operation"
+ *      ),
+ * )
+ */
+
+
+/**
  * @SWG\Get(
  *      path="/advertisers/{id}/product_lines",
  *      summary="Get ProductLines for an Advertiser",

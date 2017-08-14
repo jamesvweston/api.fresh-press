@@ -1,3 +1,13 @@
+###Api Documentation
+-   Api documentation is accomplished by using PHP swagger.
+-   We create the requests, uar swagger to mark it up, and use swagger to ducment the models
+-   Currently, going to the root of the project (http://api.fresh-press/) in the browser will generate the docs
+
+###Import TODOs
+-   Import images to S3
+-   Create authentication system. OAuth2? Anything is better than sessions
+-   Impersonation of users: USER_TO_IMPERSONATE should belong in the header
+
 ###Table importing status
 -   advertisers imported
 -   advertisers_users                           ignored. Used to create advertisers
