@@ -6,6 +6,7 @@ namespace App\Requests;
 use App\Requests\Traits\RequestValidation;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
+
 abstract class BaseIndexRequest
 {
 

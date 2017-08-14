@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Locations;
 use App\Http\Controllers\Controller;
 use App\Models\Locations\Country;
 use App\Repositories\Locations\CountryRepository;
+use App\Requests\GetCountries;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -25,7 +26,10 @@ class CountryController extends Controller
 
     public function index (Request $request)
     {
-        return $this->country_repo->where([], true);
+        $params                             = new GetCountries($request->input());
+        $params->validate();
+
+        return $this->country_repo->where($params, true);
     }
 
     public function show (Request $request)
