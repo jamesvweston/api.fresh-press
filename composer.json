@@ -15,6 +15,7 @@
         "FMTCco/php-integrations": "dev-master",
         "barryvdh/laravel-debugbar": "^2.4",
         "barryvdh/laravel-ide-helper": "^2.4",
+        "darkaonline/l5-swagger": "^4.0",
         "guzzlehttp/guzzle": "^6.3",
         "jamesvweston/php-utilities": "dev-master",
         "laravel-doctrine/orm": "^1.3",

@@ -182,6 +182,7 @@ return [
          * Third-Party Application Service Providers...
          */
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        L5Swagger\L5SwaggerServiceProvider::class,
         LaravelDoctrine\ORM\DoctrineServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
 
