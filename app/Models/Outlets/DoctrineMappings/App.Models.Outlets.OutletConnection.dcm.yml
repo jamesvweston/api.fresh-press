@@ -16,6 +16,10 @@ App\Models\Outlets\OutletConnection:
         strategy:     IDENTITY
 
   fields:
+    url:
+      column:         url
+      type:           string
+      nullable:       true
     sync_failed_message:
       column:         sync_failed_message
       type:           string

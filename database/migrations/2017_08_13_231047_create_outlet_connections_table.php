@@ -15,6 +15,7 @@ class CreateOutletConnectionsTable extends Migration
     {
         Schema::create('outlet_connections', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('url')->nullable()->default(null);
 
             $table->tinyInteger('outlet_id')->unsigned()->index();
             $table->foreign('outlet_id')->references('id')->on('outlets');

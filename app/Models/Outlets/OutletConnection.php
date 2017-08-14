@@ -20,6 +20,11 @@ class OutletConnection implements \JsonSerializable
     protected $id;
 
     /**
+     * @var string|null
+     */
+    protected $url;
+
+    /**
      * @var Outlet
      */
     protected $outlet;
@@ -45,6 +50,7 @@ class OutletConnection implements \JsonSerializable
      */
     public function __construct($data = [])
     {
+        $this->url                      = AU::get($data['url']);
         $this->outlet                   = AU::get($data['outlet']);
         $this->influencer               = AU::get($data['influencer']);
         $this->sync_failed_at           = AU::get($data['sync_failed_at']);
@@ -57,6 +63,7 @@ class OutletConnection implements \JsonSerializable
     public function jsonSerialize ()
     {
         $object['id']                   = $this->getId();
+        $object['url']                  = $this->getUrl();
         $object['outlet']               = $this->getOutlet()->jsonSerialize();
         $object['sync_failed_at']       = $this->getSyncFailedAt();
         $object['sync_failed_message']  = $this->getSyncFailedMessage();
@@ -70,6 +77,22 @@ class OutletConnection implements \JsonSerializable
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param null|string $url
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
     }
 
     /**

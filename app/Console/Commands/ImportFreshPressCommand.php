@@ -128,6 +128,7 @@ class ImportFreshPressCommand extends Command
         $this->importOpportunityCreatives();
         $this->importNetworkConnections();
         $this->importBids();
+        $this->importOutletConnections();
 
 
         $this->performFinalActions();
@@ -680,6 +681,33 @@ class ImportFreshPressCommand extends Command
         DB::table('bids')->insert($bid_data);
 
         $this->info('Finished importing bids....');
+    }
+
+    private function importOutletConnections ()
+    {
+        $this->info('Importing outlet_connections....');
+
+        $outlet_connection_data                       = [];
+        $fp_outlet_connections_result   = DB::connection('fresh_press')->select('select * from outlets WHERE sphere_id != 0');
+        foreach ($fp_outlet_connections_result AS $fp_outlet)
+        {
+            $sphere                     = DB::select('select * from spheres where id = ' . $fp_outlet->sphere_id)[0];
+            $outlet_connection_data[]   = [
+                'id'                    => $fp_outlet->id,
+                'url'                   => trim($fp_outlet->url) == '' ? null : $fp_outlet->url,
+                'outlet_id'             => $fp_outlet->outlet_type_id,
+                'influencer_id'         => $sphere->influencer_id,
+                'sync_failed_at'        => $fp_outlet->update_failed_at,
+                'sync_failed_message'   => $fp_outlet->update_failed_message,
+                'created_at'            => $fp_outlet->created_at,
+                'updated_at'            => $fp_outlet->updated_at,
+                'deleted_at'            => $fp_outlet->deleted_at,
+            ];
+        }
+
+        DB::table('outlet_connections')->insert($outlet_connection_data);
+
+        $this->info('Finished importing outlet_connections....');
     }
 
     /**
