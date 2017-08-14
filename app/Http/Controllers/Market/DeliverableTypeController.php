@@ -25,7 +25,7 @@ class DeliverableTypeController extends Controller
 
     public function index (Request $request)
     {
-        return $this->deliverable_type_repo->findAll();
+        return $this->deliverable_type_repo->where([], true);
     }
 
     public function show (Request $request)

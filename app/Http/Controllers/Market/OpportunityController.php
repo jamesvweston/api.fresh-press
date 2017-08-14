@@ -24,7 +24,7 @@ class OpportunityController extends Controller
 
     public function index (Request $request)
     {
-        return $this->opportunity_repo->findAll();
+        return $this->opportunity_repo->where([], true);
     }
 
     public function show (Request $request)

@@ -32,7 +32,7 @@ class SphereController extends Controller
 
     public function index (Request $request)
     {
-        return $this->sphere_repo->findAll();
+        return $this->sphere_repo->where([], true);
     }
 
     public function show (Request $request)

@@ -25,7 +25,7 @@ class PlatformController extends Controller
 
     public function index (Request $request)
     {
-        return $this->platform_repo->findAll();
+        return $this->platform_repo->where([], true);
     }
 
     public function show (Request $request)

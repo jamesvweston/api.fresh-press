@@ -25,7 +25,7 @@ class RoleController extends Controller
 
     public function index (Request $request)
     {
-        return $this->role_repo->findAll();
+        return $this->role_repo->where([], true);
     }
 
     public function show (Request $request)

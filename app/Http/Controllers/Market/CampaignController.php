@@ -23,7 +23,7 @@ class CampaignController extends Controller
 
     public function index (Request $request)
     {
-        return $this->campaign_repo->findAll();
+        return $this->campaign_repo->where([], true);
     }
 
     public function show (Request $request)

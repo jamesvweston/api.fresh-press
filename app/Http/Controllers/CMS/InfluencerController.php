@@ -25,7 +25,7 @@ class InfluencerController extends Controller
 
     public function index (Request $request)
     {
-        return $this->influencer_repo->findAll();
+        return $this->influencer_repo->where([], true);
     }
 
     public function show (Request $request)

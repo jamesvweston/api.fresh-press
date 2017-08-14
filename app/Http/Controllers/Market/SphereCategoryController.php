@@ -24,7 +24,7 @@ class SphereCategoryController extends Controller
 
     public function index (Request $request)
     {
-        return $this->sphere_category_repo->findAll();
+        return $this->sphere_category_repo->where([], true);
     }
 
     public function show (Request $request)

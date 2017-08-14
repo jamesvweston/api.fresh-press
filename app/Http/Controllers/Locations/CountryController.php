@@ -25,7 +25,7 @@ class CountryController extends Controller
 
     public function index (Request $request)
     {
-        return $this->country_repo->findAll();
+        return $this->country_repo->where([], true);
     }
 
     public function show (Request $request)

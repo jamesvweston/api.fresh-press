@@ -25,7 +25,7 @@ class ProductLineController extends Controller
 
     public function index (Request $request)
     {
-        return $this->product_line_repo->findAll();
+        return $this->product_line_repo->where([], true);
     }
 
     public function show (Request $request)

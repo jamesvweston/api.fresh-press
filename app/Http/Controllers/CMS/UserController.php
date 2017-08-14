@@ -24,7 +24,7 @@ class UserController extends Controller
 
     public function index (Request $request)
     {
-        return $this->user_repo->findAll();
+        return $this->user_repo->where([], true);
     }
 
 

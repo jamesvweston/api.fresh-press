@@ -24,7 +24,7 @@ class NetworkController extends Controller
 
     public function index (Request $request)
     {
-        return $this->network_repo->findAll();
+        return $this->network_repo->where([], true);
     }
 
     public function show (Request $request)

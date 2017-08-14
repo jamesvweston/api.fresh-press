@@ -25,7 +25,7 @@ class AgeRangeController extends Controller
 
     public function index (Request $request)
     {
-        return $this->age_range_repo->findAll();
+        return $this->age_range_repo->where([], true);
     }
 
     public function show (Request $request)

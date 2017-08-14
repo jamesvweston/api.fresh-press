@@ -29,4 +29,13 @@ class AdvertiserRepository extends BaseRepository
             return $qb->getQuery()->getResult();
     }
 
+    /**
+     * @param   int $id
+     * @return  Advertiser|null
+     */
+    public function find($id)
+    {
+        return parent::find($id);
+    }
+
 }

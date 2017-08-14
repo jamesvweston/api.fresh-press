@@ -26,7 +26,7 @@ class OutletController extends Controller
 
     public function index (Request $request)
     {
-        return $this->outlet_repo->findAll();
+        return $this->outlet_repo->where([], true);
     }
 
 

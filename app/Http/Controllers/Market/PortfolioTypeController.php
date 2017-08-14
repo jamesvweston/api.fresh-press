@@ -24,7 +24,7 @@ class PortfolioTypeController extends Controller
 
     public function index (Request $request)
     {
-        return $this->portfolio_type_repo->findAll();
+        return $this->portfolio_type_repo->where([], true);
     }
 
     public function show (Request $request)
