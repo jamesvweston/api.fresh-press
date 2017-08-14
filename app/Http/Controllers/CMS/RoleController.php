@@ -6,6 +6,7 @@ namespace App\Http\Controllers\CMS;
 use App\Http\Controllers\Controller;
 use App\Models\CMS\Role;
 use App\Repositories\CMS\RoleRepository;
+use App\Requests\GetRoles;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -25,7 +26,10 @@ class RoleController extends Controller
 
     public function index (Request $request)
     {
-        return $this->role_repo->where([], true);
+        $params                             = new GetRoles($request->input());
+        $params->validate();
+
+        return $this->role_repo->where($params, true);
     }
 
     public function show (Request $request)

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\CMS;
 
 use App\Models\CMS\Advertiser;
 use App\Repositories\CMS\AdvertiserRepository;
+use App\Requests\GetAdvertisers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -25,7 +26,9 @@ class AdvertiserController extends Controller
 
     public function index (Request $request)
     {
-        return $this->advertiser_repo->where([], true);
+        $params                             = new GetAdvertisers($request->input());
+        $params->validate();
+        return $this->advertiser_repo->where($params, true);
     }
 
     public function show (Request $request)

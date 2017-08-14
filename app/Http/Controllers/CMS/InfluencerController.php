@@ -5,6 +5,7 @@ namespace App\Http\Controllers\CMS;
 
 use App\Models\CMS\Influencer;
 use App\Repositories\CMS\InfluencerRepository;
+use App\Requests\GetInfluencers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -25,7 +26,10 @@ class InfluencerController extends Controller
 
     public function index (Request $request)
     {
-        return $this->influencer_repo->where([], true);
+        $params                             = new GetInfluencers($request->input());
+        $params->validate();
+
+        return $this->influencer_repo->where($params, true);
     }
 
     public function show (Request $request)
