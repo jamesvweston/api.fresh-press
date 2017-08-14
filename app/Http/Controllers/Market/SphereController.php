@@ -75,6 +75,12 @@ class SphereController extends Controller
         return response('', 204);
     }
 
+    public function getOutletConnections (Request $request)
+    {
+        $sphere                             = $this->getFromRoute($request);
+        return response($sphere->getOutletConnections());
+    }
+
     /**
      * @param   Request $request
      * @return  Sphere

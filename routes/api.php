@@ -140,6 +140,7 @@ Route::group(['prefix'     => 'spheres'], function () {
     Route::get('/{id}/categories', 'Market\SphereController@getCategories');
     Route::post('/{id}/categories/{sphere_category_id}', 'Market\SphereController@addCategory');
     Route::delete('/{id}/categories/{sphere_category_id}', 'Market\SphereController@deleteCategory');
+    Route::get('/{id}/outlet_connections', 'Market\SphereController@getOutletConnections');
 
 });
 
