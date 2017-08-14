@@ -57,11 +57,11 @@ App\Models\Outlets\OutletConnection:
       joinColumn:
         name:         outlet_id
         referencedColumnName: id
-    influencer:
-      targetEntity:   App\Models\CMS\Influencer
+    sphere:
+      targetEntity:   App\Models\Market\Sphere
       nullable:       false
       fetch:          LAZY
       inversedBy:     outlet_connections
       joinColumn:
-        name:         influencer_id
+        name:         sphere_id
         referencedColumnName: id

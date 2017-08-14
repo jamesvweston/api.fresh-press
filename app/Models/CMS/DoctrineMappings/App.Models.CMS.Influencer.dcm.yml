@@ -56,10 +56,6 @@ App\Models\CMS\Influencer:
       targetEntity:   App\Models\Networks\NetworkConnection
       mappedBy:       influencer
       cascade:        ["persist", "remove"]
-    outlet_connections:
-      targetEntity:   App\Models\Outlets\OutletConnection
-      mappedBy:       influencer
-      cascade:        ["persist", "remove"]
     spheres:
       targetEntity:   App\Models\Market\Sphere
       mappedBy:       influencer

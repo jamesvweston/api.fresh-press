@@ -64,10 +64,10 @@ class Sphere extends \App\Models\Market\Sphere implements \Doctrine\ORM\Proxy\Pr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'title', 'description', 'percent_male', 'percent_female', 'logo', 'influencer', 'age_range', 'country', 'categories', 'portfolios', 'created_at', 'updated_at', 'deleted_at'];
+            return ['__isInitialized__', 'id', 'title', 'description', 'percent_male', 'percent_female', 'logo', 'influencer', 'age_range', 'country', 'categories', 'outlet_connections', 'portfolios', 'created_at', 'updated_at', 'deleted_at'];
         }
 
-        return ['__isInitialized__', 'id', 'title', 'description', 'percent_male', 'percent_female', 'logo', 'influencer', 'age_range', 'country', 'categories', 'portfolios', 'created_at', 'updated_at', 'deleted_at'];
+        return ['__isInitialized__', 'id', 'title', 'description', 'percent_male', 'percent_female', 'logo', 'influencer', 'age_range', 'country', 'categories', 'outlet_connections', 'portfolios', 'created_at', 'updated_at', 'deleted_at'];
     }
 
     /**
@@ -428,6 +428,28 @@ class Sphere extends \App\Models\Market\Sphere implements \Doctrine\ORM\Proxy\Pr
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeCategory', [$category]);
 
         return parent::removeCategory($category);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getOutletConnections()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOutletConnections', []);
+
+        return parent::getOutletConnections();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addOutletConnection(\App\Models\Outlets\OutletConnection $outlet_connection)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addOutletConnection', [$outlet_connection]);
+
+        return parent::addOutletConnection($outlet_connection);
     }
 
     /**

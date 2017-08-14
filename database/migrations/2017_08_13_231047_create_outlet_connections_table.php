@@ -20,8 +20,8 @@ class CreateOutletConnectionsTable extends Migration
             $table->tinyInteger('outlet_id')->unsigned()->index();
             $table->foreign('outlet_id')->references('id')->on('outlets');
 
-            $table->integer('influencer_id')->unsigned()->index();
-            $table->foreign('influencer_id')->references('id')->on('influencers');
+            $table->integer('sphere_id')->unsigned()->index();
+            $table->foreign('sphere_id')->references('id')->on('spheres');
 
             $table->datetime('sync_failed_at')->nullable()->default(null)->index();
             $table->text('sync_failed_message')->nullable()->default(null);

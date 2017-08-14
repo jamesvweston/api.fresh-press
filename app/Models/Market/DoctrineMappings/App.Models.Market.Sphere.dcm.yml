@@ -86,6 +86,10 @@ App\Models\Market\Sphere:
       targetEntity:   Portfolio
       mappedBy:       sphere
       cascade:        ["persist", "remove"]
+    outlet_connections:
+      targetEntity:   App\Models\Outlets\OutletConnection
+      mappedBy:       sphere
+      cascade:        ["persist", "remove"]
 
   manyToMany:
     categories:

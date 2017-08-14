@@ -5,6 +5,7 @@ namespace App\Models\Market;
 
 use App\Models\CMS\Influencer;
 use App\Models\Locations\Country;
+use App\Models\Outlets\OutletConnection;
 use App\Models\Traits\Deletable;
 use App\Models\Traits\TimeStamps;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -69,6 +70,11 @@ class Sphere implements \JsonSerializable
     /**
      * @var ArrayCollection
      */
+    protected $outlet_connections;
+
+    /**
+     * @var ArrayCollection
+     */
     protected $portfolios;
 
     /**
@@ -85,6 +91,7 @@ class Sphere implements \JsonSerializable
         $this->age_range                = AU::get($data['age_range']);
         $this->country                  = AU::get($data['country']);
         $this->categories               = AU::get($data['categories'], new ArrayCollection());
+        $this->outlet_connections       = AU::get($data['outlet_connections'], new ArrayCollection());
         $this->portfolios               = AU::get($data['portfolios'], new ArrayCollection());
     }
 
@@ -281,6 +288,23 @@ class Sphere implements \JsonSerializable
     public function removeCategory (SphereCategory $category)
     {
         $this->categories->removeElement($category);
+    }
+
+    /**
+     * @return OutletConnection[]
+     */
+    public function getOutletConnections ()
+    {
+        return $this->outlet_connections->toArray();
+    }
+
+    /**
+     * @param OutletConnection $outlet_connection
+     */
+    public function addOutletConnection (OutletConnection $outlet_connection)
+    {
+        $outlet_connection->setSphere($this);
+        $this->outlet_connections->add($outlet_connection);
     }
 
     /**

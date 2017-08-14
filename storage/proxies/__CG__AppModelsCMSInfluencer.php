@@ -64,10 +64,10 @@ class Influencer extends \App\Models\CMS\Influencer implements \Doctrine\ORM\Pro
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'user', 'billing_address', 'network_connections', 'outlet_connections', 'spheres', 'favorite_merchants', 'created_at', 'updated_at', 'deleted_at'];
+            return ['__isInitialized__', 'id', 'user', 'billing_address', 'network_connections', 'spheres', 'favorite_merchants', 'created_at', 'updated_at', 'deleted_at'];
         }
 
-        return ['__isInitialized__', 'id', 'user', 'billing_address', 'network_connections', 'outlet_connections', 'spheres', 'favorite_merchants', 'created_at', 'updated_at', 'deleted_at'];
+        return ['__isInitialized__', 'id', 'user', 'billing_address', 'network_connections', 'spheres', 'favorite_merchants', 'created_at', 'updated_at', 'deleted_at'];
     }
 
     /**
@@ -274,28 +274,6 @@ class Influencer extends \App\Models\CMS\Influencer implements \Doctrine\ORM\Pro
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'addFavoriteMerchant', [$favorite_merchant]);
 
         return parent::addFavoriteMerchant($favorite_merchant);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getOutletConnections()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOutletConnections', []);
-
-        return parent::getOutletConnections();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function addOutletConnection(\App\Models\Outlets\OutletConnection $outlet_connection)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addOutletConnection', [$outlet_connection]);
-
-        return parent::addOutletConnection($outlet_connection);
     }
 
     /**

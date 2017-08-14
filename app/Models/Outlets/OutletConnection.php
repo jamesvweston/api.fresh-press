@@ -3,7 +3,7 @@
 namespace App\Models\Outlets;
 
 
-use App\Models\CMS\Influencer;
+use App\Models\Market\Sphere;
 use App\Models\Traits\Deletable;
 use App\Models\Traits\TimeStamps;
 use jamesvweston\Utilities\ArrayUtil AS AU;
@@ -30,9 +30,9 @@ class OutletConnection implements \JsonSerializable
     protected $outlet;
 
     /**
-     * @var Influencer
+     * @var Sphere
      */
-    protected $influencer;
+    protected $sphere;
 
     /**
      * @var \DateTime|null
@@ -52,7 +52,7 @@ class OutletConnection implements \JsonSerializable
     {
         $this->url                      = AU::get($data['url']);
         $this->outlet                   = AU::get($data['outlet']);
-        $this->influencer               = AU::get($data['influencer']);
+        $this->sphere                   = AU::get($data['sphere']);
         $this->sync_failed_at           = AU::get($data['sync_failed_at']);
         $this->sync_failed_message      = AU::get($data['sync_failed_message']);
     }
@@ -112,19 +112,19 @@ class OutletConnection implements \JsonSerializable
     }
 
     /**
-     * @return Influencer
+     * @return Sphere
      */
-    public function getInfluencer()
+    public function getSphere()
     {
-        return $this->influencer;
+        return $this->sphere;
     }
 
     /**
-     * @param Influencer $influencer
+     * @param Sphere $sphere
      */
-    public function setInfluencer($influencer)
+    public function setSphere($sphere)
     {
-        $this->influencer = $influencer;
+        $this->sphere = $sphere;
     }
 
     /**
