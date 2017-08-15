@@ -19,34 +19,6 @@
 -   bids
 -   campaigns                                   imported
 -   cj_commissions
--   connection_af
--   connection_afu
--   connection_al
--   connection_alau
--   connection_alca
--   connection_am
--   connection_aw
--   connection_cg
--   connection_cj
--   connection_dgm
--   connection_eby
--   connection_fp
--   connection_grp
--   connection_ir
--   connection_lc
--   connection_ll
--   connection_ls
--   connection_my
--   connection_om
--   connection_on
--   connection_ph
--   connection_pj
--   connection_rk
--   connection_sas
--   connection_sim
--   connection_sl
--   connection_td
--   connection_wg
 -   countries                                   imported
 -   deliverable_types                           imported
 -   failed_jobs
@@ -73,11 +45,6 @@
 -   outlet_metrics
 -   outlet_types
 -   outlets
--   outlets_google
--   outlets_instagram
--   outlets_pinterest
--   outlets_twitter
--   outlets_website
 -   payout_profiles
 -   pepperjam_transaction_details
 -   pepperjam_transaction_summary
@@ -114,3 +81,38 @@
 -   user_onboarding
 -   users                                       imported
 -   users_groups                                ignored. Role is being used instead
+
+###Deprecated Tables
+-   connection_af
+-   connection_afu
+-   connection_al
+-   connection_alau
+-   connection_alca
+-   connection_am
+-   connection_aw
+-   connection_cg
+-   connection_cj
+-   connection_dgm
+-   connection_eby
+-   connection_fp
+-   connection_grp
+-   connection_ir
+-   connection_lc
+-   connection_ll
+-   connection_ls
+-   connection_my
+-   connection_om
+-   connection_on
+-   connection_ph
+-   connection_pj
+-   connection_rk
+-   connection_sas
+-   connection_sim
+-   connection_sl
+-   connection_td
+-   connection_wg
+-   outlets_google
+-   outlets_instagram
+-   outlets_pinterest
+-   outlets_twitter
+-   outlets_website
