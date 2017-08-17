@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Market;
 use App\Http\Controllers\Controller;
 use App\Models\Market\Opportunity;
 use App\Repositories\Market\OpportunityRepository;
+use App\Requests\GetOpportunities;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -24,7 +25,10 @@ class OpportunityController extends Controller
 
     public function index (Request $request)
     {
-        return $this->opportunity_repo->where([], true);
+        $params                             = new GetOpportunities($request->input());
+        $params->validate();
+
+        return $this->opportunity_repo->where($params, true);
     }
 
     public function show (Request $request)

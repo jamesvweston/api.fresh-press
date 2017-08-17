@@ -5,15 +5,20 @@ namespace App\Models\Market;
 
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
+/**
+ * @SWG\Definition()
+ */
 class OpportunityCreative implements \JsonSerializable
 {
 
     /**
+     * @SWG\Property()
      * @var int
      */
     protected $id;
 
     /**
+     * @SWG\Property()
      * @var string
      */
     protected $url;
