@@ -5,7 +5,7 @@ namespace App\Models\Market;
 
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
-class ProductCompensation extends CompensationModel implements \JsonSerializable
+class ProductCompensation extends CompensationModel
 {
 
     /**
@@ -30,9 +30,9 @@ class ProductCompensation extends CompensationModel implements \JsonSerializable
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function toArray ()
     {
-        $object                         = parent::jsonSerialize();
+        $object                         = parent::toArray();
         $object['description']          = $this->getDescription();
         $object['value']                = $this->getValue();
 

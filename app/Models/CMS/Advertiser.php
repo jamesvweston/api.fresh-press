@@ -3,55 +3,32 @@
 namespace App\Models\CMS;
 
 
-use App\Models\Contracts\Validatable;
 use App\Models\Market\Campaign;
 use App\Models\Market\Opportunity;
 use App\Models\Market\ProductLine;
-use App\Models\Traits\Deletable;
-use App\Models\Traits\TimeStamps;
-use Doctrine\Common\Collections\ArrayCollection;
+use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use jamesvweston\Utilities\ArrayUtil AS AU;
+
 
 /**
  * @SWG\Definition()
+ *
+ * @property    int                             $id
+ * @property    string                          $name
+ * @property    User                            $user
+ * @property    Campaign[]                      $campaigns
+ * @property    Opportunity[]                   $opportunities
+ * @property    ProductLine[]                   $product_lines
+ * @property    \Carbon\Carbon                  $created_at
+ * @property    \Carbon\Carbon                  $updated_at
+ * @property    \Carbon\Carbon|null             $deleted_at
  */
-class Advertiser implements \JsonSerializable, Validatable
+class Advertiser extends Model
 {
 
-    use TimeStamps, Deletable;
-
-
-    /**
-     * @SWG\Property()
-     * @var int
-     */
-    protected $id;
-
-    /**
-     * @SWG\Property()
-     * @var string|null
-     */
-    protected $name;
-
-    /**
-     * @var User
-     */
-    protected $user;
-
-    /**
-     * @var ArrayCollection
-     */
-    protected $campaigns;
-
-    /**
-     * @var ArrayCollection
-     */
-    protected $opportunities;
-
-    /**
-     * @var ArrayCollection
-     */
-    protected $product_lines;
+    use HasTimestamps, SoftDeletes;
 
 
     /**
@@ -61,113 +38,41 @@ class Advertiser implements \JsonSerializable, Validatable
     {
         $this->name                     = AU::get($data['name']);
         $this->user                     = AU::get($data['user']);
-        $this->campaigns                = AU::get($data['campaigns'], new ArrayCollection());
-        $this->opportunities            = AU::get($data['opportunities'], new ArrayCollection());
-        $this->product_lines            = AU::get($data['product_lines'], new ArrayCollection());
-    }
-
-    public function validate()
-    {
-
     }
 
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function toArray()
     {
-        $object['id']                   = $this->getId();
-        $object['name']                 = $this->getName();
+        $object['id']                   = $this->id;
+        $object['name']                 = $this->name;
 
         return $object;
     }
 
     /**
-     * @return int
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function getId()
+    public function campaigns ()
     {
-        return $this->id;
+        return $this->hasMany(Campaign::class);
     }
 
     /**
-     * @return null|string
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function getName()
+    public function product_lines ()
     {
-        return $this->name;
+        return $this->hasMany(ProductLine::class);
     }
 
     /**
-     * @param null|string $name
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function setName($name)
+    public function opportunities()
     {
-        $this->name = $name;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param User $user
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-    }
-
-    /**
-     * @return Opportunity[]
-     */
-    public function getOpportunities ()
-    {
-        return $this->opportunities->toArray();
-    }
-
-    public function addOpportunity (Opportunity $opportunity)
-    {
-        $opportunity->setAdvertiser($this);
-        $this->opportunities->add($opportunity);
-    }
-
-    /**
-     * @return ProductLine[]
-     */
-    public function getProductLines ()
-    {
-        return $this->product_lines->toArray();
-    }
-
-    /**
-     * @param ProductLine $product_line
-     */
-    public function addProductLine (ProductLine $product_line)
-    {
-        $product_line->setAdvertiser($this);
-        $this->product_lines->add($product_line);
-    }
-
-    /**
-     * @return Campaign[]
-     */
-    public function getCampaigns ()
-    {
-        return $this->campaigns->toArray();
-    }
-
-    /**
-     * @param Campaign $campaign
-     */
-    public function addCampaign (Campaign $campaign)
-    {
-        $campaign->setAdvertiser($this);
-        $this->campaigns->add($campaign);
+        return $this->hasMany(Opportunity::class);
     }
 
 }

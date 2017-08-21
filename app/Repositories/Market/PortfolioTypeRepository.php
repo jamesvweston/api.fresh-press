@@ -4,15 +4,12 @@ namespace App\Repositories\Market;
 
 
 use App\Models\Market\PortfolioType;
-use App\Repositories\Doctrine\BaseRepository;
+use App\Repositories\RepositoryContract;
+use App\Requests\GetPortfolioTypes;
 use Illuminate\Pagination\LengthAwarePaginator;
-use LaravelDoctrine\ORM\Pagination\PaginatesFromParams;
 
-class PortfolioTypeRepository extends BaseRepository
+class PortfolioTypeRepository implements RepositoryContract
 {
-
-    use PaginatesFromParams;
-
 
     /**
      * @param   array $params
@@ -21,12 +18,37 @@ class PortfolioTypeRepository extends BaseRepository
      */
     public function where ($params = [], $paginate_results = false)
     {
-        $qb                         = $this->createQueryBuilder('portfolio_type');
+        $params                     = ($params instanceof GetPortfolioTypes) ? $params : new GetPortfolioTypes($params);
+        $qb                         = $this->getQuery();
+
+        if (!is_null($params->getIds()))
+            $qb->whereIn('id', explode(',', $params->getIds()));
+
+        if (!is_null($params->getNames()))
+            $qb->whereIn('name', explode(',', $params->getNames()));
+
+        $qb->orderBy($params->getOrderBy(), $params->getDirection());
 
         if ($paginate_results)
-            return $this->paginate($qb->getQuery(), 20);
+            return $qb->paginate($params->getPerPage());
         else
-            return $qb->getQuery()->getResult();
+            return $qb->get();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getQuery ()
+    {
+        return PortfolioType::query()->with($this->with());
+    }
+
+    /**
+     * @return array
+     */
+    public function with ()
+    {
+        return [];
     }
 
     /**
@@ -35,16 +57,16 @@ class PortfolioTypeRepository extends BaseRepository
      */
     public function find($id)
     {
-        return parent::find($id);
+        return $this->where(['ids' => $id])->first();
     }
 
     /**
-     * @param   string  $name
+     * @param   string $name
      * @return  PortfolioType|null
      */
-    public function getOneByName ($name)
+    public function findByName($name)
     {
-        return $this->findOneBy(['name' => $name]);
+        return $this->where(['names' => $name])->first();
     }
 
 }

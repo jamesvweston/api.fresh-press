@@ -3,12 +3,17 @@
 namespace App\Models\Market;
 
 
+use Illuminate\Database\Eloquent\Model;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
 /**
  * @SWG\Definition()
+ *
+ * @property    int                             $id
+ * @property    string                          $url
+ * @property    Opportunity                     $opportunity
  */
-class OpportunityCreative implements \JsonSerializable
+class OpportunityCreative extends Model
 {
 
     /**
@@ -41,52 +46,12 @@ class OpportunityCreative implements \JsonSerializable
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function toArray ()
     {
-        $object['id']                   = $this->getId();
-        $object['url']                  = $this->getUrl();
+        $object['id']                   = $this->id;
+        $object['url']                  = $this->url;
 
         return $object;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    /**
-     * @param string $url
-     */
-    public function setUrl($url)
-    {
-        $this->url = $url;
-    }
-
-    /**
-     * @return Opportunity
-     */
-    public function getOpportunity()
-    {
-        return $this->opportunity;
-    }
-
-    /**
-     * @param Opportunity $opportunity
-     */
-    public function setOpportunity($opportunity)
-    {
-        $this->opportunity = $opportunity;
     }
 
 }

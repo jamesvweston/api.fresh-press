@@ -3,55 +3,33 @@
 namespace App\Models\CMS;
 
 
-use App\Models\Contracts\Validatable;
 use App\Models\Locations\Address;
 use App\Models\Market\Sphere;
 use App\Models\Networks\FavoriteMerchant;
 use App\Models\Networks\NetworkConnection;
-use App\Models\Traits\Deletable;
-use App\Models\Traits\TimeStamps;
-use Doctrine\Common\Collections\ArrayCollection;
+use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
 /**
  * @SWG\Definition()
+ *
+ * @property    int                             $id
+ * @property    User                            $user
+ * @property    Address|null                    $billing_address
+ * @property    NetworkConnection[]             $network_connections
+ * @property    Sphere[]                        $spheres
+ * @property    FavoriteMerchant[]              $favorite_merchants
+ * @property    \Carbon\Carbon                  $created_at
+ * @property    \Carbon\Carbon                  $updated_at
+ * @property    \Carbon\Carbon|null             $deleted_at
  */
-class Influencer implements \JsonSerializable, Validatable
+class Influencer extends Model
 {
 
-    use TimeStamps, Deletable;
+    use HasTimestamps, SoftDeletes;
 
-
-    /**
-     * @SWG\Property()
-     * @var int
-     */
-    protected $id;
-
-    /**
-     * @var User
-     */
-    protected $user;
-
-    /**
-     * @var Address|null
-     */
-    protected $billing_address;
-
-    /**
-     * @var ArrayCollection
-     */
-    protected $network_connections;
-
-    /**
-     * @var ArrayCollection
-     */
-    protected $spheres;
-
-    /**
-     * @var ArrayCollection
-     */
-    protected $favorite_merchants;
 
     /**
      * @param array $data
@@ -60,115 +38,51 @@ class Influencer implements \JsonSerializable, Validatable
     {
         $this->user                     = AU::get($data['user']);
         $this->billing_address          = AU::get($data['billing_address']);
-        $this->favorite_merchants       = AU::get($data['favorite_merchants'], new ArrayCollection());
-        $this->network_connections      = AU::get($data['network_connections'], new ArrayCollection());
-        $this->spheres                  = AU::get($data['spheres'], new ArrayCollection());
-    }
-
-    public function validate()
-    {
-
+        $this->favorite_merchants       = AU::get($data['favorite_merchants']);
+        $this->network_connections      = AU::get($data['network_connections']);
+        $this->spheres                  = AU::get($data['spheres']);
     }
 
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function toArray ()
     {
-        $object['id']                   = $this->getId();
+        $object['id']                   = $this->id;
 
         return $object;
     }
 
     /**
-     * @return int
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function getId()
+    public function billing_address()
     {
-        return $this->id;
+        return $this->hasOne(Address::class, 'id', 'billing_address_id');
     }
 
     /**
-     * @return User
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function getUser()
+    public function favorite_merchants ()
     {
-        return $this->user;
+        return $this->hasMany(FavoriteMerchant::class);
     }
 
     /**
-     * @param User $user
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function setUser($user)
+    public function network_connections ()
     {
-        $this->user = $user;
+        return $this->hasMany(NetworkConnection::class);
     }
 
     /**
-     * @return Address|null
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function getBillingAddress()
+    public function spheres ()
     {
-        return $this->billing_address;
-    }
-
-    /**
-     * @param Address|null $billing_address
-     */
-    public function setBillingAddress($billing_address)
-    {
-        $this->billing_address = $billing_address;
-    }
-
-    /**
-     * @return FavoriteMerchant[]
-     */
-    public function getFavoriteMerchants ()
-    {
-        return $this->favorite_merchants->toArray();
-    }
-
-    /**
-     * @param FavoriteMerchant $favorite_merchant
-     */
-    public function addFavoriteMerchant (FavoriteMerchant $favorite_merchant)
-    {
-        $favorite_merchant->setInfluencer($this);
-        $this->favorite_merchants->add($favorite_merchant);
-    }
-
-    /**
-     * @return NetworkConnection[]
-     */
-    public function getNetworkConnections()
-    {
-        return $this->network_connections->toArray();
-    }
-
-    /**
-     * @param NetworkConnection $network_connection
-     */
-    public function addNetworkConnections($network_connection)
-    {
-        $network_connection->setInfluencer($this);
-        $this->network_connections->add($network_connection);
-    }
-
-    /**
-     * @return Sphere[]
-     */
-    public function getSpheres ()
-    {
-        return $this->spheres->toArray();
-    }
-
-    /**
-     * @param Sphere $sphere
-     */
-    public function addSphere (Sphere $sphere)
-    {
-        $sphere->setInfluencer($this);
-        $this->spheres->add($sphere);
+        return $this->hasMany(Sphere::class);
     }
 
 }

@@ -3,35 +3,26 @@
 namespace App\Models\Market;
 
 
+use Illuminate\Database\Eloquent\Model;
+
+
 /**
  * @SWG\Definition()
+ *
+ * @property    int                             $id
+ * @property    int                             $min
+ * @property    int|null                        $max
  */
-class AgeRange implements \JsonSerializable
+class AgeRange extends Model
 {
 
-    /**
-     * @SWG\Property(example="1")
-     * @var int
-     */
-    protected $id;
-
-    /**
-     * @SWG\Property(example="13")
-     * @var int
-     */
-    protected $min;
-
-    /**
-     * @SWG\Property(example="17")
-     * @var int|null
-     */
-    protected $max;
+    protected $table = 'age_ranges';
 
 
     /**
      * @return array
      */
-    public function jsonSerialize ()
+    public function toArray ()
     {
         $object['id']                   = $this->getId();
         $object['min']                  = $this->getMin();

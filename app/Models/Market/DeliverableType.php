@@ -3,50 +3,27 @@
 namespace App\Models\Market;
 
 
+use Illuminate\Database\Eloquent\Model;
+
+
 /**
  * @SWG\Definition()
+ *
+ * @property    int                             $id
+ * @property    string                          $name
  */
-class DeliverableType implements \JsonSerializable
+class DeliverableType extends Model
 {
-
-    /**
-     * @SWG\Property()
-     * @var int
-     */
-    protected $id;
-
-    /**
-     * @SWG\Property()
-     * @var string
-     */
-    protected $name;
-
 
     /**
      * @return array
      */
-    public function jsonSerialize ()
+    public function toArray ()
     {
-        $object['id']                   = $this->getId();
-        $object['name']                 = $this->getName();
+        $object['id']                   = $this->id;
+        $object['name']                 = $this->name;
 
         return $object;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId ()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName ()
-    {
-        return $this->name;
     }
 
 }

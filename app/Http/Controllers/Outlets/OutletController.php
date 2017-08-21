@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Outlets;
 
 use App\Models\Outlets\Outlet;
 use App\Repositories\Outlets\OutletRepository;
+use App\Requests\GetOutlets;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -26,7 +27,10 @@ class OutletController extends Controller
 
     public function index (Request $request)
     {
-        return $this->outlet_repo->where([], true);
+        $params                             = new GetOutlets($request->input());
+        $params->validate();
+
+        return $this->outlet_repo->where($params, true);
     }
 
 

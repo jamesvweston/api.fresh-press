@@ -4,67 +4,32 @@ namespace App\Models\Networks;
 
 
 use App\Models\CMS\Influencer;
-use App\Models\Traits\TimeStamps;
-use Doctrine\Common\Collections\ArrayCollection;
+use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
+use Illuminate\Database\Eloquent\Model;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
 /**
  * @SWG\Definition()
+ *
+ * @property    int                             $id
+ * @property    string|null                     $affiliate_id
+ * @property    int|null                        $publisher_id
+ * @property    bool                            $is_sync
+ * @property    Network                         $network
+ * @property    Influencer                      $influencer
+ * @property    string|null                     $sync_failed_message
+ * @property    \Carbon\Carbon|null             $sync_failed_at
+ * @property    \Carbon\Carbon                  $created_at
+ * @property    \Carbon\Carbon                  $updated_at
  */
-class NetworkConnection implements \JsonSerializable
+class NetworkConnection extends Model
 {
 
-    use TimeStamps;
+    use HasTimestamps;
+
+    protected $with = ['network'];
 
 
-    /**
-     * @SWG\Property(example="1")
-     * @var int
-     */
-    protected $id;
-
-    /**
-     * @SWG\Property()
-     * @var string|null
-     */
-    protected $affiliate_id;
-
-    /**
-     * @SWG\Property()
-     * @var int|null
-     */
-    protected $publisher_id;
-
-    /**
-     * @SWG\Property()
-     * @var bool
-     */
-    protected $is_sync;
-
-    /**
-     * @SWG\Property()
-     * @var Network
-     */
-    protected $network;
-
-    /**
-     * @var Influencer
-     */
-    protected $influencer;
-
-    /**
-     * @var \DateTime|null
-     */
-    protected $sync_failed_at;
-
-    /**
-     * @var string|null
-     */
-    protected $sync_failed_message;
-
-    /**
-     * @var ArrayCollection
-     */
     protected $fields;
 
     /**
@@ -79,158 +44,37 @@ class NetworkConnection implements \JsonSerializable
         $this->influencer               = AU::get($data['influencer']);
         $this->sync_failed_at           = AU::get($data['sync_failed_at']);
         $this->sync_failed_message      = AU::get($data['sync_failed_message']);
-        $this->fields                   = AU::get($data['fields'], new ArrayCollection());
+        $this->fields                   = AU::get($data['fields']);
     }
 
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function toArray()
     {
-        $object['id']                   = $this->getId();
-        $object['affiliate_id']         = $this->getAffiliateId();
-        $object['publisher_id']         = $this->getPublisherId();
-        $object['is_sync']              = $this->getIsSync();
-        $object['network']              = $this->getNetwork()->jsonSerialize();
+        $object['id']                   = $this->id;
+        $object['affiliate_id']         = $this->affiliate_id;
+        $object['publisher_id']         = $this->publisher_id;
+        $object['is_sync']              = $this->is_sync;
+        $object['network']              = $this->network->toArray();
 
         return $object;
     }
 
     /**
-     * @return int
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function getId()
+    public function network ()
     {
-        return $this->id;
+        return $this->belongsTo(Network::class);
     }
 
     /**
-     * @return null|string
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function getAffiliateId()
+    public function influencer ()
     {
-        return $this->affiliate_id;
-    }
-
-    /**
-     * @param null|string $affiliate_id
-     */
-    public function setAffiliateId($affiliate_id)
-    {
-        $this->affiliate_id = $affiliate_id;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getPublisherId()
-    {
-        return $this->publisher_id;
-    }
-
-    /**
-     * @param int|null $publisher_id
-     */
-    public function setPublisherId($publisher_id)
-    {
-        $this->publisher_id = $publisher_id;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getIsSync()
-    {
-        return $this->is_sync;
-    }
-
-    /**
-     * @param bool $is_sync
-     */
-    public function setIsSync($is_sync)
-    {
-        $this->is_sync = $is_sync;
-    }
-
-    /**
-     * @return Network
-     */
-    public function getNetwork()
-    {
-        return $this->network;
-    }
-
-    /**
-     * @param Network $network
-     */
-    public function setNetwork($network)
-    {
-        $this->network = $network;
-    }
-
-    /**
-     * @return Influencer
-     */
-    public function getInfluencer()
-    {
-        return $this->influencer;
-    }
-
-    /**
-     * @param Influencer $influencer
-     */
-    public function setInfluencer($influencer)
-    {
-        $this->influencer = $influencer;
-    }
-
-    /**
-     * @return \DateTime|null
-     */
-    public function getSyncFailedAt()
-    {
-        return $this->sync_failed_at;
-    }
-
-    /**
-     * @param \DateTime|null $sync_failed_at
-     */
-    public function setSyncFailedAt($sync_failed_at)
-    {
-        $this->sync_failed_at = $sync_failed_at;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getSyncFailedMessage()
-    {
-        return $this->sync_failed_message;
-    }
-
-    /**
-     * @param null|string $sync_failed_message
-     */
-    public function setSyncFailedMessage($sync_failed_message)
-    {
-        $this->sync_failed_message = $sync_failed_message;
-    }
-
-    /**
-     * @return NetworkConnectionField[]
-     */
-    public function getFields()
-    {
-        return $this->fields->toArray();
-    }
-
-    /**
-     * @param NetworkConnectionField $field
-     */
-    public function addField ($field)
-    {
-        $field->setNetworkConnection($this);
-        $this->fields->add($field);
+        return $this->belongsTo(Influencer::class);
     }
 
 }

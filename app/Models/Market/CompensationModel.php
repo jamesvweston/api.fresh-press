@@ -3,9 +3,15 @@
 namespace App\Models\Market;
 
 
+use Illuminate\Database\Eloquent\Model;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
-abstract class CompensationModel implements \JsonSerializable
+/**
+ * @SWG\Definition()
+ *
+ * @property    int                             $id
+ */
+abstract class CompensationModel extends Model
 {
 
     /**
@@ -18,6 +24,7 @@ abstract class CompensationModel implements \JsonSerializable
      */
     protected $opportunity;
 
+
     public function __construct($data = [])
     {
         $this->opportunity              = AU::get($data['opportunity']);
@@ -26,7 +33,7 @@ abstract class CompensationModel implements \JsonSerializable
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function toArray()
     {
         $object['id']                   = $this->getId();
         $object['type']                 = $this->getType();

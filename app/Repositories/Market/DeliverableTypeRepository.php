@@ -4,29 +4,37 @@ namespace App\Repositories\Market;
 
 
 use App\Models\Market\DeliverableType;
-use App\Repositories\Doctrine\BaseRepository;
-use Illuminate\Pagination\LengthAwarePaginator;
-use LaravelDoctrine\ORM\Pagination\PaginatesFromParams;
+use App\Repositories\RepositoryContract;
+use App\Requests\GetDeliverableTypes;
 
-class DeliverableTypeRepository extends BaseRepository
+class DeliverableTypeRepository implements RepositoryContract
 {
-
-    use PaginatesFromParams;
 
 
     /**
-     * @param   array $params
+     * @param   GetDeliverableTypes|array   $params
      * @param   bool $paginate_results
-     * @return  DeliverableType[]|LengthAwarePaginator
+     * @return  \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Database\Eloquent\Collection|static[]
      */
     public function where ($params = [], $paginate_results = false)
     {
-        $qb                         = $this->createQueryBuilder('deliverable_type');
+        $params                  = ($params instanceof GetDeliverableTypes) ? $params : new GetDeliverableTypes($params);
+        $qb                     = $this->getQuery();
+
+        if (!is_null($params->getIds()))
+            $qb->whereIn('id', explode(',', $params->getIds()));
+
+        if (!is_null($params->getLabels()))
+            $qb->whereIn('label', explode(',', $params->getLabels()));
+
+
+        $qb->orderBy($params->getOrderBy(), $params->getDirection());
 
         if ($paginate_results)
-            return $this->paginate($qb->getQuery(), 20);
+            return $qb->paginate($params->getPerPage());
         else
-            return $qb->getQuery()->getResult();
+            return $qb->get();
+
     }
 
     /**
@@ -35,7 +43,23 @@ class DeliverableTypeRepository extends BaseRepository
      */
     public function find($id)
     {
-        return parent::find($id);
+        return $this->where(['ids' => $id])->first();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getQuery ()
+    {
+        return DeliverableType::query()->with($this->with());
+    }
+
+    /**
+     * @return array
+     */
+    public function with ()
+    {
+        return [];
     }
 
 }

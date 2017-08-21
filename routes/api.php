@@ -52,14 +52,6 @@ Route::group(['prefix'     => 'influencers'], function () {
 });
 
 
-Route::group(['prefix'     => 'network_connections'], function () {
-
-    Route::get('/', 'Networks\NetworkConnectionController@index');
-    Route::get('/{id}', 'Networks\NetworkConnectionController@show');
-
-});
-
-
 Route::group(['prefix'     => 'networks'], function () {
 
     Route::get('/', 'Networks\NetworkController@index');
@@ -96,25 +88,12 @@ Route::group(['prefix'     => 'platforms'], function () {
 });
 
 
-Route::group(['prefix'     => 'platforms'], function () {
-
-    Route::get('/', 'Market\PlatformController@index');
-
-});
-
-
 Route::group(['prefix'     => 'portfolio_types'], function () {
 
     Route::get('/', 'Market\PortfolioTypeController@index');
     Route::get('/{id}', 'Market\PortfolioTypeController@show');
 });
 
-
-Route::group(['prefix'     => 'product_lines'], function () {
-
-    Route::get('/', 'Market\ProductLineController@index');
-    Route::get('/{id}', 'Market\ProductLineController@show');
-});
 
 
 Route::group(['prefix'     => 'roles'], function () {
@@ -129,18 +108,6 @@ Route::group(['prefix'     => 'sphere_categories'], function () {
 
     Route::get('/', 'Market\SphereCategoryController@index');
     Route::get('/{id}', 'Market\SphereCategoryController@show');
-
-});
-
-
-Route::group(['prefix'     => 'spheres'], function () {
-
-    Route::get('/', 'Market\SphereController@index');
-    Route::get('/{id}', 'Market\SphereController@show');
-    Route::get('/{id}/categories', 'Market\SphereController@getCategories');
-    Route::post('/{id}/categories/{sphere_category_id}', 'Market\SphereController@addCategory');
-    Route::delete('/{id}/categories/{sphere_category_id}', 'Market\SphereController@deleteCategory');
-    Route::get('/{id}/outlet_connections', 'Market\SphereController@getOutletConnections');
 
 });
 

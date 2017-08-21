@@ -4,36 +4,36 @@ namespace App\Repositories\Locations;
 
 
 use App\Models\Locations\Country;
-use App\Repositories\Doctrine\BaseRepository;
+use App\Repositories\RepositoryContract;
 use App\Requests\GetCountries;
-use Illuminate\Pagination\LengthAwarePaginator;
-use LaravelDoctrine\ORM\Pagination\PaginatesFromParams;
 
-class CountryRepository extends BaseRepository
+class CountryRepository implements RepositoryContract
 {
-
-    use PaginatesFromParams;
 
 
     /**
-     * @param   array $params
+     * @param   GetCountries|[] $params
      * @param   bool $paginate_results
-     * @return  Country[]|LengthAwarePaginator
+     * @return  \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Database\Eloquent\Collection|static[]
      */
     public function where ($params = [], $paginate_results = false)
     {
-        $params                     = $params instanceof GetCountries ? $params : new GetCountries($params);
-        $qb                         = $this->createQueryBuilder('country');
+        $params                  = ($params instanceof GetCountries) ? $params : new GetCountries($params);
+        $qb                     = $this->getQuery();
 
         if (!is_null($params->getIds()))
-            $qb->andWhere($qb->expr()->in('country.id', $params->getIds()));
+            $qb->whereIn('id', explode(',', $params->getIds()));
+
+        if (!is_null($params->getCodes()))
+            $qb->whereIn('code', explode(',', $params->getCodes()));
+
 
         $qb->orderBy($params->getOrderBy(), $params->getDirection());
 
         if ($paginate_results)
-            return $this->paginate($qb->getQuery(), $params->getPerPage(), $params->getPage());
+            return $qb->paginate($params->getPerPage());
         else
-            return $qb->getQuery()->getResult();
+            return $qb->get();
     }
 
     /**
@@ -42,16 +42,16 @@ class CountryRepository extends BaseRepository
      */
     public function find($id)
     {
-        return parent::find($id);
+        return $this->where(['ids' => $id])->first();
     }
 
     /**
      * @param   string  $code
      * @return  Country|null
      */
-    public function getOneByCode ($code)
+    public function findByCode ($code)
     {
-        return $this->findOneBy(['code' => $code]);
+        return $this->where(['codes' => $code])->first();
     }
 
     /**
@@ -60,6 +60,22 @@ class CountryRepository extends BaseRepository
     public function getUS ()
     {
         return $this->find(233);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getQuery ()
+    {
+        return Country::query()->with($this->with());
+    }
+
+    /**
+     * @return array
+     */
+    public function with ()
+    {
+        return [];
     }
 
 }

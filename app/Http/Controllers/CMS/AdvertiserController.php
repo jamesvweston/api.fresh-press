@@ -40,19 +40,19 @@ class AdvertiserController extends Controller
     public function getCampaigns (Request $request)
     {
         $advertiser                         = $this->getFromRoute($request);
-        return response($advertiser->getCampaigns());
+        return response($advertiser->campaigns);
     }
 
     public function getOpportunities (Request $request)
     {
         $advertiser                         = $this->getFromRoute($request);
-        return response($advertiser->getOpportunities());
+        return response($advertiser->opportunities);
     }
 
     public function getProductLines (Request $request)
     {
         $advertiser                         = $this->getFromRoute($request);
-        return response($advertiser->getProductLines());
+        return response($advertiser->product_lines);
     }
 
     /**

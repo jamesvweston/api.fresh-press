@@ -4,42 +4,26 @@ namespace App\Models\Market;
 
 
 use App\Models\CMS\Advertiser;
-use App\Models\Traits\Deletable;
-use App\Models\Traits\TimeStamps;
+use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
 /**
  * @SWG\Definition()
+ *
+ * @property    int                             $id
+ * @property    string                          $name
+ * @property    string                          $description
+ * @property    Advertiser                      $advertiser
+ * @property    \Carbon\Carbon                  $created_at
+ * @property    \Carbon\Carbon                  $updated_at
+ * @property    \Carbon\Carbon|null             $deleted_at
  */
-class Campaign implements \JsonSerializable
+class Campaign extends Model
 {
 
-    use TimeStamps, Deletable;
-
-
-    /**
-     * @SWG\Property()
-     * @var int
-     */
-    protected $id;
-
-    /**
-     * @SWG\Property()
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * @SWG\Property()
-     * @var string|null
-     */
-    protected $description;
-
-    /**
-     * @var Advertiser
-     */
-    protected $advertiser;
-
+    use HasTimestamps, SoftDeletes;
 
     /**
      * @param array $data
@@ -54,69 +38,13 @@ class Campaign implements \JsonSerializable
     /**
      * @return array
      */
-    public function jsonSerialize ()
+    public function toArray ()
     {
-        $object['id']                   = $this->getId();
-        $object['name']                 = $this->getName();
-        $object['description']          = $this->getDescription();
+        $object['id']                   = $this->id;
+        $object['name']                 = $this->name;
+        $object['description']          = $this->description;
 
         return $object;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param null|string $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * @return Advertiser
-     */
-    public function getAdvertiser()
-    {
-        return $this->advertiser;
-    }
-
-    /**
-     * @param Advertiser $advertiser
-     */
-    public function setAdvertiser($advertiser)
-    {
-        $this->advertiser = $advertiser;
     }
 
 }

@@ -41,25 +41,25 @@ class InfluencerController extends Controller
     public function getBillingAddress (Request $request)
     {
         $influencer                         = $this->getFromRoute($request);
-        return response($influencer->getBillingAddress());
+        return response($influencer->billing_address);
     }
 
     public function getFavoriteMerchants (Request $request)
     {
         $influencer                         = $this->getFromRoute($request);
-        return response($influencer->getFavoriteMerchants());
+        return response($influencer->favorite_merchants);
     }
 
     public function getNetworkConnections (Request $request)
     {
         $influencer                         = $this->getFromRoute($request);
-        return response($influencer->getNetworkConnections());
+        return response($influencer->network_connections);
     }
 
     public function getSpheres (Request $request)
     {
         $influencer                         = $this->getFromRoute($request);
-        return response($influencer->getSpheres());
+        return response($influencer->spheres);
     }
 
     /**

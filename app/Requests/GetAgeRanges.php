@@ -3,27 +3,19 @@
 namespace App\Requests;
 
 
-use App\Requests\Traits\QueryNames;
-use jamesvweston\Utilities\ArrayUtil AS AU;
-
-
-class GetGigStatuses extends BaseIndexRequest
+class GetAgeRanges extends BaseIndexRequest
 {
-
-    use QueryNames;
-
 
     public function __construct($data = [])
     {
         parent::__construct($data);
-
-        $this->setNames(AU::get($data['names']));
     }
 
     public function validate()
     {
         parent::validate();
     }
+
 
     /**
      * @return string
@@ -38,7 +30,7 @@ class GetGigStatuses extends BaseIndexRequest
      */
     public function getOrderByFields()
     {
-        return ['id', 'name'];
+        return ['id', 'label', 'min_age', 'max_age'];
     }
 
 }

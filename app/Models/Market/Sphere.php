@@ -6,86 +6,38 @@ namespace App\Models\Market;
 use App\Models\CMS\Influencer;
 use App\Models\Locations\Country;
 use App\Models\Outlets\OutletConnection;
-use App\Models\Traits\Deletable;
-use App\Models\Traits\TimeStamps;
-use Doctrine\Common\Collections\ArrayCollection;
+use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
 /**
  * @SWG\Definition()
+ *
+ * @property    int                             $id
+ * @property    string                          $title
+ * @property    string                          $description
+ * @property    int                             $percent_male
+ * @property    int                             $percent_female
+ * @property    string|null                     $logo
+ * @property    Influencer                      $influencer
+ * @property    AgeRange|null                   $age_range
+ * @property    Country|null                    $country
+ * @property    \Carbon\Carbon                  $created_at
+ * @property    \Carbon\Carbon                  $updated_at
+ * @property    \Carbon\Carbon|null             $deleted_at
  */
-class Sphere implements \JsonSerializable
+class Sphere extends Model
 {
 
-    use TimeStamps, Deletable;
+    use HasTimestamps, SoftDeletes;
 
 
-    /**
-     * @SWG\Property()
-     * @var int
-     */
-    protected $id;
 
-    /**
-     * @SWG\Property()
-     * @var string
-     */
-    protected $title;
-
-    /**
-     * @SWG\Property()
-     * @var string
-     */
-    protected $description;
-
-    /**
-     * @SWG\Property()
-     * @var int
-     */
-    protected $percent_male;
-
-    /**
-     * @SWG\Property()
-     * @var int
-     */
-    protected $percent_female;
-
-    /**
-     * @SWG\Property()
-     * @var string|null
-     */
-    protected $logo;
-
-    /**
-     * @var Influencer
-     */
-    protected $influencer;
-
-    /**
-     * @SWG\Property()
-     * @var AgeRange|null
-     */
-    protected $age_range;
-
-    /**
-     * @SWG\Property()
-     * @var Country|null
-     */
-    protected $country;
-
-    /**
-     * @var ArrayCollection
-     */
     protected $categories;
 
-    /**
-     * @var ArrayCollection
-     */
     protected $outlet_connections;
 
-    /**
-     * @var ArrayCollection
-     */
     protected $portfolios;
 
     /**
@@ -101,239 +53,50 @@ class Sphere implements \JsonSerializable
         $this->influencer               = AU::get($data['influencer']);
         $this->age_range                = AU::get($data['age_range']);
         $this->country                  = AU::get($data['country']);
-        $this->categories               = AU::get($data['categories'], new ArrayCollection());
-        $this->outlet_connections       = AU::get($data['outlet_connections'], new ArrayCollection());
-        $this->portfolios               = AU::get($data['portfolios'], new ArrayCollection());
-    }
-
-    public function validate()
-    {
-
+        $this->categories               = AU::get($data['categories']);
+        $this->outlet_connections       = AU::get($data['outlet_connections']);
+        $this->portfolios               = AU::get($data['portfolios']);
     }
 
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function toArray ()
     {
-        $object['id']                   = $this->getId();
-        $object['title']                = $this->getTitle();
-        $object['description']          = $this->getDescription();
-        $object['percent_male']         = $this->getPercentMale();
-        $object['percent_female']       = $this->getPercentFemale();
-        $object['logo']                 = $this->getLogo();
-        $object['age_range']            = is_null($this->getAgeRange()) ? null : $this->getAgeRange()->jsonSerialize();
-        $object['country']              = is_null($this->getCountry()) ? null : $this->getCountry()->jsonSerialize();
+        $object['id']                   = $this->id;
+        $object['title']                = $this->title;
+        $object['description']          = $this->description;
+        $object['percent_male']         = $this->percent_male;
+        $object['percent_female']       = $this->percent_female;
+        $object['logo']                 = $this->logo;
+        $object['age_range']            = is_null($this->age_range) ? null : $this->age_range->toArray();
+        $object['country']              = is_null($this->country) ? null : $this->country->toArray();
 
         return $object;
     }
 
     /**
-     * @return int
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function getId()
+    public function age_range()
     {
-        return $this->id;
+        return $this->hasOne(AgeRange::class, 'id', 'age_range_id');
     }
 
     /**
-     * @return string
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function getTitle()
+    public function country()
     {
-        return $this->title;
+        return $this->hasOne(Country::class, 'id', 'country_id');
     }
 
     /**
-     * @param string $title
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function setTitle($title)
+    public function influencer ()
     {
-        $this->title = $title;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPercentMale()
-    {
-        return $this->percent_male;
-    }
-
-    /**
-     * @param int $percent_male
-     */
-    public function setPercentMale($percent_male)
-    {
-        $this->percent_male = $percent_male;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPercentFemale()
-    {
-        return $this->percent_female;
-    }
-
-    /**
-     * @param int $percent_female
-     */
-    public function setPercentFemale($percent_female)
-    {
-        $this->percent_female = $percent_female;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getLogo()
-    {
-        return $this->logo;
-    }
-
-    /**
-     * @param null|string $logo
-     */
-    public function setLogo($logo)
-    {
-        $this->logo = $logo;
-    }
-
-    /**
-     * @return Influencer
-     */
-    public function getInfluencer()
-    {
-        return $this->influencer;
-    }
-
-    /**
-     * @param Influencer $influencer
-     */
-    public function setInfluencer($influencer)
-    {
-        $this->influencer = $influencer;
-    }
-
-    /**
-     * @return AgeRange|null
-     */
-    public function getAgeRange()
-    {
-        return $this->age_range;
-    }
-
-    /**
-     * @param AgeRange|null $age_range
-     */
-    public function setAgeRange($age_range)
-    {
-        $this->age_range = $age_range;
-    }
-
-    /**
-     * @return Country|null
-     */
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    /**
-     * @param Country|null $country
-     */
-    public function setCountry($country)
-    {
-        $this->country = $country;
-    }
-
-    /**
-     * @return SphereCategory[]
-     */
-    public function getCategories ()
-    {
-        return $this->categories->toArray();
-    }
-
-    /**
-     * @param   SphereCategory $sphere_category
-     * @return  bool
-     */
-    public function hasCategory (SphereCategory $sphere_category)
-    {
-        foreach ($this->getCategories() AS $category)
-        {
-            if ($category->getId() == $sphere_category->getId())
-                return true;
-        }
-        return false;
-    }
-
-    /**
-     * @param SphereCategory $category
-     */
-    public function addCategory (SphereCategory $category)
-    {
-        $this->categories->add($category);
-    }
-
-    /**
-     * @param SphereCategory $category
-     */
-    public function removeCategory (SphereCategory $category)
-    {
-        $this->categories->removeElement($category);
-    }
-
-    /**
-     * @return OutletConnection[]
-     */
-    public function getOutletConnections ()
-    {
-        return $this->outlet_connections->toArray();
-    }
-
-    /**
-     * @param OutletConnection $outlet_connection
-     */
-    public function addOutletConnection (OutletConnection $outlet_connection)
-    {
-        $outlet_connection->setSphere($this);
-        $this->outlet_connections->add($outlet_connection);
-    }
-
-    /**
-     * @return Portfolio[]
-     */
-    public function getPortfolios ()
-    {
-        return $this->portfolios->toArray();
-    }
-
-    /**
-     * @param Portfolio $portfolio
-     */
-    public function addPortfolio (Portfolio $portfolio)
-    {
-        $portfolio->setSphere($this);
-        $this->portfolios->add($portfolio);
+        return $this->belongsTo(Influencer::class);
     }
 
 }

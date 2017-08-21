@@ -4,94 +4,38 @@ namespace App\Models\Market;
 
 
 use App\Models\CMS\Advertiser;
-use App\Models\Traits\Deletable;
-use App\Models\Traits\TimeStamps;
-use Doctrine\Common\Collections\ArrayCollection;
+use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
 /**
  * @SWG\Definition()
+ *
+ * @property    int                             $id
+ * @property    string                          $name
+ * @property    string|null                     $alias
+ * @property    string                          $description
+ * @property    string                          $logo
+ * @property    string|null                     $website
+ * @property    string|null                     $facebook
+ * @property    string|null                     $twitter
+ * @property    string|null                     $instagram
+ * @property    string|null                     $news_url
+ * @property    string|null                     $keywords
+ * @property    Advertiser                      $advertiser
+ * @property    Platform[]                      $platforms
+ * @property    \Carbon\Carbon                  $created_at
+ * @property    \Carbon\Carbon                  $updated_at
+ * @property    \Carbon\Carbon|null             $deleted_at
  */
-class ProductLine implements \JsonSerializable
+class ProductLine extends Model
 {
 
-    use TimeStamps, Deletable;
+    use HasTimestamps, SoftDeletes;
 
 
-    /**
-     * @SWG\Property()
-     * @var int
-     */
-    protected $id;
 
-    /**
-     * @SWG\Property()
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * @SWG\Property()
-     * @var string|null
-     */
-    protected $alias;
-
-    /**
-     * @SWG\Property()
-     * @var string
-     */
-    protected $description;
-
-    /**
-     * @SWG\Property()
-     * @var string
-     */
-    protected $logo;
-
-    /**
-     * @SWG\Property()
-     * @var string|null
-     */
-    protected $website;
-
-    /**
-     * @SWG\Property()
-     * @var string|null
-     */
-    protected $facebook;
-
-    /**
-     * @SWG\Property()
-     * @var string|null
-     */
-    protected $twitter;
-
-    /**
-     * @SWG\Property()
-     * @var string|null
-     */
-    protected $instagram;
-
-    /**
-     * @SWG\Property()
-     * @var string|null
-     */
-    protected $news_url;
-
-    /**
-     * @SWG\Property()
-     * @var string|null
-     */
-    protected $keywords;
-
-    /**
-     * @var Advertiser
-     */
-    protected $advertiser;
-
-    /**
-     * @var ArrayCollection
-     */
     protected $platforms;
 
     /**
@@ -110,232 +54,34 @@ class ProductLine implements \JsonSerializable
         $this->news_url                 = AU::get($data['news_url']);
         $this->keywords                 = AU::get($data['keywords']);
         $this->advertiser               = AU::get($data['advertiser']);
-        $this->platforms                = AU::get($data['platforms'], new ArrayCollection());
-    }
-
-    public function validate()
-    {
-
     }
 
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function toArray ()
     {
-        $object['id']                   = $this->getId();
-        $object['name']                 = $this->getName();
-        $object['alias']                = $this->getAlias();
-        $object['description']          = $this->getDescription();
-        $object['logo']                 = $this->getLogo();
-        $object['website']              = $this->getWebsite();
-        $object['facebook']             = $this->getFacebook();
-        $object['twitter']              = $this->getTwitter();
-        $object['instagram']            = $this->getInstagram();
-        $object['news_url']             = $this->getNewsUrl();
-        $object['keywords']             = $this->getKeywords();
+        $object['id']                   = $this->id;
+        $object['name']                 = $this->name;
+        $object['alias']                = $this->alias;
+        $object['description']          = $this->description;
+        $object['logo']                 = $this->logo;
+        $object['website']              = $this->website;
+        $object['facebook']             = $this->facebook;
+        $object['twitter']              = $this->twitter;
+        $object['instagram']            = $this->instagram;
+        $object['news_url']             = $this->news_url;
+        $object['keywords']             = $this->keywords;
 
         return $object;
     }
 
     /**
-     * @return int
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function getId()
+    public function platforms ()
     {
-        return $this->id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getAlias()
-    {
-        return $this->alias;
-    }
-
-    /**
-     * @param null|string $alias
-     */
-    public function setAlias($alias)
-    {
-        $this->alias = $alias;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLogo()
-    {
-        return $this->logo;
-    }
-
-    /**
-     * @param string $logo
-     */
-    public function setLogo($logo)
-    {
-        $this->logo = $logo;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getWebsite()
-    {
-        return $this->website;
-    }
-
-    /**
-     * @param null|string $website
-     */
-    public function setWebsite($website)
-    {
-        $this->website = $website;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getFacebook()
-    {
-        return $this->facebook;
-    }
-
-    /**
-     * @param null|string $facebook
-     */
-    public function setFacebook($facebook)
-    {
-        $this->facebook = $facebook;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getTwitter()
-    {
-        return $this->twitter;
-    }
-
-    /**
-     * @param null|string $twitter
-     */
-    public function setTwitter($twitter)
-    {
-        $this->twitter = $twitter;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getInstagram()
-    {
-        return $this->instagram;
-    }
-
-    /**
-     * @param null|string $instagram
-     */
-    public function setInstagram($instagram)
-    {
-        $this->instagram = $instagram;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getNewsUrl()
-    {
-        return $this->news_url;
-    }
-
-    /**
-     * @param null|string $news_url
-     */
-    public function setNewsUrl($news_url)
-    {
-        $this->news_url = $news_url;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getKeywords()
-    {
-        return $this->keywords;
-    }
-
-    /**
-     * @param null|string $keywords
-     */
-    public function setKeywords($keywords)
-    {
-        $this->keywords = $keywords;
-    }
-
-    /**
-     * @return Advertiser
-     */
-    public function getAdvertiser()
-    {
-        return $this->advertiser;
-    }
-
-    /**
-     * @param Advertiser $advertiser
-     */
-    public function setAdvertiser($advertiser)
-    {
-        $this->advertiser = $advertiser;
-    }
-
-    /**
-     * @return Platform[]
-     */
-    public function getPlatforms ()
-    {
-        return $this->platforms->toArray();
-    }
-
-    /**
-     * @param Platform $platform
-     */
-    public function addPlatform (Platform $platform)
-    {
-        $this->platforms->add($platform);
+        return $this->hasMany(Platform::class);
     }
 
 }

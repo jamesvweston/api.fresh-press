@@ -127,7 +127,7 @@ class GetOpportunities extends BaseIndexRequest
      */
     public function getDefaultOrderBy()
     {
-        return 'opportunity.id';
+        return 'id';
     }
 
     /**
@@ -135,7 +135,7 @@ class GetOpportunities extends BaseIndexRequest
      */
     public function getOrderByFields()
     {
-        return ['opportunity.id', 'opportunity.email'];
+        return ['id', 'email'];
     }
 
 }

@@ -4,14 +4,15 @@ namespace App\Models\Outlets;
 
 
 use App\Models\Market\Sphere;
-use App\Models\Traits\Deletable;
-use App\Models\Traits\TimeStamps;
+use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
-class OutletConnection implements \JsonSerializable
+class OutletConnection extends Model
 {
 
-    use TimeStamps, Deletable;
+    use HasTimestamps, SoftDeletes;
 
 
     /**
@@ -60,11 +61,11 @@ class OutletConnection implements \JsonSerializable
     /**
      * @return array
      */
-    public function jsonSerialize ()
+    public function toArray ()
     {
         $object['id']                   = $this->getId();
         $object['url']                  = $this->getUrl();
-        $object['outlet']               = $this->getOutlet()->jsonSerialize();
+        $object['outlet']               = $this->getOutlet()->toArray();
         $object['sync_failed_at']       = $this->getSyncFailedAt();
         $object['sync_failed_message']  = $this->getSyncFailedMessage();
 

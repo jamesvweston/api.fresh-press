@@ -4,16 +4,12 @@ namespace App\Repositories\CMS;
 
 
 use App\Models\CMS\Influencer;
-use App\Repositories\Doctrine\BaseRepository;
+use App\Repositories\RepositoryContract;
 use App\Requests\GetInfluencers;
 use Illuminate\Pagination\LengthAwarePaginator;
-use LaravelDoctrine\ORM\Pagination\PaginatesFromParams;
 
-class InfluencerRepository extends BaseRepository
+class InfluencerRepository implements RepositoryContract
 {
-
-    use PaginatesFromParams;
-
 
     /**
      * @param   array $params
@@ -23,17 +19,39 @@ class InfluencerRepository extends BaseRepository
     public function where ($params = [], $paginate_results = false)
     {
         $params                     = $params instanceof GetInfluencers ? $params : new GetInfluencers($params);
-        $qb                         = $this->createQueryBuilder('influencer');
+        $qb                         = $this->getQuery();
 
         if (!is_null($params->getIds()))
-            $qb->andWhere($qb->expr()->in('influencer.id', $params->getIds()));
+            $qb->whereIn('id', explode(',', $params->getIds()));
+
+        if (!is_null($params->getCreatedFrom()))
+            $qb->where('created_at', '>=', new \Carbon\Carbon($params->getCreatedFrom()));
+
+        if (!is_null($params->getCreatedTo()))
+            $qb->where('created_at', '<=', new \Carbon\Carbon($params->getCreatedTo()));
 
         $qb->orderBy($params->getOrderBy(), $params->getDirection());
 
         if ($paginate_results)
-            return $this->paginate($qb->getQuery(), $params->getPerPage(), $params->getPage());
+            return $qb->paginate($params->getPerPage());
         else
-            return $qb->getQuery()->getResult();
+            return $qb->get();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getQuery ()
+    {
+        return Influencer::query()->with($this->with());
+    }
+
+    /**
+     * @return array
+     */
+    public function with ()
+    {
+        return [];
     }
 
     /**
@@ -42,7 +60,7 @@ class InfluencerRepository extends BaseRepository
      */
     public function find($id)
     {
-        return parent::find($id);
+        return $this->where(['ids' => $id])->first();
     }
 
 }

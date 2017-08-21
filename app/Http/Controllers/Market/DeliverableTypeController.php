@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Market;
 use App\Http\Controllers\Controller;
 use App\Models\Market\DeliverableType;
 use App\Repositories\Market\DeliverableTypeRepository;
+use App\Requests\GetDeliverableTypes;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -26,7 +27,10 @@ class DeliverableTypeController extends Controller
 
     public function index (Request $request)
     {
-        return $this->deliverable_type_repo->where([], true);
+        $params                                 = new GetDeliverableTypes($request->input());
+        $params->validate();
+
+        return $this->deliverable_type_repo->where($params, true);
     }
 
     public function show (Request $request)

@@ -33,7 +33,7 @@ class GetUsers extends BaseIndexRequest
      */
     public function getDefaultOrderBy()
     {
-        return 'user.id';
+        return 'id';
     }
 
     /**
@@ -41,7 +41,7 @@ class GetUsers extends BaseIndexRequest
      */
     public function getOrderByFields()
     {
-        return ['user.id', 'user.email'];
+        return ['id', 'email'];
     }
 
 }

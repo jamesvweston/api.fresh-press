@@ -111,25 +111,32 @@ class ImportFreshPressCommand extends Command
         $this->performInitialActions();
 
 
-        $this->importUsers();
-        $this->importUsersAdminRole();
-        $this->importAdvertisers();
-        $this->importInfluencers();
-        $this->importInfluencerBilling();
-        $this->importInfluencerFavorites();
-        $this->importCampaigns();
-        $this->importSpheres();
-        $this->importSphereCategories();
-        $this->importPortfolios();
-        $this->importProductLines();
-        $this->insertProductLinePlatforms();
-        $this->importOpportunities();
-        $this->importOpportunityCompensationModels();
-        $this->importOpportunityCreatives();
-        $this->importNetworkConnections();
-        $this->importBids();
-        $this->importOutletConnections();
-
+        try
+        {
+            $this->importUsers();
+            $this->importUsersAdminRole();
+            $this->importAdvertisers();
+            $this->importInfluencers();
+            $this->importInfluencerBilling();
+            $this->importInfluencerFavorites();
+            $this->importCampaigns();
+            $this->importSpheres();
+            $this->importSphereCategories();
+            $this->importPortfolios();
+            $this->importProductLines();
+            $this->insertProductLinePlatforms();
+            $this->importOpportunities();
+            //  $this->importOpportunityCompensationModels();
+            $this->importOpportunityCreatives();
+            $this->importNetworkConnections();
+            $this->importBids();
+            $this->importOutletConnections();
+        }
+        catch (\Exception $exception)
+        {
+            $this->performFinalActions();
+            throw $exception;
+        }
 
         $this->performFinalActions();
     }
@@ -295,26 +302,29 @@ class ImportFreshPressCommand extends Command
             else
             {
                 $billing_address            = new Address();
-                $billing_address->setStreet1($fp_user->billing_address);
-                if (trim($fp_user->billing_address_line_2) == '')
-                    $billing_address->setStreet2(null);
+                $billing_address->street1   = $fp_user->billing_address;
+
+                $street2                    = trim($fp_user->billing_address_line_2) == '' ? null : $fp_user->billing_address_line_2;
+                $billing_address->street2   = $street2;
+
+                $billing_address->city      = $fp_user->billing_city;
+                $billing_address->state_province    = $fp_user->billing_state;
+                $billing_address->postal_code   = $fp_user->billing_zip;
+
+                if (is_null($fp_user->billing_country))
+                    $country                = $this->country_repo->getUS();
                 else
-                    $billing_address->setStreet2($fp_user->billing_address_line_2);
-
-                $billing_address->setCity($fp_user->billing_city);
-                $billing_address->setStateProvince($fp_user->billing_state);
-                $billing_address->setPostalCode($fp_user->billing_zip);
-
-                $country                    = $this->country_repo->getOneByCode($fp_user->billing_country);
+                    $country                    = $this->country_repo->findByCode($fp_user->billing_country);
                 if (is_null($country))
                     $country                = $this->country_repo->getUS();
-                $billing_address->setCountry($country);
-                $influencer->setBillingAddress($billing_address);
+                $billing_address->country_id = $country->id;
+                $billing_address->save();
+                $influencer->billing_address_id = $billing_address->id;
+                $influencer->save();
             }
 
-            $this->influencer_repo->save($influencer);
+
         }
-        $this->influencer_repo->commit();
 
         $this->info('Finished importing influencer billing data...');
     }
@@ -377,7 +387,7 @@ class ImportFreshPressCommand extends Command
             if ($fp_sphere->country_id != null)
             {
                 $country                        = $this->getCountry($fp_sphere->country_id);
-                $country_id                     = $country->getId();
+                $country_id                     = $country->id;
             }
             $sphere_data[]                      = [
                 'id'                            => $fp_sphere->id,
@@ -429,7 +439,7 @@ class ImportFreshPressCommand extends Command
             $type                       = $fp_portfolio_item->type;
             if ($type == 'Youtube channel')
                 $type = 'Youtube Channel';
-            $portfolio_type             = $this->portfolio_type_repo->getOneByName($type);
+            $portfolio_type             = $this->portfolio_type_repo->findByName($type);
 
             $portfolios[]               = [
                 'id'                    => $fp_portfolio_item->id,
@@ -438,7 +448,7 @@ class ImportFreshPressCommand extends Command
                 'is_unverified_outlet'  => $fp_portfolio_item->is_unverified_outlet,
                 'created_at'            => $fp_portfolio_item->created_at,
                 'updated_at'            => $fp_portfolio_item->updated_at,
-                'portfolio_type_id'     => $portfolio_type->getId(),
+                'portfolio_type_id'     => $portfolio_type->id,
                 'sphere_id'             => $fp_portfolio_item->sphere_id,
             ];
         }
@@ -727,7 +737,7 @@ class ImportFreshPressCommand extends Command
     private function getCountry ($fp_country_id)
     {
         $fp_country_code            = DB::connection('fresh_press')->select('select code from countries where id = ' . $fp_country_id);
-        $country                    = $this->country_repo->getOneByCode($fp_country_code[0]->code);
+        $country                    = $this->country_repo->findByCode($fp_country_code[0]->code);
         if (is_null($country))
             dd('oh shit country is null with code of ' . $fp_country_code[0]->code);
         return $country;

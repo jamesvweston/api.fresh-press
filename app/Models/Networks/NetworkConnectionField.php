@@ -3,9 +3,10 @@
 namespace App\Models\Networks;
 
 
+use Illuminate\Database\Eloquent\Model;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
-class NetworkConnectionField implements \JsonSerializable
+class NetworkConnectionField extends Model
 {
 
     /**
@@ -42,10 +43,10 @@ class NetworkConnectionField implements \JsonSerializable
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function toArray()
     {
         $object['id']                   = $this->getId();
-        $object['network_field']        = $this->getNetworkField()->jsonSerialize();
+        $object['network_field']        = $this->getNetworkField()->toArray();
         $object['value']                = $this->getValue();
 
         return $object;

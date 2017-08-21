@@ -4,15 +4,12 @@ namespace App\Repositories\Market;
 
 
 use App\Models\Market\Platform;
-use App\Repositories\Doctrine\BaseRepository;
+use App\Repositories\RepositoryContract;
+use App\Requests\GetPlatforms;
 use Illuminate\Pagination\LengthAwarePaginator;
-use LaravelDoctrine\ORM\Pagination\PaginatesFromParams;
 
-class PlatformRepository extends BaseRepository
+class PlatformRepository implements RepositoryContract
 {
-
-    use PaginatesFromParams;
-
 
     /**
      * @param   array $params
@@ -21,12 +18,37 @@ class PlatformRepository extends BaseRepository
      */
     public function where ($params = [], $paginate_results = false)
     {
-        $qb                         = $this->createQueryBuilder('platform');
+        $params                     = $params instanceof GetPlatforms ? $params : new GetPlatforms($params);
+        $qb                         = $this->getQuery();
 
-        if ($paginate_results)
-            return $this->paginate($qb->getQuery(), 20);
+        if (!is_null($params->getIds()))
+            $qb->whereIn('id', explode(',', $params->getIds()));
+
+        if (!is_null($params->getNames()))
+            $qb->whereIn('name', explode(',', $params->getNames()));
+
+        $qb->orderBy($params->getOrderBy(), $params->getDirection());
+
+        if (!$paginate_results)
+            return $qb->get();
         else
-            return $qb->getQuery()->getResult();
+            return $qb->paginate($params->getPerPage());
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getQuery ()
+    {
+        return Platform::query()->with($this->with());
+    }
+
+    /**
+     * @return array
+     */
+    public function with ()
+    {
+        return [];
     }
 
     /**
@@ -35,7 +57,7 @@ class PlatformRepository extends BaseRepository
      */
     public function find($id)
     {
-        return parent::find($id);
+        return $this->where(['ids' => $id])->first();
     }
 
 }

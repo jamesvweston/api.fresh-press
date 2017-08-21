@@ -3,10 +3,9 @@
 namespace App\Models\Market;
 
 
-use Doctrine\Common\Collections\ArrayCollection;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
-class CommissionCompensation extends CompensationModel implements \JsonSerializable
+class CommissionCompensation extends CompensationModel
 {
 
     /**
@@ -63,9 +62,9 @@ class CommissionCompensation extends CompensationModel implements \JsonSerializa
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function toArray()
     {
-        $object                         = parent::jsonSerialize();
+        $object                         = parent::toArray();
         $object['rate']                 = $this->getRate();
         $object['rate_type']            = $this->getRateType();
         $object['conversion_type']      = $this->getConversionType();
@@ -76,7 +75,7 @@ class CommissionCompensation extends CompensationModel implements \JsonSerializa
         $object['affiliate_links']      = [];
         foreach ($this->getAffiliateLinks() AS $affiliate_link)
         {
-            $object['affiliate_links'][] = $affiliate_link->jsonSerialize();
+            $object['affiliate_links'][] = $affiliate_link->toArray();
         }
 
         return $object;

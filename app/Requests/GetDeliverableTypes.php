@@ -5,19 +5,20 @@ namespace App\Requests;
 
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
-class GetCountries extends BaseIndexRequest
+class GetDeliverableTypes extends BaseIndexRequest
 {
 
     /**
      * @var string|null
      */
-    protected $codes;
+    protected $labels;
+
 
     public function __construct($data = [])
     {
         parent::__construct($data);
 
-        $this->codes                    = AU::get($data['codes']);
+        $this->labels                   = AU::get($data['labels']);
     }
 
     public function validate()
@@ -28,17 +29,17 @@ class GetCountries extends BaseIndexRequest
     /**
      * @return null|string
      */
-    public function getCodes()
+    public function getLabels()
     {
-        return $this->codes;
+        return $this->labels;
     }
 
     /**
-     * @param null|string $codes
+     * @param null|string $labels
      */
-    public function setCodes($codes)
+    public function setLabels($labels)
     {
-        $this->codes = $codes;
+        $this->labels = $labels;
     }
 
     /**
@@ -54,7 +55,7 @@ class GetCountries extends BaseIndexRequest
      */
     public function getOrderByFields()
     {
-        return ['id', 'name', 'code'];
+        return ['id', 'label'];
     }
 
 }

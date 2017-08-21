@@ -4,15 +4,12 @@ namespace App\Repositories\Outlets;
 
 
 use App\Models\Outlets\Outlet;
-use App\Repositories\Doctrine\BaseRepository;
+use App\Repositories\RepositoryContract;
+use App\Requests\GetOutlets;
 use Illuminate\Pagination\LengthAwarePaginator;
-use LaravelDoctrine\ORM\Pagination\PaginatesFromParams;
 
-class OutletRepository extends BaseRepository
+class OutletRepository implements RepositoryContract
 {
-
-    use PaginatesFromParams;
-
 
     /**
      * @param   array $params
@@ -21,12 +18,37 @@ class OutletRepository extends BaseRepository
      */
     public function where ($params = [], $paginate_results = false)
     {
-        $qb                         = $this->createQueryBuilder('outlet');
+        $params                     = ($params instanceof GetOutlets) ? $params : new GetOutlets($params);
+        $qb                         = $this->getQuery();
+
+        if (!is_null($params->getIds()))
+            $qb->whereIn('id', explode(',', $params->getIds()));
+
+        if (!is_null($params->getNames()))
+            $qb->whereIn('name', explode(',', $params->getNames()));
+
+        $qb->orderBy($params->getOrderBy(), $params->getDirection());
 
         if ($paginate_results)
-            return $this->paginate($qb->getQuery(), 20);
+            return $qb->paginate($params->getPerPage());
         else
-            return $qb->getQuery()->getResult();
+            return $qb->get();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getQuery ()
+    {
+        return Outlet::query()->with($this->with());
+    }
+
+    /**
+     * @return array
+     */
+    public function with ()
+    {
+        return [];
     }
 
     /**
@@ -35,7 +57,7 @@ class OutletRepository extends BaseRepository
      */
     public function find($id)
     {
-        return parent::find($id);
+        return $this->where(['ids' => $id])->first();
     }
 
 }

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Market;
 
+
 use App\Http\Controllers\Controller;
 use App\Models\Market\AgeRange;
 use App\Repositories\Market\AgeRangeRepository;
+use App\Requests\GetAgeRanges;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -25,7 +27,10 @@ class AgeRangeController extends Controller
 
     public function index (Request $request)
     {
-        return $this->age_range_repo->where([], true);
+        $params                                 = new GetAgeRanges($request->input());
+        $params->validate();
+
+        return $this->age_range_repo->where($params, true);
     }
 
     public function show (Request $request)

@@ -30,7 +30,7 @@ class GetRoles extends BaseIndexRequest
      */
     public function getDefaultOrderBy()
     {
-        return 'role.id';
+        return 'id';
     }
 
     /**
@@ -38,7 +38,7 @@ class GetRoles extends BaseIndexRequest
      */
     public function getOrderByFields()
     {
-        return ['role.id', 'role.name'];
+        return ['id', 'name'];
     }
 
 }

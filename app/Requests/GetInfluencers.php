@@ -33,15 +33,16 @@ class GetInfluencers extends BaseIndexRequest
      */
     public function getDefaultOrderBy()
     {
-        return 'influencer.id';
+        return 'id';
     }
+
 
     /**
      * @return array
      */
     public function getOrderByFields()
     {
-        return ['influencer.id', 'influencer.name', 'influencer.created_at', 'influencer.updated_at'];
+        return ['id', 'name', 'created_at', 'updated_at'];
     }
 
 }

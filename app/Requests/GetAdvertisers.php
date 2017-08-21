@@ -33,7 +33,7 @@ class GetAdvertisers extends BaseIndexRequest
      */
     public function getDefaultOrderBy()
     {
-        return 'advertiser.id';
+        return 'id';
     }
 
     /**
@@ -41,7 +41,7 @@ class GetAdvertisers extends BaseIndexRequest
      */
     public function getOrderByFields()
     {
-        return ['advertiser.id', 'advertiser.name', 'advertiser.created_at', 'advertiser.updated_at'];
+        return ['id', 'name', 'created_at', 'updated_at'];
     }
 
 }

@@ -4,70 +4,33 @@ namespace App\Models\Market;
 
 
 use App\Models\CMS\Influencer;
-use App\Models\Traits\Deletable;
-use App\Models\Traits\TimeStamps;
+use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
-class Bid implements \JsonSerializable
+/**
+ * @SWG\Definition()
+ *
+ * @property    int                             $id
+ * @property    float                           $amount
+ * @property    string|null                     $message
+ * @property    string|null                     $product_address
+ * @property    string|null                     $product_choices
+ * @property    string|null                     $rejected_reason
+ * @property    float                           $freshpress_cut
+ * @property    Influencer                      $influencer
+ * @property    Opportunity                     $opportunity
+ * @property    \Carbon\Carbon|null             $accepted_at
+ * @property    \Carbon\Carbon|null             $rejected_at
+ * @property    \Carbon\Carbon                  $created_at
+ * @property    \Carbon\Carbon                  $updated_at
+ * @property    \Carbon\Carbon|null             $deleted_at
+ */
+class Bid extends Model
 {
 
-    use TimeStamps, Deletable;
-
-
-    /**
-     * @var int
-     */
-    protected $id;
-
-    /**
-     * @var float
-     */
-    protected $amount;
-
-    /**
-     * @var string|null
-     */
-    protected $message;
-
-    /**
-     * @var string|null
-     */
-    protected $product_address;
-
-    /**
-     * @var string|null
-     */
-    protected $product_choices;
-
-    /**
-     * @var string|null
-     */
-    protected $reject_reason;
-
-    /**
-     * @var float
-     */
-    protected $freshpress_cut;
-
-    /**
-     * @var Influencer
-     */
-    protected $influencer;
-
-    /**
-     * @var Opportunity
-     */
-    protected $opportunity;
-
-    /**
-     * @var \DateTime|null
-     */
-    protected $accepted_at;
-
-    /**
-     * @var \DateTime|null
-     */
-    protected $rejected_at;
+    use HasTimestamps, SoftDeletes;
 
 
     public function __construct($data = [])
@@ -87,187 +50,27 @@ class Bid implements \JsonSerializable
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function toArray ()
     {
-        $object['id']                   = $this->getId();
-        $object['amount']               = $this->getAmount();
-        $object['message']              = $this->getMessage();
-        $object['product_address']      = $this->getProductAddress();
-        $object['product_choices']      = $this->getProductChoices();
-        $object['reject_reason']        = $this->getRejectReason();
-        $object['influencer']           = $this->getInfluencer()->jsonSerialize();
-        $object['accepted_at']          = $this->getAcceptedAt();
-        $object['rejected_at']          = $this->getRejectedAt();
+        $object['id']                   = $this->id;
+        $object['amount']               = $this->amount;
+        $object['message']              = $this->message;
+        $object['product_address']      = $this->product_address;
+        $object['product_choices']      = $this->product_choices;
+        $object['reject_reason']        = $this->rejected_reason;
+        $object['influencer']           = $this->influencer->toArray();
+        $object['accepted_at']          = $this->accepted_at;
+        $object['rejected_at']          = $this->rejected_at;
 
         return $object;
     }
 
     /**
-     * @return int
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function getId()
+    public function influencer ()
     {
-        return $this->id;
-    }
-
-    /**
-     * @return float
-     */
-    public function getAmount()
-    {
-        return $this->amount;
-    }
-
-    /**
-     * @param float $amount
-     */
-    public function setAmount($amount)
-    {
-        $this->amount = $amount;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getMessage()
-    {
-        return $this->message;
-    }
-
-    /**
-     * @param null|string $message
-     */
-    public function setMessage($message)
-    {
-        $this->message = $message;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getProductAddress()
-    {
-        return $this->product_address;
-    }
-
-    /**
-     * @param null|string $product_address
-     */
-    public function setProductAddress($product_address)
-    {
-        $this->product_address = $product_address;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getProductChoices()
-    {
-        return $this->product_choices;
-    }
-
-    /**
-     * @param null|string $product_choices
-     */
-    public function setProductChoices($product_choices)
-    {
-        $this->product_choices = $product_choices;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getRejectReason()
-    {
-        return $this->reject_reason;
-    }
-
-    /**
-     * @param null|string $reject_reason
-     */
-    public function setRejectReason($reject_reason)
-    {
-        $this->reject_reason = $reject_reason;
-    }
-
-    /**
-     * @return float
-     */
-    public function getFreshpressCut()
-    {
-        return $this->freshpress_cut;
-    }
-
-    /**
-     * @param float $freshpress_cut
-     */
-    public function setFreshpressCut($freshpress_cut)
-    {
-        $this->freshpress_cut = $freshpress_cut;
-    }
-
-    /**
-     * @return Influencer
-     */
-    public function getInfluencer()
-    {
-        return $this->influencer;
-    }
-
-    /**
-     * @param Influencer $influencer
-     */
-    public function setInfluencer($influencer)
-    {
-        $this->influencer = $influencer;
-    }
-
-    /**
-     * @return Opportunity
-     */
-    public function getOpportunity()
-    {
-        return $this->opportunity;
-    }
-
-    /**
-     * @param Opportunity $opportunity
-     */
-    public function setOpportunity($opportunity)
-    {
-        $this->opportunity = $opportunity;
-    }
-
-    /**
-     * @return \DateTime|null
-     */
-    public function getAcceptedAt()
-    {
-        return $this->accepted_at;
-    }
-
-    /**
-     * @param \DateTime|null $accepted_at
-     */
-    public function setAcceptedAt($accepted_at)
-    {
-        $this->accepted_at = $accepted_at;
-    }
-
-    /**
-     * @return \DateTime|null
-     */
-    public function getRejectedAt()
-    {
-        return $this->rejected_at;
-    }
-
-    /**
-     * @param \DateTime|null $rejected_at
-     */
-    public function setRejectedAt($rejected_at)
-    {
-        $this->rejected_at = $rejected_at;
+        return $this->belongsTo(Influencer::class);
     }
 
 }

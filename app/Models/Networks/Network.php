@@ -3,120 +3,41 @@
 namespace App\Models\Networks;
 
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * @SWG\Definition()
+ *
+ * @property    int                             $id
+ * @property    string                          $label
+ * @property    string                          $shorthand
+ * @property    string                          $logo
+ * @property    int                             $fmtc_network_id
+ * @property    string|null                     $sub_id_key
+ * @property    NetworkField[]                  $fields
  */
-class Network implements \JsonSerializable
+class Network extends Model
 {
-
-    /**
-     * @SWG\Property(example="1")
-     * @var int
-     */
-    protected $id;
-
-    /**
-     * @SWG\Property()
-     * @var string
-     */
-    protected $label;
-
-    /**
-     * @SWG\Property()
-     * @var string
-     */
-    protected $shorthand;
-
-    /**
-     * @SWG\Property()
-     * @var string
-     */
-    protected $logo;
-
-    /**
-     * @var string|null
-     */
-    protected $sub_id_key;
-
-    /**
-     * @var int|null
-     */
-    protected $fmtc_network_id;
-
-    /**
-     * @var ArrayCollection
-     */
-    protected $fields;
 
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function toArray()
     {
-        $object['id']                   = $this->getId();
-        $object['label']                = $this->getLabel();
-        $object['shorthand']            = $this->getShorthand();
-        $object['logo']                 = $this->getLogo();
+        $object['id']                   = $this->id;
+        $object['label']                = $this->label;
+        $object['shorthand']            = $this->shorthand;
+        $object['logo']                 = $this->logo;
 
         return $object;
     }
 
     /**
-     * @return int
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function getId()
+    public function fields()
     {
-        return $this->id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLabel()
-    {
-        return $this->label;
-    }
-
-    /**
-     * @return string
-     */
-    public function getShorthand()
-    {
-        return $this->shorthand;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLogo()
-    {
-        return $this->logo;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getSubIdKey()
-    {
-        return $this->sub_id_key;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getFmtcNetworkId()
-    {
-        return $this->fmtc_network_id;
-    }
-
-    /**
-     * @return NetworkField[]
-     */
-    public function getFields ()
-    {
-        return $this->fields->toArray();
+        return $this->hasMany(NetworkField::class);
     }
 
 }

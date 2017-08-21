@@ -4,15 +4,12 @@ namespace App\Repositories\CMS;
 
 
 use App\Models\CMS\Role;
-use App\Repositories\Doctrine\BaseRepository;
+use App\Repositories\RepositoryContract;
 use App\Requests\GetRoles;
 use Illuminate\Pagination\LengthAwarePaginator;
-use LaravelDoctrine\ORM\Pagination\PaginatesFromParams;
 
-class RoleRepository extends BaseRepository
+class RoleRepository  implements RepositoryContract
 {
-
-    use PaginatesFromParams;
 
 
     /**
@@ -23,19 +20,37 @@ class RoleRepository extends BaseRepository
     public function where ($params = [], $paginate_results = false)
     {
         $params                     = $params instanceof GetRoles ? $params : new GetRoles($params);
-        $qb                         = $this->createQueryBuilder('role');
+        $qb                         = $this->getQuery();
 
         if (!is_null($params->getIds()))
-            $qb->andWhere($qb->expr()->in('role.id', $params->getIds()));
+            $qb->whereIn('id', explode(',', $params->getIds()));
+
+        if (!is_null($params->getNames()))
+            $qb->whereIn('name', explode(',', $params->getNames()));
 
         $qb->orderBy($params->getOrderBy(), $params->getDirection());
 
         if ($paginate_results)
-            return $this->paginate($qb->getQuery(), $params->getPerPage(), $params->getPage());
+            return $qb->paginate($params->getPerPage());
         else
-            return $qb->getQuery()->getResult();
+            return $qb->get();
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getQuery ()
+    {
+        return Role::query()->with($this->with());
+    }
+
+    /**
+     * @return array
+     */
+    public function with ()
+    {
+        return [];
+    }
 
     /**
      * @param   int $id
@@ -43,7 +58,7 @@ class RoleRepository extends BaseRepository
      */
     public function find($id)
     {
-        return parent::find($id);
+        return $this->where(['ids' => $id])->first();
     }
 
     /**

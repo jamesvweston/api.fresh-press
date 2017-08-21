@@ -3,30 +3,22 @@
 namespace App\Models\Market;
 
 
+use Illuminate\Database\Eloquent\Model;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
-class AffiliateLink implements \JsonSerializable
+/**
+ * @SWG\Definition()
+ *
+ * @property    int                             $id
+ * @property    string                          $landing_page
+ * @property    string|null                     $affiliate_link
+ * @property    CommissionCompensation          $commission_compensation
+ * @property    \Carbon\Carbon                  $created_at
+ * @property    \Carbon\Carbon                  $updated_at
+ * @property    \Carbon\Carbon|null             $deleted_at
+ */
+class AffiliateLink extends Model
 {
-
-    /**
-     * @var int
-     */
-    protected $id;
-
-    /**
-     * @var string
-     */
-    protected $landing_page;
-
-    /**
-     * @var string|null
-     */
-    protected $affiliate_link;
-
-    /**
-     * @var CommissionCompensation
-     */
-    protected $commission_compensation;
 
 
     /**
@@ -42,7 +34,7 @@ class AffiliateLink implements \JsonSerializable
     /**
      * @return array
      */
-    public function jsonSerialize ()
+    public function toArray ()
     {
         $object['id']                   = $this->getId();
         $object['landing_page']         = $this->getLandingPage();

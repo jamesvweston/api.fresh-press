@@ -4,141 +4,50 @@ namespace App\Models\Market;
 
 
 use App\Models\CMS\Advertiser;
-use App\Models\Traits\Deletable;
-use App\Models\Traits\TimeStamps;
-use Doctrine\Common\Collections\ArrayCollection;
+use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
 /**
  * @SWG\Definition()
+ *
+ * @property    int                             $id
+ * @property    string                          $name
+ * @property    string|null                     $cover_photo
+ * @property    string|null                     $keywords
+ * @property    string|null                     $notes
+ * @property    string|null                     $pitch
+ * @property    string|null                     $rejected_reason
+ * @property    int                             $deliverable_deadline_days
+ * @property    \Carbon\Carbon|null             $apply_by
+ * @property    \Carbon\Carbon|null             $published_at
+ * @property    \Carbon\Carbon|null             $closed_at
+ * @property    \Carbon\Carbon|null             $paused_at
+ * @property    \Carbon\Carbon|null             $submitted_at
+ * @property    \Carbon\Carbon|null             $rejected_at
+ * @property    Advertiser                      $advertiser
+ * @property    Campaign                        $campaign
+ * @property    ProductLine                     $product_line
+ * @property    DeliverableType                 $deliverable_type
+ * @property    \Carbon\Carbon                  $created_at
+ * @property    \Carbon\Carbon                  $updated_at
+ * @property    \Carbon\Carbon|null             $deleted_at
  */
-class Opportunity implements \JsonSerializable
+class Opportunity extends Model
 {
 
-    use TimeStamps, Deletable;
+    use HasTimestamps, SoftDeletes;
 
 
-    /**
-     * @SWG\Property()
-     * @var int
-     */
-    protected $id;
+    protected $with = ['advertiser', 'campaign', 'product_line', 'deliverable_type'];
 
-    /**
-     * @SWG\Property()
-     * @var string
-     */
-    protected $name;
+    protected $dates = ['apply_by'];
 
-    /**
-     * @SWG\Property()
-     * @var string|null
-     */
-    protected $cover_photo;
-
-    /**
-     * @SWG\Property()
-     * @var string|null
-     */
-    protected $keywords;
-
-    /**
-     * @SWG\Property()
-     * @var string|null
-     */
-    protected $notes;
-
-    /**
-     * @SWG\Property()
-     * @var string|null
-     */
-    protected $pitch;
-
-    /**
-     * @SWG\Property()
-     * @var string|null
-     */
-    protected $rejected_reason;
-
-    /**
-     * @SWG\Property()
-     * @var int
-     */
-    protected $deliverable_deadline_days;
-
-    /**
-     * @SWG\Property(ref="#/definitions/DateTime")
-     * @var \DateTime|null
-     */
-    protected $apply_by;
-
-    /**
-     * @SWG\Property(ref="#/definitions/DateTime")
-     * @var \DateTime|null
-     */
-    protected $published_at;
-
-    /**
-     * @SWG\Property(ref="#/definitions/DateTime")
-     * @var \DateTime|null
-     */
-    protected $closed_at;
-
-    /**
-     * @SWG\Property(ref="#/definitions/DateTime")
-     * @var \DateTime|null
-     */
-    protected $paused_at;
-
-    /**
-     * @SWG\Property(ref="#/definitions/DateTime")
-     * @var \DateTime|null
-     */
-    protected $submitted_at;
-
-    /**
-     * @SWG\Property(ref="#/definitions/DateTime")
-     * @var \DateTime|null
-     */
-    protected $rejected_at;
-
-    /**
-     * @SWG\Property()
-     * @var Advertiser
-     */
-    protected $advertiser;
-
-    /**
-     * @SWG\Property()
-     * @var Campaign
-     */
-    protected $campaign;
-
-    /**
-     * @SWG\Property()
-     * @var ProductLine
-     */
-    protected $product_line;
-
-    /**
-     * @SWG\Property()
-     * @var DeliverableType
-     */
-    protected $deliverable_type;
-
-    /**
-     * @var ArrayCollection
-     */
     protected $creatives;
 
-    /**
-     * @var ArrayCollection
-     */
     protected $compensation_models;
 
-    /**
-     * @var ArrayCollection
-     */
     protected $bids;
 
 
@@ -164,367 +73,84 @@ class Opportunity implements \JsonSerializable
         $this->campaign                 = AU::get($data['campaign']);
         $this->product_line             = AU::get($data['product_line']);
         $this->deliverable_type         = AU::get($data['deliverable_type']);
-        $this->bids                     = AU::get($data['bids'], new ArrayCollection());
-        $this->creatives                = AU::get($data['creatives'], new ArrayCollection());
-        $this->compensation_models      = AU::get($data['compensation_models'], new ArrayCollection());
+        $this->bids                     = AU::get($data['bids']);
+        $this->creatives                = AU::get($data['creatives']);
+        $this->compensation_models      = AU::get($data['compensation_models']);
     }
 
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function toArray ()
     {
-        $object['id']                   = $this->getId();
-        $object['name']                 = $this->getName();
-        $object['cover_photo']          = $this->getCoverPhoto();
-        $object['keywords']             = $this->getKeywords();
-        $object['notes']                = $this->getPitch();
-        $object['pitch']                = $this->getPitch();
-        $object['rejected_reason']      = $this->getRejectedReason();
-        $object['deliverable_deadline_days']    = $this->getDeliverableDeadlineDays();
-        $object['apply_by']             = $this->getApplyBy();
-        $object['published_at']         = $this->getPublishedAt();
-        $object['closed_at']            = $this->getClosedAt();
-        $object['paused_at']            = $this->getPausedAt();
-        $object['submitted_at']         = $this->getSubmittedAt();
-        $object['rejected_at']          = $this->getRejectedAt();
-        $object['advertiser']           = $this->getAdvertiser()->jsonSerialize();
-        $object['campaign']             = $this->getCampaign()->jsonSerialize();
-        $object['product_line']         = $this->getProductLine()->jsonSerialize();
-        $object['deliverable_type']     = $this->getDeliverableType()->jsonSerialize();
+        $object['id']                   = $this->id;
+        $object['name']                 = $this->name;
+        $object['cover_photo']          = $this->cover_photo;
+        $object['keywords']             = $this->keywords;
+        $object['notes']                = $this->notes;
+        $object['pitch']                = $this->pitch;
+        $object['rejected_reason']      = $this->rejected_reason;
+        $object['deliverable_deadline_days']    = $this->deliverable_deadline_days;
+        $object['apply_by']             = $this->apply_by;
+        $object['published_at']         = $this->published_at;
+        $object['closed_at']            = $this->closed_at;
+        $object['paused_at']            = $this->paused_at;
+        $object['submitted_at']         = $this->submitted_at;
+        $object['rejected_at']          = $this->rejected_at;
+        $object['advertiser']           = $this->advertiser->toArray();
+        $object['campaign']             = $this->campaign->toArray();
+        $object['product_line']         = $this->product_line->toArray();
+        $object['deliverable_type']     = $this->deliverable_type->toArray();
 
         return $object;
     }
 
     /**
-     * @return int
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function getId()
+    public function advertiser ()
     {
-        return $this->id;
+        return $this->belongsTo(Advertiser::class);
     }
 
     /**
-     * @return string
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function getName()
+    public function campaign ()
     {
-        return $this->name;
+        return $this->hasOne(Campaign::class, 'id', 'campaign_id');
     }
 
     /**
-     * @param string $name
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function setName($name)
+    public function product_line ()
     {
-        $this->name = $name;
+        return $this->hasOne(ProductLine::class, 'id', 'product_line_id');
     }
 
     /**
-     * @return null|string
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function getCoverPhoto()
+    public function deliverable_type ()
     {
-        return $this->cover_photo;
+        return $this->hasOne(DeliverableType::class, 'id', 'deliverable_type_id');
     }
 
     /**
-     * @param null|string $cover_photo
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function setCoverPhoto($cover_photo)
+    public function bids ()
     {
-        $this->cover_photo = $cover_photo;
+        return $this->hasMany(Bid::class);
     }
 
     /**
-     * @return null|string
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function getKeywords()
+    public function creatives ()
     {
-        return $this->keywords;
-    }
-
-    /**
-     * @param null|string $keywords
-     */
-    public function setKeywords($keywords)
-    {
-        $this->keywords = $keywords;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getNotes()
-    {
-        return $this->notes;
-    }
-
-    /**
-     * @param null|string $notes
-     */
-    public function setNotes($notes)
-    {
-        $this->notes = $notes;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getPitch()
-    {
-        return $this->pitch;
-    }
-
-    /**
-     * @param null|string $pitch
-     */
-    public function setPitch($pitch)
-    {
-        $this->pitch = $pitch;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getRejectedReason()
-    {
-        return $this->rejected_reason;
-    }
-
-    /**
-     * @param null|string $rejected_reason
-     */
-    public function setRejectedReason($rejected_reason)
-    {
-        $this->rejected_reason = $rejected_reason;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDeliverableDeadlineDays()
-    {
-        return $this->deliverable_deadline_days;
-    }
-
-    /**
-     * @param int $deliverable_deadline_days
-     */
-    public function setDeliverableDeadlineDays($deliverable_deadline_days)
-    {
-        $this->deliverable_deadline_days = $deliverable_deadline_days;
-    }
-
-    /**
-     * @return \DateTime|null
-     */
-    public function getApplyBy()
-    {
-        return $this->apply_by;
-    }
-
-    /**
-     * @param \DateTime|null $apply_by
-     */
-    public function setApplyBy($apply_by)
-    {
-        $this->apply_by = $apply_by;
-    }
-
-    /**
-     * @return \DateTime|null
-     */
-    public function getPublishedAt()
-    {
-        return $this->published_at;
-    }
-
-    /**
-     * @param \DateTime|null $published_at
-     */
-    public function setPublishedAt($published_at)
-    {
-        $this->published_at = $published_at;
-    }
-
-    /**
-     * @return \DateTime|null
-     */
-    public function getClosedAt()
-    {
-        return $this->closed_at;
-    }
-
-    /**
-     * @param \DateTime|null $closed_at
-     */
-    public function setClosedAt($closed_at)
-    {
-        $this->closed_at = $closed_at;
-    }
-
-    /**
-     * @return \DateTime|null
-     */
-    public function getPausedAt()
-    {
-        return $this->paused_at;
-    }
-
-    /**
-     * @param \DateTime|null $paused_at
-     */
-    public function setPausedAt($paused_at)
-    {
-        $this->paused_at = $paused_at;
-    }
-
-    /**
-     * @return \DateTime|null
-     */
-    public function getSubmittedAt()
-    {
-        return $this->submitted_at;
-    }
-
-    /**
-     * @param \DateTime|null $submitted_at
-     */
-    public function setSubmittedAt($submitted_at)
-    {
-        $this->submitted_at = $submitted_at;
-    }
-
-    /**
-     * @return \DateTime|null
-     */
-    public function getRejectedAt()
-    {
-        return $this->rejected_at;
-    }
-
-    /**
-     * @param \DateTime|null $rejected_at
-     */
-    public function setRejectedAt($rejected_at)
-    {
-        $this->rejected_at = $rejected_at;
-    }
-
-    /**
-     * @return Advertiser
-     */
-    public function getAdvertiser()
-    {
-        return $this->advertiser;
-    }
-
-    /**
-     * @param Advertiser $advertiser
-     */
-    public function setAdvertiser($advertiser)
-    {
-        $this->advertiser = $advertiser;
-    }
-
-    /**
-     * @return Campaign
-     */
-    public function getCampaign()
-    {
-        return $this->campaign;
-    }
-
-    /**
-     * @param Campaign $campaign
-     */
-    public function setCampaign($campaign)
-    {
-        $this->campaign = $campaign;
-    }
-
-    /**
-     * @return ProductLine
-     */
-    public function getProductLine()
-    {
-        return $this->product_line;
-    }
-
-    /**
-     * @param ProductLine $product_line
-     */
-    public function setProductLine($product_line)
-    {
-        $this->product_line = $product_line;
-    }
-
-    /**
-     * @return DeliverableType
-     */
-    public function getDeliverableType()
-    {
-        return $this->deliverable_type;
-    }
-
-    /**
-     * @param DeliverableType $deliverable_type
-     */
-    public function setDeliverableType($deliverable_type)
-    {
-        $this->deliverable_type = $deliverable_type;
-    }
-
-    /**
-     * @return Bid[]
-     */
-    public function getBids ()
-    {
-        return $this->bids->toArray();
-    }
-
-    /**
-     * @param Bid $bid
-     */
-    public function addBid (Bid $bid)
-    {
-        $bid->setOpportunity($this);
-        $this->bids->add($bid);
-    }
-
-    /**
-     * @return OpportunityCreative[]
-     */
-    public function getCreatives ()
-    {
-        return $this->creatives->toArray();
-    }
-
-    /**
-     * @param OpportunityCreative $creative
-     */
-    public function addCreative (OpportunityCreative $creative)
-    {
-        $creative->setOpportunity($this);
-        $this->creatives->add($creative);
-    }
-
-    /**
-     * @return CompensationModel[]
-     */
-    public function getCompensationModels ()
-    {
-        return $this->compensation_models->toArray();
-    }
-
-    /**
-     * @param CompensationModel $compensation_model
-     */
-    public function addCompensationModel (CompensationModel $compensation_model)
-    {
-        $compensation_model->setOpportunity($this);
-        $this->compensation_models->add($compensation_model);
+        return $this->hasMany(OpportunityCreative::class);
     }
 
 }

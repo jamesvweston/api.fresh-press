@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Market;
 
 use App\Models\Market\SphereCategory;
 use App\Repositories\Market\SphereCategoryRepository;
+use App\Requests\GetSphereCategories;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -24,7 +25,9 @@ class SphereCategoryController extends Controller
 
     public function index (Request $request)
     {
-        return $this->sphere_category_repo->where([], true);
+        $query                                  = new GetSphereCategories($request->input());
+        $query->validate();
+        return $this->sphere_category_repo->where($query, true);
     }
 
     public function show (Request $request)

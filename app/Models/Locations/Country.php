@@ -3,65 +3,32 @@
 namespace App\Models\Locations;
 
 
+use Illuminate\Database\Eloquent\Model;
+
+
 /**
  * @SWG\Definition()
+ *
+ * @property    int                             $id
+ * @property    string                          $name
+ * @property    string                          $code
  */
-class Country implements \JsonSerializable
+class Country extends Model
 {
 
-    /**
-     * @SWG\Property()
-     * @var int
-     */
-    protected $id;
-
-    /**
-     * @SWG\Property()
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * @SWG\Property()
-     * @var string
-     */
-    protected $code;
+    protected $table = 'countries';
 
 
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function toArray ()
     {
-        $object['id']                   = $this->getId();
-        $object['name']                 = $this->getName();
-        $object['code']                 = $this->getCode();
+        $object['id']                   = $this->id;
+        $object['name']                 = $this->name;
+        $object['code']                 = $this->code;
 
         return $object;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCode()
-    {
-        return $this->code;
     }
 
 }

@@ -4,15 +4,12 @@ namespace App\Repositories\Market;
 
 
 use App\Models\Market\SphereCategory;
-use App\Repositories\Doctrine\BaseRepository;
+use App\Repositories\RepositoryContract;
+use App\Requests\GetSphereCategories;
 use Illuminate\Pagination\LengthAwarePaginator;
-use LaravelDoctrine\ORM\Pagination\PaginatesFromParams;
 
-class SphereCategoryRepository extends BaseRepository
+class SphereCategoryRepository implements RepositoryContract
 {
-
-    use PaginatesFromParams;
-
 
     /**
      * @param   array $params
@@ -21,12 +18,38 @@ class SphereCategoryRepository extends BaseRepository
      */
     public function where ($params = [], $paginate_results = false)
     {
-        $qb                         = $this->createQueryBuilder('sphere_category');
+        $params                  = ($params instanceof GetSphereCategories) ? $params : new GetSphereCategories($params);
+
+        $qb                         = $this->getQuery();
+
+        if (!is_null($params->getIds()))
+            $qb->whereIn('id', explode(',', $params->getIds()));
+
+        if (!is_null($params->getNames()))
+            $qb->whereIn('name', explode(',', $params->getNames()));
+
+        $qb->orderBy($params->getOrderBy(), $params->getDirection());
 
         if ($paginate_results)
-            return $this->paginate($qb->getQuery(), 20);
+            return $qb->paginate($params->getPerPage());
         else
-            return $qb->getQuery()->getResult();
+            return $qb->get();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getQuery ()
+    {
+        return SphereCategory::query()->with($this->with());
+    }
+
+    /**
+     * @return array
+     */
+    public function with ()
+    {
+        return [];
     }
 
     /**
@@ -35,7 +58,7 @@ class SphereCategoryRepository extends BaseRepository
      */
     public function find($id)
     {
-        return parent::find($id);
+        return $this->where(['ids' => $id])->first();
     }
 
 }

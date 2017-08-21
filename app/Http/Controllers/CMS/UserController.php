@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\CMS;
 
+
 use App\Models\CMS\User;
 use App\Repositories\CMS\UserRepository;
 use App\Requests\GetUsers;
@@ -41,7 +42,7 @@ class UserController extends Controller
     public function getRoles (Request $request)
     {
         $user                               = $this->getFromRoute($request);
-        return response($user->getRoles());
+        return response($user->roles);
     }
 
 

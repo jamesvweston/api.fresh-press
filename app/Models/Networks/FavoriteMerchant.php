@@ -4,12 +4,13 @@ namespace App\Models\Networks;
 
 
 use App\Models\CMS\Influencer;
+use Illuminate\Database\Eloquent\Model;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
 /**
  * @SWG\Definition()
  */
-class FavoriteMerchant implements \JsonSerializable
+class FavoriteMerchant extends Model
 {
 
     /**
@@ -42,7 +43,7 @@ class FavoriteMerchant implements \JsonSerializable
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function toArray()
     {
         $object['id']                   = $this->getId();
         $object['fmtc_master_merchant_id']  = $this->getFmtcMasterMerchantId();

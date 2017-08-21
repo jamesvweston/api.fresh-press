@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Market;
 
 use App\Models\Market\Platform;
 use App\Repositories\Market\PlatformRepository;
+use App\Requests\GetPlatforms;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -25,7 +26,10 @@ class PlatformController extends Controller
 
     public function index (Request $request)
     {
-        return $this->platform_repo->where([], true);
+        $params                             = new GetPlatforms($request->input());
+        $params->validate();
+
+        return $this->platform_repo->where($params, true);
     }
 
     public function show (Request $request)

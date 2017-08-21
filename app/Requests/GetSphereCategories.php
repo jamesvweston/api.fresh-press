@@ -6,8 +6,7 @@ namespace App\Requests;
 use App\Requests\Traits\QueryNames;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
-
-class GetGigStatuses extends BaseIndexRequest
+class GetSphereCategories extends BaseIndexRequest
 {
 
     use QueryNames;

@@ -4,29 +4,37 @@ namespace App\Repositories\Networks;
 
 
 use App\Models\Networks\Network;
-use App\Repositories\Doctrine\BaseRepository;
-use Illuminate\Pagination\LengthAwarePaginator;
-use LaravelDoctrine\ORM\Pagination\PaginatesFromParams;
+use App\Repositories\RepositoryContract;
+use App\Requests\GetNetworks;
 
-class NetworkRepository extends BaseRepository
+class NetworkRepository implements RepositoryContract
 {
 
-    use PaginatesFromParams;
-
-
     /**
-     * @param   array $params
+     * @param   GetNetworks|array   $params
      * @param   bool $paginate_results
-     * @return  Network[]|LengthAwarePaginator
+     * @return  \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Database\Eloquent\Collection|static[]
      */
     public function where ($params = [], $paginate_results = false)
     {
-        $qb                         = $this->createQueryBuilder('network');
+        $params                  = ($params instanceof GetNetworks) ? $params : new GetNetworks($params);
+        $qb                     = $this->getQuery();
+
+        if (!is_null($params->getIds()))
+            $qb->whereIn('id', explode(',', $params->getIds()));
+
+        if (!is_null($params->getLabels()))
+            $qb->whereIn('label', explode(',', $params->getLabels()));
+
+        if (!is_null($params->getShorthands()))
+            $qb->whereIn('shorthand', explode(',', $params->getShorthands()));
+
+        $qb->orderBy($params->getOrderBy(), $params->getDirection());
 
         if ($paginate_results)
-            return $this->paginate($qb->getQuery(), 20);
+            return $qb->paginate($params->getPerPage());
         else
-            return $qb->getQuery()->getResult();
+            return $qb->get();
     }
 
     /**
@@ -35,7 +43,23 @@ class NetworkRepository extends BaseRepository
      */
     public function find($id)
     {
-        return parent::find($id);
+        return $this->where(['ids' => $id])->first();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getQuery ()
+    {
+        return Network::query()->with($this->with());
+    }
+
+    /**
+     * @return array
+     */
+    public function with ()
+    {
+        return [];
     }
 
 }

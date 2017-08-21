@@ -3,59 +3,27 @@
 namespace App\Models\CMS;
 
 
-use App\Models\Contracts\Validatable;
-use App\Models\Traits\Deletable;
-use App\Models\Traits\TimeStamps;
-use Doctrine\Common\Collections\ArrayCollection;
+use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
 use jamesvweston\Utilities\ArrayUtil AS AU;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * @SWG\Definition()
+ *
+ * @property    int                             $id
+ * @property    string                          $first_name
+ * @property    string                          $last_name
+ * @property    string                          $email
+ * @property    string                          $password
+ * @property    bool                            $email_is_verified
+ * @property    Role[]                          $roles
  */
-class User implements \JsonSerializable, Validatable
+class User extends Authenticatable
 {
 
-    use TimeStamps, Deletable;
-
-
-    /**
-     * @SWG\Property(example="1")
-     * @var int
-     */
-    protected $id;
-
-    /**
-     * @SWG\Property(example="John")
-     * @var string
-     */
-    protected $first_name;
-
-    /**
-     * @SWG\Property(example="Doe")
-     * @var string
-     */
-    protected $last_name;
-
-    /**
-     * @SWG\Property(example="john.doe@whatever.com")
-     * @var string
-     */
-    protected $email;
-
-    /**
-     * @var string
-     */
-    protected $password;
-
-    /**
-     * @var bool
-     */
-    protected $email_is_verified;
-
-    /**
-     * @var ArrayCollection
-     */
-    protected $roles;
+    use HasTimestamps, Notifiable, SoftDeletes;
 
 
     /**
@@ -68,18 +36,12 @@ class User implements \JsonSerializable, Validatable
         $this->email                    = AU::get($data['email']);
         $this->password                 = AU::get($data['password']);
         $this->email_is_verified        = AU::get($data['email_is_verified'], false);
-        $this->roles                    = AU::get($data['roles'], new ArrayCollection());
-    }
-
-    public function validate()
-    {
-        
     }
 
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function toArray()
     {
         $object['id']                   = $this->getId();
         $object['first_name']           = $this->getFirstName();
@@ -87,15 +49,6 @@ class User implements \JsonSerializable, Validatable
         $object['email']                = $this->getEmail();
 
         return $object;
-    }
-
-    /**
-     * This is temporarily in place to support Bugsnag's error reporting
-     * @return array
-     */
-    public function toArray ()
-    {
-        return $this->jsonSerialize();
     }
 
     /**
@@ -187,16 +140,11 @@ class User implements \JsonSerializable, Validatable
     }
 
     /**
-     * @return Role[]
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function getRoles ()
+    public function roles ()
     {
-        return $this->roles->toArray();
-    }
-
-    public function addRole (Role $role)
-    {
-        $this->roles->add($role);
+        return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id');
     }
 
 }

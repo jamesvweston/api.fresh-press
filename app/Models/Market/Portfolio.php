@@ -3,13 +3,14 @@
 namespace App\Models\Market;
 
 
-use App\Models\Traits\TimeStamps;
+use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
+use Illuminate\Database\Eloquent\Model;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
-class Portfolio implements \JsonSerializable
+class Portfolio extends Model
 {
 
-    use TimeStamps;
+    use HasTimestamps;
 
     /**
      * @var int
@@ -57,12 +58,12 @@ class Portfolio implements \JsonSerializable
     /**
      * @return array
      */
-    public function jsonSerialize ()
+    public function toArray ()
     {
         $object['id']                   = $this->getId();
         $object['description']          = $this->getDescription();
         $object['is_unverified_outlet'] = $this->getIsUnverifiedOutlet();
-        $object['portfolio_type']       = $this->getPortfolioType()->jsonSerialize();
+        $object['portfolio_type']       = $this->getPortfolioType()->toArray();
 
         return $object;
     }

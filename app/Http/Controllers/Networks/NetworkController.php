@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Networks;
 
+
 use App\Models\Networks\Network;
 use App\Repositories\Networks\NetworkRepository;
+use App\Requests\GetNetworks;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -24,7 +26,10 @@ class NetworkController extends Controller
 
     public function index (Request $request)
     {
-        return $this->network_repo->where([], true);
+        $params                             = new GetNetworks($request->input());
+        $params->validate();
+
+        return $this->network_repo->where($params, true);
     }
 
     public function show (Request $request)
@@ -36,7 +41,7 @@ class NetworkController extends Controller
     public function getFields (Request $request)
     {
         $network                            = $this->getFromRoute($request);
-        return response($network->getFields());
+        return response($network->fields);
     }
 
     /**
