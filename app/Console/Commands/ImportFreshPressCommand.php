@@ -146,7 +146,7 @@ class ImportFreshPressCommand extends Command
         $clients[]                      = [
             'id'                        => 2,
             'user_id'                   => null,
-            'name'                      => 'Laravel Password Grant Clien',
+            'name'                      => 'Laravel Password Grant Client',
             'secret'                    => 'a7s63ysn0E9dmy4PNGAO4Vzi5Yl8gjaux6zuyDrc',
             'redirect'                  => config('app.url'),
             'personal_access_client'    => 0,
