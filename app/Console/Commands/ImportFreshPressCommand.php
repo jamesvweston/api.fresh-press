@@ -389,13 +389,17 @@ class ImportFreshPressCommand extends Command
                 $country                        = $this->getCountry($fp_sphere->country_id);
                 $country_id                     = $country->id;
             }
+            $logo                               = null;
+            if (trim($fp_sphere->logo) != '' && $fp_sphere->logo != 'sphere-placeholder.jpg')
+                $logo                           = 'https://app.freshpress.media/images/logos/' . $fp_sphere->logo;
+
             $sphere_data[]                      = [
                 'id'                            => $fp_sphere->id,
                 'title'                         => $fp_sphere->title,
                 'description'                   => $fp_sphere->description,
                 'percent_male'                  => $fp_sphere->percent_male,
                 'percent_female'                => $fp_sphere->percent_female,
-                'logo'                          => $fp_sphere->logo,
+                'logo'                          => $logo,
                 'influencer_id'                 => $fp_sphere_owner_result->user_id,
                 'age_range_id'                  => $fp_sphere->age_range_id == 0 ? null : $fp_sphere->age_range_id,
                 'country_id'                    => $country_id,
@@ -500,7 +504,7 @@ class ImportFreshPressCommand extends Command
                 'name'                      => $fp_product_line->name,
                 'description'               => is_null($fp_product_line->about) || trim($fp_product_line->about) == '' ? null : $fp_product_line->about,
                 'alias'                     => is_null($fp_product_line->aka) || trim($fp_product_line->aka) == '' ? null : $fp_product_line->aka,
-                'logo'                      => $fp_product_line->logo,
+                'logo'                      => is_null($fp_product_line->logo) ? null : 'https://app.freshpress.media/images/logos/' . $fp_product_line->logo,
                 'website'                   => is_null($fp_product_line->website) || trim($fp_product_line->website) == '' ? null : $fp_product_line->website,
                 'facebook'                  => is_null($fp_product_line->facebook) || trim($fp_product_line->facebook) == '' ? null : $fp_product_line->facebook,
                 'twitter'                   => is_null($fp_product_line->twitter) || trim($fp_product_line->twitter) == '' ? null : $fp_product_line->twitter,
@@ -551,7 +555,7 @@ class ImportFreshPressCommand extends Command
             $opportunity_data[]         = [
                 'id'                    => $fp_opportunity->id,
                 'name'                  => $fp_opportunity->title,
-                'cover_photo'           => trim($fp_opportunity->cover_photo) == '' ? null : $fp_opportunity->cover_photo,
+                'cover_photo'           => trim($fp_opportunity->cover_photo) == '' ? null : 'https://app.freshpress.media/images/cover-photos/' . $fp_opportunity->cover_photo,
                 'keywords'              => trim($fp_opportunity->keywords) == '' ? null : $fp_opportunity->keywords,
                 'notes'                 => trim($fp_opportunity->notes) == '' ? null : $fp_opportunity->notes,
                 'pitch'                 => trim($fp_opportunity->pitch) == '' ? null : $fp_opportunity->pitch,
