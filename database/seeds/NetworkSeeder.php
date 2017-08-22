@@ -37,6 +37,8 @@ class NetworkSeeder extends Seeder
 
             if ($array[$i]['fmtc_network_id'] == 'null')
                 $array[$i]['fmtc_network_id'] = null;
+
+            $array[$i]['syncable']  = $array[$i]['syncable'] == 'true' ? true : false;
         }
 
         return $array;

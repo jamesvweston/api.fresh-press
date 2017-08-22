@@ -22,7 +22,7 @@ class CreateNetworkConnectionFieldsTable extends Migration
             $table->smallInteger('network_field_id')->unsigned()->index();
             $table->foreign('network_field_id')->references('id')->on('network_fields');
 
-            $table->string('value');
+            $table->string('value', 500);
 
 
             $table->unique(['network_connection_id', 'network_field_id'], 'network_connection_fields_unique_1');

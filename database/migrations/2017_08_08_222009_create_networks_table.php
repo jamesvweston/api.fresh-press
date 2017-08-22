@@ -20,6 +20,7 @@ class CreateNetworksTable extends Migration
             $table->string('logo', 10);
             $table->string('sub_id_key', 20)->nullable()->default(null);
             $table->integer('fmtc_network_id')->unsigned()->index()->nullable()->default(null);
+            $table->boolean('syncable')->index();
         });
     }
 

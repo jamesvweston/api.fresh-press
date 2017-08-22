@@ -4,6 +4,7 @@ namespace App\Services\Networks\Connections;
 
 
 use App\Models\Networks\Network;
+use App\Models\Networks\NetworkField;
 
 abstract class BaseNetworkConnectionService
 {
@@ -13,10 +14,15 @@ abstract class BaseNetworkConnectionService
      */
     protected $network;
 
+    /**
+     * @var NetworkField[]
+     */
+    protected $fields;
 
     public function __construct()
     {
         $this->network                      = Network::find($this->getNetworkId());
+        $this->fields                       = $this->network->fields;
     }
 
 

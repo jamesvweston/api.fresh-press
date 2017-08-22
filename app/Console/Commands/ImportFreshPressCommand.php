@@ -12,6 +12,7 @@ use App\Models\Market\Opportunity;
 use App\Models\Market\PlacementCompensation;
 use App\Models\Market\PortfolioType;
 use App\Models\Market\ProductCompensation;
+use App\Models\Networks\NetworkField;
 use Illuminate\Console\Command;
 use DB;
 
@@ -352,11 +353,10 @@ class ImportFreshPressCommand extends Command
     private function importNetworkConnections ()
     {
         $this->info('Importing network_connections...');
-        $network_connection_data        = [];
         $fp_network_connections_result  = DB::connection('fresh_press')->select('select * from network_connections');
         foreach ($fp_network_connections_result AS $fp_network_connection)
         {
-            $network_connection_data[]  = [
+            $network_connection_data    = [
                 'id'                    => $fp_network_connection->id,
                 'affiliate_id'          => trim($fp_network_connection->affiliate_id) == null ? null : $fp_network_connection->affiliate_id,
                 'publisher_id'          => $fp_network_connection->publisher_id,
@@ -368,8 +368,244 @@ class ImportFreshPressCommand extends Command
                 'created_at'            => $fp_network_connection->created_at,
                 'updated_at'            => $fp_network_connection->updated_at,
             ];
+
+            DB::table('network_connections')->insert($network_connection_data);
+
+            $network_connection_fields_data = [];
+            $network_field_response     = NetworkField::search(
+                [
+                    'network_ids'   => $fp_network_connection->network_id,
+                ]
+            );
+
+            switch ($fp_network_connection->connectable_type)
+            {
+                case 'App\Models\Networks\Connections\FreshPress':
+                    $fp_network_conn  = DB::connection('fresh_press')->select('select * from connection_fp where id = ' . $fp_network_connection->connectable_id)[0];
+                    //  not much going on here
+                    break;
+                case 'App\Models\Networks\Connections\AvantLink':
+                    $fp_network_conn  = DB::connection('fresh_press')->select('select * from connection_al where id = ' . $fp_network_connection->connectable_id);
+                    if (sizeof($fp_network_conn) == 0)
+                    {
+                        $this->info('Couldn\'t find connection_al where id = ' . $fp_network_connection->connectable_id);
+                        break;
+                    }
+                    $fp_network_conn    = $fp_network_conn[0];
+
+                    foreach ($network_field_response AS $network_field)
+                    {
+                        if ($network_field->field == 'affiliate_id')
+                        {
+                            $network_connection_fields_data[] = [
+                                'network_connection_id'     => $fp_network_connection->id,
+                                'network_field_id'          => $network_field->id,
+                                'value'                     => $fp_network_conn->affiliate_id,
+                            ];
+                        }
+                        if ($network_field->field == 'api_key')
+                        {
+                            $network_connection_fields_data[] = [
+                                'network_connection_id'     => $fp_network_connection->id,
+                                'network_field_id'          => $network_field->id,
+                                'value'                     => $fp_network_conn->api_key,
+                            ];
+                        }
+
+                    }
+                    break;
+                case 'App\Models\Networks\Connections\CommissionJunction':
+                    $fp_network_conn  = DB::connection('fresh_press')->select('select * from connection_cj where id = ' . $fp_network_connection->connectable_id)[0];
+
+                    if (is_null($fp_network_conn->api_key))
+                        continue;
+
+                    foreach ($network_field_response AS $network_field)
+                    {
+                        if ($network_field->field == 'api_key')
+                        {
+                            $network_connection_fields_data[] = [
+                                'network_connection_id'     => $fp_network_connection->id,
+                                'network_field_id'          => $network_field->id,
+                                'value'                     => $fp_network_conn->api_key,
+                            ];
+                        }
+
+                    }
+                    break;
+                case 'App\Models\Networks\Connections\ImpactRadius':
+                    $fp_network_conn  = DB::connection('fresh_press')->select('select * from connection_ir where id = ' . $fp_network_connection->connectable_id)[0];
+
+                    foreach ($network_field_response AS $network_field)
+                    {
+                        if ($network_field->field == 'account_sid')
+                        {
+                            $network_connection_fields_data[] = [
+                                'network_connection_id'     => $fp_network_connection->id,
+                                'network_field_id'          => $network_field->id,
+                                'value'                     => $fp_network_conn->account_sid,
+                            ];
+                        }
+                        if ($network_field->field == 'auth_token')
+                        {
+                            $network_connection_fields_data[] = [
+                                'network_connection_id'     => $fp_network_connection->id,
+                                'network_field_id'          => $network_field->id,
+                                'value'                     => $fp_network_conn->auth_token,
+                            ];
+                        }
+                    }
+                    break;
+                case 'App\Models\Networks\Connections\LinkConnector':
+                    $fp_network_conn  = DB::connection('fresh_press')->select('select * from connection_lc where id = ' . $fp_network_connection->connectable_id)[0];
+
+                    foreach ($network_field_response AS $network_field)
+                    {
+                        if ($network_field->field == 'api_key')
+                        {
+                            $network_connection_fields_data[] = [
+                                'network_connection_id'     => $fp_network_connection->id,
+                                'network_field_id'          => $network_field->id,
+                                'value'                     => $fp_network_conn->api_key,
+                            ];
+                        }
+                    }
+                    break;
+                case 'App\Models\Networks\Connections\Pepperjam':
+                    $fp_network_conn  = DB::connection('fresh_press')->select('select * from connection_pj where id = ' . $fp_network_connection->connectable_id)[0];
+                    if (is_null($fp_network_conn->api_key))
+                        continue;
+
+                    foreach ($network_field_response AS $network_field)
+                    {
+                        if ($network_field->field == 'api_key')
+                        {
+                            $network_connection_fields_data[] = [
+                                'network_connection_id'     => $fp_network_connection->id,
+                                'network_field_id'          => $network_field->id,
+                                'value'                     => $fp_network_conn->api_key,
+                            ];
+                        }
+                    }
+                    break;
+                case 'App\Models\Networks\Connections\LinkShare':
+                    $fp_network_conn  = DB::connection('fresh_press')->select('select * from connection_ls where id = ' . $fp_network_connection->connectable_id)[0];
+                    if (is_null($fp_network_conn->web_services_token))
+                        continue;
+
+                    foreach ($network_field_response AS $network_field)
+                    {
+                        if ($network_field->field == 'web_services_token')
+                        {
+                            $network_connection_fields_data[] = [
+                                'network_connection_id'     => $fp_network_connection->id,
+                                'network_field_id'          => $network_field->id,
+                                'value'                     => $fp_network_conn->web_services_token,
+                            ];
+                        }
+                    }
+                    break;
+                case 'App\Models\Networks\Connections\ShareASale':
+                    $fp_network_conn  = DB::connection('fresh_press')->select('select * from connection_sas where id = ' . $fp_network_connection->connectable_id)[0];
+                    if (is_null($fp_network_conn->token) || is_null($fp_network_conn->secret_key))
+                        continue;
+
+                    foreach ($network_field_response AS $network_field)
+                    {
+                        if ($network_field->field == 'token')
+                        {
+                            $network_connection_fields_data[] = [
+                                'network_connection_id'     => $fp_network_connection->id,
+                                'network_field_id'          => $network_field->id,
+                                'value'                     => $fp_network_conn->token,
+                            ];
+                        }
+                        if ($network_field->field == 'secret_key')
+                        {
+                            $network_connection_fields_data[] = [
+                                'network_connection_id'     => $fp_network_connection->id,
+                                'network_field_id'          => $network_field->id,
+                                'value'                     => $fp_network_conn->secret_key,
+                            ];
+                        }
+                    }
+                    break;
+                case 'App\Models\Networks\Connections\Skimlinks':
+                    $fp_network_conn  = DB::connection('fresh_press')->select('select * from connection_sl where id = ' . $fp_network_connection->connectable_id)[0];
+                    if (is_null($fp_network_conn->public_api_key) || is_null($fp_network_conn->private_api_key))
+                        continue;
+
+                    foreach ($network_field_response AS $network_field)
+                    {
+                        if ($network_field->field == 'public_api_key')
+                        {
+                            $network_connection_fields_data[] = [
+                                'network_connection_id'     => $fp_network_connection->id,
+                                'network_field_id'          => $network_field->id,
+                                'value'                     => $fp_network_conn->public_api_key,
+                            ];
+                        }
+                        if ($network_field->field == 'private_api_key')
+                        {
+                            $network_connection_fields_data[] = [
+                                'network_connection_id'     => $fp_network_connection->id,
+                                'network_field_id'          => $network_field->id,
+                                'value'                     => $fp_network_conn->private_api_key,
+                            ];
+                        }
+                    }
+                    break;
+                case 'App\Models\Networks\Connections\Amazon':
+                    //  do nothing
+                    break;
+                case 'App\Models\Networks\Connections\Groupon':
+                    //  do nothing
+                    break;
+                case 'App\Models\Networks\Connections\AffiliateWindow':
+                    $fp_network_conn  = DB::connection('fresh_press')->select('select * from connection_aw where id = ' . $fp_network_connection->connectable_id)[0];
+                    if (is_null($fp_network_conn->api_password))
+                        continue;
+
+                    foreach ($network_field_response AS $network_field)
+                    {
+                        if ($network_field->field == 'api_password')
+                        {
+                            $network_connection_fields_data[] = [
+                                'network_connection_id'     => $fp_network_connection->id,
+                                'network_field_id'          => $network_field->id,
+                                'value'                     => $fp_network_conn->api_password,
+                            ];
+                        }
+                    }
+                    break;
+                case 'App\Models\Networks\Connections\PerformanceHorizon':
+                    //  do nothing
+                    break;
+                case 'App\Models\Networks\Connections\EbayPartnerNetwork':
+                    //  do nothing
+                    break;
+                case 'App\Models\Networks\Connections\Webgains':
+                    $fp_network_conn  = DB::connection('fresh_press')->select('select * from connection_wg where id = ' . $fp_network_connection->connectable_id)[0];
+
+                    foreach ($network_field_response AS $network_field)
+                    {
+                        if ($network_field->field == 'api_password')
+                        {
+                            $network_connection_fields_data[] = [
+                                'network_connection_id'     => $fp_network_connection->id,
+                                'network_field_id'          => $network_field->id,
+                                'value'                     => $fp_network_conn->api_password,
+                            ];
+                        }
+                    }
+                    break;
+                default:
+                    dd($fp_network_connection->connectable_type . ' is not mapped in importNetworkConnections');
+            }
+            if (sizeof($network_connection_fields_data) != 0)
+                DB::table('network_connection_fields')->insert($network_connection_fields_data);
         }
-        DB::table('network_connections')->insert($network_connection_data);
+
 
         $this->info('Finished importing network_connections...');
     }
