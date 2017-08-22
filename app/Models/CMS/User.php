@@ -11,8 +11,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
 
 /**
- * @SWG\Definition()
- *
  * @property    int                             $id
  * @property    string                          $first_name
  * @property    string                          $last_name

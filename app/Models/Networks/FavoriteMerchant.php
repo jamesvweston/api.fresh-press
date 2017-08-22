@@ -7,14 +7,11 @@ use App\Models\CMS\Influencer;
 use Illuminate\Database\Eloquent\Model;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
-/**
- * @SWG\Definition()
- */
+
 class FavoriteMerchant extends Model
 {
 
     /**
-     * @SWG\Property(example="1")
      * @var int
      */
     protected $id;
@@ -25,7 +22,6 @@ class FavoriteMerchant extends Model
     protected $influencer;
 
     /**
-     * @SWG\Property(example="100")
      * @var int
      */
     protected $fmtc_master_merchant_id;

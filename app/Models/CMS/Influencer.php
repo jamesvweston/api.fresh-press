@@ -13,8 +13,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
 /**
- * @SWG\Definition()
- *
  * @property    int                             $id
  * @property    User                            $user
  * @property    Address|null                    $billing_address

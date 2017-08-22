@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
 /**
- * @SWG\Definition()
- *
  * @property    int                             $id
  * @property    string                          $name
  * @property    string|null                     $alias
@@ -35,6 +33,11 @@ class ProductLine extends Model
     use HasTimestamps, SoftDeletes;
 
 
+    protected $fillable = [
+        'name',
+        'alias',
+        'description',
+    ];
 
     protected $platforms;
 
@@ -53,7 +56,6 @@ class ProductLine extends Model
         $this->instagram                = AU::get($data['instagram']);
         $this->news_url                 = AU::get($data['news_url']);
         $this->keywords                 = AU::get($data['keywords']);
-        $this->advertiser               = AU::get($data['advertiser']);
     }
 
     /**

@@ -6,6 +6,7 @@ namespace App\Http\Controllers\CMS;
 use App\Models\CMS\User;
 use App\Repositories\CMS\UserRepository;
 use App\Requests\GetUsers;
+use Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -32,6 +33,10 @@ class UserController extends Controller
         return $this->user_repo->where($params, true);
     }
 
+    public function me (Request $request)
+    {
+        return Auth::user();
+    }
 
     public function show (Request $request)
     {

@@ -7,13 +7,7 @@
  *      tags={"gig_statuses"},
  *      operationId="GetGigStatuses",
  *      produces={"application/json"},
- *      @SWG\Parameter(
- *          name="ids",
- *          in="query",
- *          type="string",
- *          required=false,
- *          description="GigStatus ids"
- *      ),
+ *      @SWG\Parameter(ref="#/parameters/ids"),
  *      @SWG\Parameter(ref="#/parameters/page"),
  *      @SWG\Parameter(ref="#/parameters/per_page"),
  *      @SWG\Parameter(ref="#/parameters/order_by"),
@@ -21,62 +15,12 @@
  *      @SWG\Response(
  *          response=200,
  *          description="Successful operation",
- *          @SWG\Definition(
- *              definition="GetGigStatusesResponse",
- *          @SWG\Property(
- *             property="current_page",
- *             type="integer",
- *             example="1"
- *         ),
- *          @SWG\Property(
- *              property="data",
- *              type="array",
- *              @SWG\Items(ref="#/definitions/GigStatus")
- *         ),
- *          @SWG\Property(
- *             property="from",
- *             type="integer",
- *             example="1"
- *         ),
- *          @SWG\Property(
- *             property="last_page",
- *             type="integer",
- *             example="1"
- *         ),
- *          @SWG\Property(
- *             property="next_page_url",
- *             type="string"
- *         ),
- *          @SWG\Property(
- *             property="path",
- *             type="string"
- *         ),
- *          @SWG\Property(
- *             property="per_page",
- *             type="integer",
- *             example="20"
- *         ),
- *          @SWG\Property(
- *             property="prev_page_url",
- *             type="string"
- *         ),
- *          @SWG\Property(
- *             property="to",
- *             type="integer",
- *             example="20"
- *         ),
- *           @SWG\Property(
- *             property="total",
- *             type="integer",
- *             example="100"
- *         ),
- *     ),
- *  ),
- * )
- */
-
-
-/**
+ *          @SWG\Schema(ref="#/definitions/GetGigStatuses")
+ *     )
+ *  )
+ *
+ *
+ *
  * @SWG\Get(
  *      path="/gig_statuses/{id}",
  *      summary="Get a GigStatus by it's id",
@@ -84,21 +28,57 @@
  *      tags={"gig_statuses"},
  *      operationId="ShowGigStatusRequest",
  *      produces={"application/json"},
- *      @SWG\Parameter(
- *          name="id",
- *          in="path",
- *          type="integer",
- *          required=true,
- *          description="GigStatus Id"
- *     ),
+ *      @SWG\Parameter(ref="#/parameters/gig_status_id"),
  *      @SWG\Response(
  *         response=200,
  *         description="Successful operation",
  *         @SWG\Schema(ref="#/definitions/GigStatus")
- *     ),
- *      @SWG\Response(
- *          response=403,
- *          description="Unauthorized to complete this operation"
- *      ),
+ *     )
  * )
+ */
+
+
+
+/**
+ * @SWG\Parameter(
+ *      parameter="gig_status_id",
+ *      description="GigStatus Id",
+ *      in="path",
+ *      name="id",
+ *      required=true,
+ *      type="integer"
+ *  )
+ */
+
+
+
+/**
+ * @SWG\Definition(
+ *      definition="GetGigStatuses",
+ *      allOf={@SWG\Schema(ref="#/definitions/PaginatedResults")},
+ *      properties={
+ *          @SWG\Property(
+ *              property="data",
+ *              type="array",
+ *              @SWG\Items(ref="#/definitions/GigStatus")
+ *          )
+ *      }
+ *  )
+ *
+ *
+ * @SWG\Definition(
+ *      definition="GigStatus",
+ *      properties={
+ *          @SWG\Property(
+ *              property="id",
+ *              type="integer",
+ *              example=1
+ *          ),
+ *          @SWG\Property(
+ *              property="name",
+ *              type="string",
+ *              example="Pending"
+ *          )
+ *      }
+ *  )
  */

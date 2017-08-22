@@ -18,11 +18,21 @@ class StatisticsMiddleware
     public function handle($request, Closure $next)
     {
         $response = $next($request);
-        //  dd(Debugbar::getData()['queries']);
+
         if (Debugbar::isEnabled())
         {
             $response->header('DB_Total_Statements', Debugbar::getData()['queries']['nb_statements']);
 
+            if ($request->input('statements'))
+            {
+                $statement_array            = [];
+                foreach (Debugbar::getData()['queries']['statements'] AS $statement)
+                {
+                    $statement_array[]      = $statement['sql'];
+                }
+
+                return response($statement_array);
+            }
         }
 
         return $response;

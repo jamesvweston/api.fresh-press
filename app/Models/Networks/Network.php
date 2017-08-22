@@ -6,8 +6,6 @@ namespace App\Models\Networks;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @SWG\Definition()
- *
  * @property    int                             $id
  * @property    string                          $label
  * @property    string                          $shorthand
@@ -27,7 +25,6 @@ class Network extends Model
         $object['id']                   = $this->id;
         $object['label']                = $this->label;
         $object['shorthand']            = $this->shorthand;
-        $object['logo']                 = $this->logo;
 
         return $object;
     }

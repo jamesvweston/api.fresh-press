@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 
 /**
- * @SWG\Definition()
- *
  * @property    int                             $id
  * @property    string                          $name
  */

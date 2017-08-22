@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
 /**
- * @SWG\Definition()
- *
  * @property    int                             $id
  * @property    string                          $name
  * @property    string                          $description
@@ -32,7 +30,6 @@ class Campaign extends Model
     {
         $this->name                     = AU::get($data['name']);
         $this->description              = AU::get($data['description']);
-        $this->advertiser               = AU::get($data['advertiser']);
     }
 
     /**

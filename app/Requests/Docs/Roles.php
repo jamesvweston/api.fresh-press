@@ -7,13 +7,7 @@
  *      tags={"roles"},
  *      operationId="GetRoles",
  *      produces={"application/json"},
- *      @SWG\Parameter(
- *          name="ids",
- *          in="query",
- *          type="string",
- *          required=false,
- *          description="Role ids"
- *      ),
+ *      @SWG\Parameter(ref="#/parameters/ids"),
  *      @SWG\Parameter(ref="#/parameters/page"),
  *      @SWG\Parameter(ref="#/parameters/per_page"),
  *      @SWG\Parameter(ref="#/parameters/order_by"),
@@ -21,62 +15,12 @@
  *      @SWG\Response(
  *          response=200,
  *          description="Successful operation",
- *          @SWG\Definition(
- *              definition="GetRolesResponse",
- *          @SWG\Property(
- *             property="current_page",
- *             type="integer",
- *             example="1"
- *         ),
- *          @SWG\Property(
- *              property="data",
- *              type="array",
- *              @SWG\Items(ref="#/definitions/Role")
- *         ),
- *          @SWG\Property(
- *             property="from",
- *             type="integer",
- *             example="1"
- *         ),
- *          @SWG\Property(
- *             property="last_page",
- *             type="integer",
- *             example="1"
- *         ),
- *          @SWG\Property(
- *             property="next_page_url",
- *             type="string"
- *         ),
- *          @SWG\Property(
- *             property="path",
- *             type="string"
- *         ),
- *          @SWG\Property(
- *             property="per_page",
- *             type="integer",
- *             example="20"
- *         ),
- *          @SWG\Property(
- *             property="prev_page_url",
- *             type="string"
- *         ),
- *          @SWG\Property(
- *             property="to",
- *             type="integer",
- *             example="20"
- *         ),
- *           @SWG\Property(
- *             property="total",
- *             type="integer",
- *             example="100"
- *         ),
- *     ),
- *  ),
+ *          @SWG\Schema(ref="#/definitions/GetRoles")
+ *     )
  * )
- */
-
-
-/**
+ *
+ *
+ *
  * @SWG\Get(
  *      path="/roles/{id}",
  *      summary="Get a Role by it's id",
@@ -84,21 +28,57 @@
  *      tags={"roles"},
  *      operationId="ShowRoleRequest",
  *      produces={"application/json"},
- *      @SWG\Parameter(
- *          name="id",
- *          in="path",
- *          type="integer",
- *          required=true,
- *          description="Role Id"
- *     ),
+ *      @SWG\Parameter(ref="#/parameters/role_id"),
  *      @SWG\Response(
  *         response=200,
  *         description="Successful operation",
  *         @SWG\Schema(ref="#/definitions/Role")
- *     ),
- *      @SWG\Response(
- *          response=403,
- *          description="Unauthorized to complete this operation"
- *      ),
+ *     )
  * )
+ */
+
+
+
+/**
+ * @SWG\Parameter(
+ *      parameter="role_id",
+ *      description="Role Id",
+ *      in="path",
+ *      name="id",
+ *      required=true,
+ *      type="integer"
+ *  )
+ */
+
+
+
+/**
+ * @SWG\Definition(
+ *      definition="GetRoles",
+ *      allOf={@SWG\Schema(ref="#/definitions/PaginatedResults")},
+ *      properties={
+ *          @SWG\Property(
+ *              property="data",
+ *              type="array",
+ *              @SWG\Items(ref="#/definitions/Role")
+ *          )
+ *      }
+ *  )
+ *
+ *
+ * @SWG\Definition(
+ *      definition="Role",
+ *      properties={
+ *          @SWG\Property(
+ *              property="id",
+ *              type="integer",
+ *              example=1
+ *          ),
+ *          @SWG\Property(
+ *              property="name",
+ *              type="string",
+ *              example="Admin"
+ *          )
+ *      }
+ *  )
  */

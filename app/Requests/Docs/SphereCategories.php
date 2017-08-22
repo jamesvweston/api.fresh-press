@@ -8,13 +8,7 @@
  *      tags={"sphere_categories"},
  *      operationId="GetSphereCategories",
  *      produces={"application/json"},
- *      @SWG\Parameter(
- *          name="ids",
- *          in="query",
- *          type="string",
- *          required=false,
- *          description="SphereCategory ids"
- *      ),
+ *      @SWG\Parameter(ref="#/parameters/ids"),
  *      @SWG\Parameter(ref="#/parameters/page"),
  *      @SWG\Parameter(ref="#/parameters/per_page"),
  *      @SWG\Parameter(ref="#/parameters/order_by"),
@@ -22,62 +16,12 @@
  *      @SWG\Response(
  *          response=200,
  *          description="Successful operation",
- *          @SWG\Definition(
- *              definition="GetSphereCategoriesResponse",
- *          @SWG\Property(
- *             property="current_page",
- *             type="integer",
- *             example="1"
- *         ),
- *          @SWG\Property(
- *              property="data",
- *              type="array",
- *              @SWG\Items(ref="#/definitions/SphereCategory")
- *         ),
- *          @SWG\Property(
- *             property="from",
- *             type="integer",
- *             example="1"
- *         ),
- *          @SWG\Property(
- *             property="last_page",
- *             type="integer",
- *             example="1"
- *         ),
- *          @SWG\Property(
- *             property="next_page_url",
- *             type="string"
- *         ),
- *          @SWG\Property(
- *             property="path",
- *             type="string"
- *         ),
- *          @SWG\Property(
- *             property="per_page",
- *             type="integer",
- *             example="20"
- *         ),
- *          @SWG\Property(
- *             property="prev_page_url",
- *             type="string"
- *         ),
- *          @SWG\Property(
- *             property="to",
- *             type="integer",
- *             example="20"
- *         ),
- *           @SWG\Property(
- *             property="total",
- *             type="integer",
- *             example="100"
- *         ),
- *     ),
- *  ),
+ *          @SWG\Schema(ref="#/definitions/GetSphereCategories")
+ *     )
  * )
- */
-
-
-/**
+ *
+ *
+ *
  * @SWG\Get(
  *      path="/sphere_categories/{id}",
  *      summary="Get a SphereCategory by it's id",
@@ -85,21 +29,57 @@
  *      tags={"sphere_categories"},
  *      operationId="ShowSphereCategoryRequest",
  *      produces={"application/json"},
- *      @SWG\Parameter(
- *          name="id",
- *          in="path",
- *          type="integer",
- *          required=true,
- *          description="SphereCategory Id"
- *     ),
+ *      @SWG\Parameter(ref="#/parameters/sphere_category_id"),
  *      @SWG\Response(
  *         response=200,
  *         description="Successful operation",
  *         @SWG\Schema(ref="#/definitions/SphereCategory")
- *     ),
- *      @SWG\Response(
- *          response=403,
- *          description="Unauthorized to complete this operation"
- *      ),
+ *     )
  * )
+ */
+
+
+
+/**
+ * @SWG\Parameter(
+ *      parameter="sphere_category_id",
+ *      description="SphereCategory Id",
+ *      in="path",
+ *      name="id",
+ *      required=true,
+ *      type="integer"
+ *  )
+ */
+
+
+
+/**
+ * @SWG\Definition(
+ *      definition="GetSphereCategories",
+ *      allOf={@SWG\Schema(ref="#/definitions/PaginatedResults")},
+ *      properties={
+ *          @SWG\Property(
+ *              property="data",
+ *              type="array",
+ *              @SWG\Items(ref="#/definitions/SphereCategory")
+ *          )
+ *      }
+ *  )
+ *
+ *
+ * @SWG\Definition(
+ *      definition="SphereCategory",
+ *      properties={
+ *          @SWG\Property(
+ *              property="id",
+ *              type="integer",
+ *              example=1
+ *          ),
+ *          @SWG\Property(
+ *              property="name",
+ *              type="string",
+ *              example="Apparel"
+ *          )
+ *      }
+ *  )
  */

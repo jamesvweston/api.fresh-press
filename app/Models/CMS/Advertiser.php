@@ -13,8 +13,6 @@ use jamesvweston\Utilities\ArrayUtil AS AU;
 
 
 /**
- * @SWG\Definition()
- *
  * @property    int                             $id
  * @property    string                          $name
  * @property    User                            $user
@@ -49,6 +47,14 @@ class Advertiser extends Model
         $object['name']                 = $this->name;
 
         return $object;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user ()
+    {
+        return $this->belongsTo(User::class);
     }
 
     /**

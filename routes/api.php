@@ -6,8 +6,12 @@ Route::group(['prefix'     => 'advertisers'], function () {
     Route::get('/', 'CMS\AdvertiserController@index');
     Route::get('/{id}', 'CMS\AdvertiserController@show');
     Route::get('/{id}/campaigns', 'CMS\AdvertiserController@getCampaigns');
+    Route::post('/{id}/campaigns', 'CMS\AdvertiserController@createCampaign');
+    Route::put('/{id}/campaigns/{campaign_id}', 'CMS\AdvertiserController@updateCampaign');
     Route::get('/{id}/opportunities', 'CMS\AdvertiserController@getOpportunities');
     Route::get('/{id}/product_lines', 'CMS\AdvertiserController@getProductLines');
+    Route::post('/{id}/product_lines', 'CMS\AdvertiserController@createProductLine');
+    Route::put('/{id}/product_lines/{product_line_id}', 'CMS\AdvertiserController@updateProductLine');
 });
 
 
@@ -115,6 +119,7 @@ Route::group(['prefix'     => 'sphere_categories'], function () {
 Route::group(['prefix'     => 'users'], function () {
 
     Route::get('/', 'CMS\UserController@index');
+    Route::get('/me', 'CMS\UserController@me');
     Route::get('/{id}', 'CMS\UserController@show');
     Route::get('/{id}/roles', 'CMS\UserController@getRoles');
 

@@ -8,13 +8,7 @@
  *      tags={"age_ranges"},
  *      operationId="GetAgeRanges",
  *      produces={"application/json"},
- *      @SWG\Parameter(
- *          name="ids",
- *          in="query",
- *          type="string",
- *          required=false,
- *          description="AgeRange ids"
- *      ),
+ *      @SWG\Parameter(ref="#/parameters/ids"),
  *      @SWG\Parameter(ref="#/parameters/page"),
  *      @SWG\Parameter(ref="#/parameters/per_page"),
  *      @SWG\Parameter(ref="#/parameters/order_by"),
@@ -22,62 +16,12 @@
  *      @SWG\Response(
  *          response=200,
  *          description="Successful operation",
- *          @SWG\Definition(
- *              definition="GetAgeRangesResponse",
- *          @SWG\Property(
- *             property="current_page",
- *             type="integer",
- *             example="1"
- *         ),
- *          @SWG\Property(
- *              property="data",
- *              type="array",
- *              @SWG\Items(ref="#/definitions/AgeRange")
- *         ),
- *          @SWG\Property(
- *             property="from",
- *             type="integer",
- *             example="1"
- *         ),
- *          @SWG\Property(
- *             property="last_page",
- *             type="integer",
- *             example="1"
- *         ),
- *          @SWG\Property(
- *             property="next_page_url",
- *             type="string"
- *         ),
- *          @SWG\Property(
- *             property="path",
- *             type="string"
- *         ),
- *          @SWG\Property(
- *             property="per_page",
- *             type="integer",
- *             example="20"
- *         ),
- *          @SWG\Property(
- *             property="prev_page_url",
- *             type="string"
- *         ),
- *          @SWG\Property(
- *             property="to",
- *             type="integer",
- *             example="20"
- *         ),
- *           @SWG\Property(
- *             property="total",
- *             type="integer",
- *             example="100"
- *         ),
- *     ),
- *  ),
- * )
- */
-
-
-/**
+ *          @SWG\Schema(ref="#/definitions/GetAgeRanges")
+ *      )
+ *  )
+ *
+ *
+ *
  * @SWG\Get(
  *      path="/age_ranges/{id}",
  *      summary="Get a AgeRange by it's id",
@@ -85,21 +29,62 @@
  *      tags={"age_ranges"},
  *      operationId="ShowAgeRangeRequest",
  *      produces={"application/json"},
- *      @SWG\Parameter(
- *          name="id",
- *          in="path",
- *          type="integer",
- *          required=true,
- *          description="AgeRange Id"
- *     ),
+ *      @SWG\Parameter(ref="#/parameters/age_range_id"),
  *      @SWG\Response(
  *         response=200,
  *         description="Successful operation",
  *         @SWG\Schema(ref="#/definitions/AgeRange")
- *     ),
- *      @SWG\Response(
- *          response=403,
- *          description="Unauthorized to complete this operation"
- *      ),
- * )
+ *     )
+ *  )
+ */
+
+
+
+/**
+ * @SWG\Parameter(
+ *      parameter="age_range_id",
+ *      description="AgeRange Id",
+ *      in="path",
+ *      name="id",
+ *      required=true,
+ *      type="integer"
+ *  )
+ */
+
+
+
+/**
+ * @SWG\Definition(
+ *      definition="GetAgeRanges",
+ *      allOf={@SWG\Schema(ref="#/definitions/PaginatedResults")},
+ *      properties={
+ *          @SWG\Property(
+ *              property="data",
+ *              type="array",
+ *              @SWG\Items(ref="#/definitions/AgeRange")
+ *          )
+ *      }
+ *  )
+ *
+ *
+ * @SWG\Definition(
+ *      definition="AgeRange",
+ *      properties={
+ *          @SWG\Property(
+ *              property="id",
+ *              type="integer",
+ *              example=1
+ *          ),
+ *          @SWG\Property(
+ *              property="min",
+ *              type="integer",
+ *              example=13
+ *          ),
+ *          @SWG\Property(
+ *              property="max",
+ *              type="integer",
+ *              example=17
+ *          )
+ *      }
+ *  )
  */

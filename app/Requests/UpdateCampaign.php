@@ -4,18 +4,22 @@ namespace App\Requests;
 
 
 use jamesvweston\Utilities\ArrayUtil AS AU;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
+/**
+ * @SWG\Definition()
+ */
 
-class CreateCampaign
+class UpdateCampaign
 {
 
     /**
+     * @SWG\Property()
      * @var string
      */
     protected $name;
 
     /**
+     * @SWG\Property()
      * @var string
      */
     protected $description;
@@ -29,10 +33,7 @@ class CreateCampaign
 
     public function validate ()
     {
-        if (is_null($this->name))
-            throw new BadRequestHttpException('name is required');
-        if (is_null($this->description))
-            throw new BadRequestHttpException('description is required');
+
     }
 
     /**

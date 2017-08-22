@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
 /**
- * @SWG\Definition()
- *
  * @property    int                             $id
  * @property    string                          $street1
  * @property    string|null                     $street2

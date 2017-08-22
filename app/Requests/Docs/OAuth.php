@@ -10,80 +10,98 @@
  *      operationId="CreateAccessToken",
  *      consumes={"application/json"},
  *      produces={"application/json"},
- *      parameters={},
- *      @SWG\Parameter(
- *          name="client_id",
- *          in="formData",
- *          description="The generated client Id for your apiKey",
- *          required=true,
- *          type="string"
- *      ),
- *      @SWG\Parameter(
- *          name="client_secret",
- *          in="formData",
- *          description="The generated client secret for your apiKey",
- *          required=true,
- *          type="string"
- *      ),
- *      @SWG\Parameter(
- *          name="grant_type",
- *          in="formData",
- *          description="The type of authentication you want to attempt",
- *          required=true,
- *          type="string",
- *          default="password",
- *          enum={"password"}
- *      ),
- *      @SWG\Parameter(
- *          name="username",
- *          in="formData",
- *          description="The username you are attempting to authenticate with",
- *          required=true,
- *          type="string"
- *      ),
- *      @SWG\Parameter(
- *          name="password",
- *          in="formData",
- *          description="The password you are attempting to authenticate with",
- *          required=true,
- *          type="string"
- *      ),
+ *      @SWG\Parameter(ref="#/parameters/client_id"),
+ *      @SWG\Parameter(ref="#/parameters/client_secret"),
+ *      @SWG\Parameter(ref="#/parameters/grant_type"),
+ *      @SWG\Parameter(ref="#/parameters/username"),
+ *      @SWG\Parameter(ref="#/parameters/password"),
  *      @SWG\Response(
  *         response=200,
  *         description="Successful operation",
  *         @SWG\Schema(ref="#/definitions/AccessToken")
- *     ),
- *      @SWG\Response(
- *          response=400,
- *          description="Invalid credentials"
- *      ),
+ *     )
  * )
- *
- *
  */
 
+
+/**
+ * @SWG\Parameter(
+ *      parameter="client_id",
+ *      description="The generated client Id",
+ *      in="formData",
+ *      name="client_id",
+ *      required=true,
+ *      type="integer"
+ *  )
+ *
+ *
+ *
+ * @SWG\Parameter(
+ *      parameter="client_secret",
+ *      description="The generated client secret",
+ *      in="formData",
+ *      name="client_secret",
+ *      required=true,
+ *      type="string"
+ *  )
+ *
+ *
+ *
+ * @SWG\Parameter(
+ *      parameter="grant_type",
+ *      description="The type of authentication",
+ *      in="formData",
+ *      name="grant_type",
+ *      required=true,
+ *      type="string",
+ *      default="password",
+ *      enum={"password"}
+ *  )
+ *
+ *
+ *
+ * @SWG\Parameter(
+ *      parameter="username",
+ *      description="Your username",
+ *      in="formData",
+ *      name="username",
+ *      required=true,
+ *      type="string"
+ *  )
+ *
+ *
+ *
+ * @SWG\Parameter(
+ *      parameter="password",
+ *      description="Your password",
+ *      in="formData",
+ *      name="password",
+ *      required=true,
+ *      type="string"
+ *  )
+ */
 
 
 /**
  * @SWG\Definition(
- *         definition="AccessToken",
- *         @SWG\Property(
- *             property="token_type",
- *             type="string",
- *             default="Bearer"
- *         ),
- *         @SWG\Property(
- *             property="expires_in",
- *             type="integer",
- *             default="1296000"
- *         ),
- *          @SWG\Property(
- *             property="access_token",
- *             type="string"
- *         ),
- *          @SWG\Property(
- *             property="refresh_token",
- *             type="string"
- *         )
- *     ),
+ *      definition="AccessToken",
+ *      @SWG\Property(
+ *          property="token_type",
+ *          type="string",
+ *          default="Bearer"
+ *      ),
+ *      @SWG\Property(
+ *          property="expires_in",
+ *          type="integer",
+ *          default="1296000"
+ *      ),
+ *      @SWG\Property(
+ *          property="access_token",
+ *          type="string"
+ *      ),
+ *      @SWG\Property(
+ *          property="refresh_token",
+ *          type="string"
+ *      )
+ *  )
  */
