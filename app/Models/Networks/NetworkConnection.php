@@ -31,8 +31,6 @@ class NetworkConnection extends Model
     protected $with = ['network'];
 
 
-    protected $fields;
-
     /**
      * @param array $data
      */
@@ -76,6 +74,14 @@ class NetworkConnection extends Model
     public function influencer ()
     {
         return $this->belongsTo(Influencer::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function fields ()
+    {
+        return $this->hasMany(NetworkField::class);
     }
 
 }

@@ -3,6 +3,8 @@
 namespace App\Services\Networks\Connections;
 
 
+use App\Utilities\NetworkUtility;
+
 class FreshPressService extends BaseNetworkConnectionService
 {
 
@@ -16,7 +18,25 @@ class FreshPressService extends BaseNetworkConnectionService
      */
     public function getNetworkId ()
     {
-        return 28;
+        return NetworkUtility::FRESH_PRESS;
     }
+
+    /**
+     * @return string
+     */
+    public function getHelpLink()
+    {
+        return 'http://support.fmtc.co';
+    }
+
+    /**
+     * @return string
+     */
+    public function getAffiliateIdRegex ()
+    {
+        return '/^\d+$/';
+    }
+
+
 
 }

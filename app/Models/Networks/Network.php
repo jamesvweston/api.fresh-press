@@ -15,6 +15,7 @@ use Validator;
  * @property    int                             $fmtc_network_id
  * @property    string|null                     $sub_id_key
  * @property    bool                            $syncable
+ * @property    bool                            $reportable
  * @property    NetworkField[]                  $fields
  */
 class Network extends Model

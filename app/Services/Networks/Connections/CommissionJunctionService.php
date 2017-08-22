@@ -3,6 +3,8 @@
 namespace App\Services\Networks\Connections;
 
 
+use App\Utilities\NetworkUtility;
+
 class CommissionJunctionService extends BaseNetworkConnectionService
 {
 
@@ -16,7 +18,25 @@ class CommissionJunctionService extends BaseNetworkConnectionService
      */
     public function getNetworkId ()
     {
-        return 1;
+        return NetworkUtility::COMMISSION_JUNCTION;
     }
+
+    /**
+     * @return string
+     */
+    public function getHelpLink()
+    {
+        return 'http://support.fmtc.co/solution/articles/221676-network-setup-commission-junction';
+    }
+
+    /**
+     * @return string
+     */
+    public function getAffiliateIdRegex ()
+    {
+        return '/^\d+$/';
+    }
+
+
 
 }

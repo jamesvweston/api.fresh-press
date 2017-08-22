@@ -3,6 +3,8 @@
 namespace App\Services\Networks\Connections;
 
 
+use App\Utilities\NetworkUtility;
+
 class AsiaPacificDigitalService extends BaseNetworkConnectionService
 {
 
@@ -16,7 +18,23 @@ class AsiaPacificDigitalService extends BaseNetworkConnectionService
      */
     public function getNetworkId ()
     {
-        return 22;
+        return NetworkUtility::ASIA_PACIFIC_DIGITAL;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHelpLink()
+    {
+        return 'http://support.fmtc.co/solution/articles/221673-network-setup-asia-pacific-digital';
+    }
+
+    /**
+     * @return string
+     */
+    public function getAffiliateIdRegex ()
+    {
+        return '/^\d+$/';
     }
 
 }

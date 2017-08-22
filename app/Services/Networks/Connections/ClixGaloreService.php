@@ -3,6 +3,8 @@
 namespace App\Services\Networks\Connections;
 
 
+use App\Utilities\NetworkUtility;
+
 class ClixGaloreService extends BaseNetworkConnectionService
 {
 
@@ -16,7 +18,25 @@ class ClixGaloreService extends BaseNetworkConnectionService
      */
     public function getNetworkId ()
     {
-        return 19;
+        return NetworkUtility::CLIX_GALORE;
     }
+
+    /**
+     * @return string
+     */
+    public function getHelpLink()
+    {
+        return 'http://support.fmtc.co/solution/articles/221675-network-setup-clixgalore';
+    }
+
+    /**
+     * @return string
+     */
+    public function getAffiliateIdRegex ()
+    {
+        return '/^[\w\@\.]+$/';
+    }
+
+
 
 }

@@ -3,6 +3,8 @@
 namespace App\Services\Networks\Connections;
 
 
+use App\Utilities\NetworkUtility;
+
 class PerformanceHorizonService extends BaseNetworkConnectionService
 {
 
@@ -16,7 +18,25 @@ class PerformanceHorizonService extends BaseNetworkConnectionService
      */
     public function getNetworkId ()
     {
-        return 20;
+        return NetworkUtility::PERFORMANCE_HORIZON;
     }
+
+    /**
+     * @return string
+     */
+    public function getHelpLink()
+    {
+        return 'http://support.fmtc.co/solution/articles/221685-network-setup-performance-horizon-group';
+    }
+
+    /**
+     * @return string
+     */
+    public function getAffiliateIdRegex ()
+    {
+        return '/^[\w\|]+$/';
+    }
+
+
 
 }

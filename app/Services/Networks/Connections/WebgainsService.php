@@ -3,6 +3,8 @@
 namespace App\Services\Networks\Connections;
 
 
+use App\Utilities\NetworkUtility;
+
 class WebgainsService extends BaseNetworkConnectionService
 {
 
@@ -16,7 +18,25 @@ class WebgainsService extends BaseNetworkConnectionService
      */
     public function getNetworkId ()
     {
-        return 26;
+        return NetworkUtility::WEBGAINS;
     }
+
+    /**
+     * @return string
+     */
+    public function getHelpLink()
+    {
+        return 'http://support.fmtc.co/solution/articles/223376-network-setup-webgains';
+    }
+
+    /**
+     * @return string
+     */
+    public function getAffiliateIdRegex ()
+    {
+        return '/^\d+$/';
+    }
+
+
 
 }

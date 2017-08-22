@@ -13,6 +13,7 @@ use App\Models\Market\PlacementCompensation;
 use App\Models\Market\PortfolioType;
 use App\Models\Market\ProductCompensation;
 use App\Models\Networks\NetworkField;
+use App\Utilities\NetworkConnectionFactory;
 use Illuminate\Console\Command;
 use DB;
 
@@ -371,17 +372,16 @@ class ImportFreshPressCommand extends Command
 
             DB::table('network_connections')->insert($network_connection_data);
 
+            $network_connection_service = NetworkConnectionFactory::get($fp_network_connection->network_id);
+
+            if (sizeof($network_connection_service->getFields()) == 0)
+                continue;
+
             $network_connection_fields_data = [];
-            $network_field_response     = NetworkField::search(
-                [
-                    'network_ids'   => $fp_network_connection->network_id,
-                ]
-            );
 
             switch ($fp_network_connection->connectable_type)
             {
                 case 'App\Models\Networks\Connections\FreshPress':
-                    $fp_network_conn  = DB::connection('fresh_press')->select('select * from connection_fp where id = ' . $fp_network_connection->connectable_id)[0];
                     //  not much going on here
                     break;
                 case 'App\Models\Networks\Connections\AvantLink':
@@ -393,7 +393,7 @@ class ImportFreshPressCommand extends Command
                     }
                     $fp_network_conn    = $fp_network_conn[0];
 
-                    foreach ($network_field_response AS $network_field)
+                    foreach ($network_connection_service->getFields() AS $network_field)
                     {
                         if ($network_field->field == 'affiliate_id')
                         {
@@ -420,7 +420,7 @@ class ImportFreshPressCommand extends Command
                     if (is_null($fp_network_conn->api_key))
                         continue;
 
-                    foreach ($network_field_response AS $network_field)
+                    foreach ($network_connection_service->getFields() AS $network_field)
                     {
                         if ($network_field->field == 'api_key')
                         {
@@ -436,7 +436,7 @@ class ImportFreshPressCommand extends Command
                 case 'App\Models\Networks\Connections\ImpactRadius':
                     $fp_network_conn  = DB::connection('fresh_press')->select('select * from connection_ir where id = ' . $fp_network_connection->connectable_id)[0];
 
-                    foreach ($network_field_response AS $network_field)
+                    foreach ($network_connection_service->getFields() AS $network_field)
                     {
                         if ($network_field->field == 'account_sid')
                         {
@@ -459,7 +459,7 @@ class ImportFreshPressCommand extends Command
                 case 'App\Models\Networks\Connections\LinkConnector':
                     $fp_network_conn  = DB::connection('fresh_press')->select('select * from connection_lc where id = ' . $fp_network_connection->connectable_id)[0];
 
-                    foreach ($network_field_response AS $network_field)
+                    foreach ($network_connection_service->getFields() AS $network_field)
                     {
                         if ($network_field->field == 'api_key')
                         {
@@ -476,7 +476,7 @@ class ImportFreshPressCommand extends Command
                     if (is_null($fp_network_conn->api_key))
                         continue;
 
-                    foreach ($network_field_response AS $network_field)
+                    foreach ($network_connection_service->getFields() AS $network_field)
                     {
                         if ($network_field->field == 'api_key')
                         {
@@ -493,7 +493,7 @@ class ImportFreshPressCommand extends Command
                     if (is_null($fp_network_conn->web_services_token))
                         continue;
 
-                    foreach ($network_field_response AS $network_field)
+                    foreach ($network_connection_service->getFields() AS $network_field)
                     {
                         if ($network_field->field == 'web_services_token')
                         {
@@ -510,7 +510,7 @@ class ImportFreshPressCommand extends Command
                     if (is_null($fp_network_conn->token) || is_null($fp_network_conn->secret_key))
                         continue;
 
-                    foreach ($network_field_response AS $network_field)
+                    foreach ($network_connection_service->getFields() AS $network_field)
                     {
                         if ($network_field->field == 'token')
                         {
@@ -535,7 +535,7 @@ class ImportFreshPressCommand extends Command
                     if (is_null($fp_network_conn->public_api_key) || is_null($fp_network_conn->private_api_key))
                         continue;
 
-                    foreach ($network_field_response AS $network_field)
+                    foreach ($network_connection_service->getFields() AS $network_field)
                     {
                         if ($network_field->field == 'public_api_key')
                         {
@@ -566,7 +566,7 @@ class ImportFreshPressCommand extends Command
                     if (is_null($fp_network_conn->api_password))
                         continue;
 
-                    foreach ($network_field_response AS $network_field)
+                    foreach ($network_connection_service->getFields() AS $network_field)
                     {
                         if ($network_field->field == 'api_password')
                         {
@@ -587,7 +587,7 @@ class ImportFreshPressCommand extends Command
                 case 'App\Models\Networks\Connections\Webgains':
                     $fp_network_conn  = DB::connection('fresh_press')->select('select * from connection_wg where id = ' . $fp_network_connection->connectable_id)[0];
 
-                    foreach ($network_field_response AS $network_field)
+                    foreach ($network_connection_service->getFields() AS $network_field)
                     {
                         if ($network_field->field == 'api_password')
                         {

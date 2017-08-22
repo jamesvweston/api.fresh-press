@@ -3,6 +3,8 @@
 namespace App\Services\Networks\Connections;
 
 
+use App\Utilities\NetworkUtility;
+
 class EbayPartnerNetworkService extends BaseNetworkConnectionService
 {
 
@@ -16,7 +18,25 @@ class EbayPartnerNetworkService extends BaseNetworkConnectionService
      */
     public function getNetworkId ()
     {
-        return 16;
+        return NetworkUtility::EBAY_PARTNER_NETWORK;
     }
+
+    /**
+     * @return string
+     */
+    public function getHelpLink()
+    {
+        return 'http://support.fmtc.co/solution/articles/221677-network-setup-ebay-partner-network';
+    }
+
+    /**
+     * @return string
+     */
+    public function getAffiliateIdRegex ()
+    {
+        return '/^[\w\|]+$/';
+    }
+
+
 
 }

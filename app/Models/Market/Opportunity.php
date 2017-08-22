@@ -156,10 +156,10 @@ class Opportunity extends Model
             ])->validate();
         }
 
-        $qb                             = self::query();
+        $qb                                 = self::query();
 
         if (!is_null(AU::get($params['ids'])))
-            $qb->whereIn('id', explode(',', AU::get($params['ids'])));
+            $qb->whereIn('opportunities.id', explode(',', AU::get($params['ids'])));
 
         if (!is_null(AU::get($params['advertiser_ids'])))
             $qb->whereIn('advertiser_id', explode(',', AU::get($params['advertiser_ids'])));
@@ -182,7 +182,7 @@ class Opportunity extends Model
         if (!is_null(AU::get($params['created_to'])))
             $qb->where('created_at', '<=', new \Carbon\Carbon($params['created_to']));
 
-        $qb->orderBy(AU::get($params['order_by'], 'id'), AU::get($params['direction'], 'asc'));
+        //  $qb->orderBy(AU::get($params['order_by'], 'id'), AU::get($params['direction'], 'asc'));
 
         if ($paginate_results)
             return $qb->paginate(AU::get($params['per_page'], 20));

@@ -5,7 +5,7 @@ namespace App\Services\Networks\Connections;
 
 use App\Utilities\NetworkUtility;
 
-class AvantLinkCAService extends BaseNetworkConnectionService
+class LinkShareService extends BaseNetworkConnectionService
 {
 
     public function __construct()
@@ -18,7 +18,7 @@ class AvantLinkCAService extends BaseNetworkConnectionService
      */
     public function getNetworkId ()
     {
-        return NetworkUtility::AVANT_LINK_CA;
+        return NetworkUtility::RAKUTEN_LINKSHARE;
     }
 
     /**
@@ -26,7 +26,7 @@ class AvantLinkCAService extends BaseNetworkConnectionService
      */
     public function getHelpLink()
     {
-        return 'http://support.fmtc.co/solution/articles/221674-network-setup-avantlink';
+        return 'http://support.fmtc.co/solution/articles/221680-network-setup-linkshare';
     }
 
     /**
@@ -34,9 +34,7 @@ class AvantLinkCAService extends BaseNetworkConnectionService
      */
     public function getAffiliateIdRegex ()
     {
-        return '/^\d+$/';
+        return '/^[\w\/]+$/';
     }
-
-
 
 }
