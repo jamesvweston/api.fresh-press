@@ -4,16 +4,9 @@ namespace App\Services\Networks\Connections;
 
 
 use App\Models\Networks\Network;
-use App\Repositories\Networks\NetworkRepository;
-use EntityManager;
 
 abstract class BaseNetworkConnectionService
 {
-
-    /**
-     * @var NetworkRepository
-     */
-    protected $network_repo;
 
     /**
      * @var Network
@@ -23,8 +16,7 @@ abstract class BaseNetworkConnectionService
 
     public function __construct()
     {
-        $this->network_repo                 = EntityManager::getRepository('App\Models\Networks\Network');
-        $this->network                      = $this->network_repo->find($this->getNetworkId());
+        $this->network                      = Network::find($this->getNetworkId());
     }
 
 

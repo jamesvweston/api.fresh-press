@@ -83,4 +83,29 @@ class Influencer extends Model
         return $this->hasMany(Sphere::class);
     }
 
+    /**
+     * @param array $params
+     * @param bool $paginate_results
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public static function search ($params = [], $paginate_results = false)
+    {
+        $qb                             = self::query();
+
+        if (!is_null(AU::get($params['ids'])))
+            $qb->whereIn('id', explode(',', AU::get($params['ids'])));
+
+        if (!is_null(AU::get($params['created_from'])))
+            $qb->where('created_at', '>=', new \Carbon\Carbon($params['created_from']));
+
+        if (!is_null(AU::get($params['created_to'])))
+            $qb->where('created_at', '<=', new \Carbon\Carbon($params['created_to']));
+
+        $qb->orderBy(AU::get($params['order_by'], 'id'), AU::get($params['direction'], 'asc'));
+
+        if ($paginate_results)
+            return $qb->paginate(AU::get($params['per_page'], 20));
+        else
+            return $qb->get();
+    }
 }

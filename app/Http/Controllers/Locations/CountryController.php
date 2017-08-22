@@ -4,32 +4,15 @@ namespace App\Http\Controllers\Locations;
 
 use App\Http\Controllers\Controller;
 use App\Models\Locations\Country;
-use App\Repositories\Locations\CountryRepository;
-use App\Requests\GetCountries;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CountryController extends Controller
 {
 
-    /**
-     * @var CountryRepository
-     */
-    private $country_repo;
-
-
-    public function __construct(CountryRepository $country_repo)
-    {
-        $this->country_repo                     = $country_repo;
-    }
-
-
     public function index (Request $request)
     {
-        $params                             = new GetCountries($request->input());
-        $params->validate();
-
-        return $this->country_repo->where($params, true);
+        return Country::search($request->input(), true);
     }
 
     public function show (Request $request)
@@ -46,7 +29,7 @@ class CountryController extends Controller
     {
         $id                                 = $request->route('id');
 
-        $country                               = $this->country_repo->find($id);
+        $country                            = Country::find($id);
         if (is_null($country))
             throw new NotFoundHttpException('Country not found');
         return $country;

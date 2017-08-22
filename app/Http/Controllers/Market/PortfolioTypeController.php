@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Market;
 
 use App\Models\Market\PortfolioType;
-use App\Repositories\Market\PortfolioTypeRepository;
-use App\Requests\GetPortfolioTypes;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -12,23 +10,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class PortfolioTypeController extends Controller
 {
 
-    /**
-     * @var PortfolioTypeRepository
-     */
-    private $portfolio_type_repo;
-
-
-    public function __construct(PortfolioTypeRepository $portfolio_type_repo)
-    {
-        $this->portfolio_type_repo              = $portfolio_type_repo;
-    }
-
     public function index (Request $request)
     {
-        $query                                  = new GetPortfolioTypes($request->input());
-        $query->validate();
-
-        return $this->portfolio_type_repo->where($query, true);
+        return PortfolioType::search($request->input(), true);
     }
 
     public function show (Request $request)
@@ -45,7 +29,7 @@ class PortfolioTypeController extends Controller
     {
         $id                                 = $request->route('id');
 
-        $portfolio_type                           = $this->portfolio_type_repo->find($id);
+        $portfolio_type                     = PortfolioType::find($id);
         if (is_null($portfolio_type))
             throw new NotFoundHttpException('PortfolioType not found');
         return $portfolio_type;

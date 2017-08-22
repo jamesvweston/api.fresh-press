@@ -4,6 +4,7 @@ namespace App\Models\Locations;
 
 
 use Illuminate\Database\Eloquent\Model;
+use jamesvweston\Utilities\ArrayUtil AS AU;
 
 
 /**
@@ -27,6 +28,46 @@ class Country extends Model
         $object['code']                 = $this->code;
 
         return $object;
+    }
+
+    /**
+     * @param array $params
+     * @param bool $paginate_results
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public static function search ($params = [], $paginate_results = false)
+    {
+        $qb                             = self::query();
+
+        if (!is_null(AU::get($params['ids'])))
+            $qb->whereIn('id', explode(',', AU::get($params['ids'])));
+
+        if (!is_null(AU::get($params['codes'])))
+            $qb->whereIn('code', explode(',', AU::get($params['codes'])));
+
+        $qb->orderBy(AU::get($params['order_by'], 'id'), AU::get($params['direction'], 'asc'));
+
+        if ($paginate_results)
+            return $qb->paginate(AU::get($params['per_page'], 20));
+        else
+            return $qb->get();
+    }
+
+    /**
+     * @param   string  $code
+     * @return  Country|null
+     */
+    public static function findByCode ($code)
+    {
+        return self::search(['codes' => $code])->first();
+    }
+
+    /**
+     * @return  Country
+     */
+    public static function findUS ()
+    {
+        return self::find(233);
     }
 
 }

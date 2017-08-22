@@ -4,6 +4,7 @@ namespace App\Models\Market;
 
 
 use Illuminate\Database\Eloquent\Model;
+use jamesvweston\Utilities\ArrayUtil AS AU;
 
 
 /**
@@ -22,35 +23,31 @@ class AgeRange extends Model
      */
     public function toArray ()
     {
-        $object['id']                   = $this->getId();
-        $object['min']                  = $this->getMin();
-        $object['max']                  = $this->getMax();
+        $object['id']                   = $this->id;
+        $object['min']                  = $this->min;
+        $object['max']                  = $this->max;
 
         return $object;
     }
 
     /**
-     * @return int
+     * @param array $params
+     * @param bool $paginate_results
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Database\Eloquent\Collection|static[]
      */
-    public function getId()
+    public static function search ($params = [], $paginate_results = false)
     {
-        return $this->id;
-    }
+        $qb                             = self::query();
 
-    /**
-     * @return int
-     */
-    public function getMin()
-    {
-        return $this->min;
-    }
+        if (!is_null(AU::get($params['ids'])))
+            $qb->whereIn('id', explode(',', AU::get($params['ids'])));
 
-    /**
-     * @return int|null
-     */
-    public function getMax()
-    {
-        return $this->max;
+        $qb->orderBy(AU::get($params['order_by'], 'id'), AU::get($params['direction'], 'asc'));
+
+        if ($paginate_results)
+            return $qb->paginate(AU::get($params['per_page'], 20));
+        else
+            return $qb->get();
     }
 
 }

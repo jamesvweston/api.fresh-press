@@ -3,18 +3,15 @@
 namespace App\Console\Commands;
 
 
+use App\Models\CMS\Influencer;
 use App\Models\Locations\Address;
 use App\Models\Locations\Country;
 use App\Models\Market\AffiliateLink;
 use App\Models\Market\CommissionCompensation;
+use App\Models\Market\Opportunity;
 use App\Models\Market\PlacementCompensation;
+use App\Models\Market\PortfolioType;
 use App\Models\Market\ProductCompensation;
-use App\Repositories\CMS\AdvertiserRepository;
-use App\Repositories\CMS\InfluencerRepository;
-use App\Repositories\CMS\RoleRepository;
-use App\Repositories\Locations\CountryRepository;
-use App\Repositories\Market\OpportunityRepository;
-use App\Repositories\Market\PortfolioTypeRepository;
 use Illuminate\Console\Command;
 use DB;
 
@@ -46,36 +43,6 @@ class ImportFreshPressCommand extends Command
     protected $description = 'Import Fresh Press';
 
     /**
-     * @var AdvertiserRepository
-     */
-    private $advertiser_repo;
-
-    /**
-     * @var CountryRepository
-     */
-    private $country_repo;
-
-    /**
-     * @var InfluencerRepository
-     */
-    private $influencer_repo;
-
-    /**
-     * @var RoleRepository
-     */
-    private $role_repo;
-
-    /**
-     * @var OpportunityRepository
-     */
-    private $opportunity_repo;
-
-    /**
-     * @var PortfolioTypeRepository
-     */
-    private $portfolio_type_repo;
-
-    /**
      * @var string
      */
     private $ignored_advertiser_ids = '192';
@@ -93,16 +60,8 @@ class ImportFreshPressCommand extends Command
      *
      * @return mixed
      */
-    public function handle(AdvertiserRepository $advertiser_repo, CountryRepository $country_repo, InfluencerRepository $influencer_repo, RoleRepository $role_repo,
-                           OpportunityRepository $opportunity_repo, PortfolioTypeRepository $portfolio_type_repo)
+    public function handle()
     {
-        $this->advertiser_repo          = $advertiser_repo;
-        $this->country_repo             = $country_repo;
-        $this->influencer_repo          = $influencer_repo;
-        $this->role_repo                = $role_repo;
-        $this->opportunity_repo         = $opportunity_repo;
-        $this->portfolio_type_repo      = $portfolio_type_repo;
-
         $this->call('migrate:refresh', [
             '--seed' => 1
         ]);
@@ -332,7 +291,7 @@ class ImportFreshPressCommand extends Command
         $fp_influencers                 = DB::connection('fresh_press')->select('select u.* from users u JOIN users_groups ug ON ug.user_id = u.id WHERE ug.user_group_id = 1 order by u.id asc');
         foreach ($fp_influencers AS $fp_user)
         {
-            $influencer                 = $this->influencer_repo->find($fp_user->id);
+            $influencer                 = Influencer::find($fp_user->id);
 
             if (is_null($fp_user->billing_address))
             {
@@ -353,11 +312,11 @@ class ImportFreshPressCommand extends Command
                 $billing_address->postal_code   = $fp_user->billing_zip;
 
                 if (is_null($fp_user->billing_country))
-                    $country                = $this->country_repo->getUS();
+                    $country                = Country::findUS();
                 else
-                    $country                    = $this->country_repo->findByCode($fp_user->billing_country);
+                    $country                = Country::findByCode($fp_user->billing_country);
                 if (is_null($country))
-                    $country                = $this->country_repo->getUS();
+                    $country                = Country::findUS();
                 $billing_address->country_id = $country->id;
                 $billing_address->save();
                 $influencer->billing_address_id = $billing_address->id;
@@ -480,7 +439,7 @@ class ImportFreshPressCommand extends Command
             $type                       = $fp_portfolio_item->type;
             if ($type == 'Youtube channel')
                 $type = 'Youtube Channel';
-            $portfolio_type             = $this->portfolio_type_repo->findByName($type);
+            $portfolio_type             = PortfolioType::findByName($type);
 
             $portfolios[]               = [
                 'id'                    => $fp_portfolio_item->id,
@@ -625,7 +584,7 @@ class ImportFreshPressCommand extends Command
         $fp_opportunities_result        = DB::connection('fresh_press')->select('select * from opportunities');
         foreach ($fp_opportunities_result AS $fp_opportunity)
         {
-            $opportunity                = $this->opportunity_repo->find($fp_opportunity->id);
+            $opportunity                = Opportunity::find($fp_opportunity->id);
             if ($fp_opportunity->is_fee)
             {
                 $placement_compensation = new PlacementCompensation();
@@ -675,9 +634,8 @@ class ImportFreshPressCommand extends Command
 
                 $opportunity->addCompensationModel($product_compensation);
             }
-            $this->opportunity_repo->save($opportunity);
+            $opportunity->save();
         }
-        $this->opportunity_repo->commit();
 
         $this->info('Finished importing opportunity compensation_models....');
     }
@@ -778,7 +736,7 @@ class ImportFreshPressCommand extends Command
     private function getCountry ($fp_country_id)
     {
         $fp_country_code            = DB::connection('fresh_press')->select('select code from countries where id = ' . $fp_country_id);
-        $country                    = $this->country_repo->findByCode($fp_country_code[0]->code);
+        $country                    = Country::findByCode($fp_country_code[0]->code);
         if (is_null($country))
             dd('oh shit country is null with code of ' . $fp_country_code[0]->code);
         return $country;

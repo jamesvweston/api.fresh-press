@@ -2,33 +2,18 @@
 
 namespace App\Http\Controllers\Market;
 
+
 use App\Http\Controllers\Controller;
 use App\Models\Market\Opportunity;
-use App\Repositories\Market\OpportunityRepository;
-use App\Requests\GetOpportunities;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class OpportunityController extends Controller
 {
 
-    /**
-     * @var OpportunityRepository
-     */
-    private $opportunity_repo;
-
-
-    public function __construct(OpportunityRepository $opportunity_repo)
-    {
-        $this->opportunity_repo                 = $opportunity_repo;
-    }
-
     public function index (Request $request)
     {
-        $params                             = new GetOpportunities($request->input());
-        $params->validate();
-
-        return $this->opportunity_repo->where($params, true);
+        return Opportunity::search($request->input(), true);
     }
 
     public function show (Request $request)
@@ -63,7 +48,7 @@ class OpportunityController extends Controller
     {
         $id                                 = $request->route('id');
 
-        $opportunity                               = $this->opportunity_repo->find($id);
+        $opportunity                        = Opportunity::find($id);
         if (is_null($opportunity))
             throw new NotFoundHttpException('Opportunity not found');
         return $opportunity;

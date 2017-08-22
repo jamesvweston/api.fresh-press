@@ -24,117 +24,18 @@ class User extends Authenticatable
 
     use HasApiTokens, HasTimestamps, Notifiable, SoftDeletes;
 
-    /**
-     * @param array $data
-     */
-    public function __construct($data = [])
-    {
-        $this->first_name               = AU::get($data['first_name']);
-        $this->last_name                = AU::get($data['last_name']);
-        $this->email                    = AU::get($data['email']);
-        $this->password                 = AU::get($data['password']);
-        $this->email_is_verified        = AU::get($data['email_is_verified'], false);
-    }
 
     /**
      * @return array
      */
     public function toArray()
     {
-        $object['id']                   = $this->getId();
-        $object['first_name']           = $this->getFirstName();
-        $object['last_name']            = $this->getLastName();
-        $object['email']                = $this->getEmail();
+        $object['id']                   = $this->id;
+        $object['first_name']           = $this->first_name;
+        $object['last_name']            = $this->last_name;
+        $object['email']                = $this->email;
 
         return $object;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFirstName()
-    {
-        return $this->first_name;
-    }
-
-    /**
-     * @param string $first_name
-     */
-    public function setFirstName($first_name)
-    {
-        $this->first_name = $first_name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLastName()
-    {
-        return $this->last_name;
-    }
-
-    /**
-     * @param string $last_name
-     */
-    public function setLastName($last_name)
-    {
-        $this->last_name = $last_name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param string $email
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
-     * @param string $password
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getEmailIsVerified()
-    {
-        return $this->email_is_verified;
-    }
-
-    /**
-     * @param bool $email_is_verified
-     */
-    public function setEmailIsVerified($email_is_verified)
-    {
-        $this->email_is_verified = $email_is_verified;
     }
 
     /**
@@ -143,6 +44,32 @@ class User extends Authenticatable
     public function roles ()
     {
         return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id');
+    }
+
+    /**
+     * @param array $params
+     * @param bool $paginate_results
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public static function search ($params = [], $paginate_results = false)
+    {
+        $qb                             = self::query();
+
+        if (!is_null(AU::get($params['ids'])))
+            $qb->whereIn('id', explode(',', AU::get($params['ids'])));
+
+        if (!is_null(AU::get($params['created_from'])))
+            $qb->where('created_at', '>=', new \Carbon\Carbon($params['created_from']));
+
+        if (!is_null(AU::get($params['created_to'])))
+            $qb->where('created_at', '<=', new \Carbon\Carbon($params['created_to']));
+
+        $qb->orderBy(AU::get($params['order_by'], 'id'), AU::get($params['direction'], 'asc'));
+
+        if ($paginate_results)
+            return $qb->paginate(AU::get($params['per_page'], 20));
+        else
+            return $qb->get();
     }
 
 }

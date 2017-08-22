@@ -4,15 +4,17 @@ namespace App\Models\Market;
 
 
 use App\Models\CMS\Advertiser;
+use App\Models\Traits\UseTransactions;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use jamesvweston\Utilities\ArrayUtil AS AU;
+use Validator;
 
 /**
  * @property    int                             $id
  * @property    string                          $name
  * @property    string                          $description
+ * @property    int                             $advertiser_id
  * @property    Advertiser                      $advertiser
  * @property    \Carbon\Carbon                  $created_at
  * @property    \Carbon\Carbon                  $updated_at
@@ -21,15 +23,24 @@ use jamesvweston\Utilities\ArrayUtil AS AU;
 class Campaign extends Model
 {
 
-    use HasTimestamps, SoftDeletes;
+    use HasTimestamps, SoftDeletes, UseTransactions;
+
+
+    protected $fillable = [
+        'name',
+        'description',
+    ];
 
     /**
-     * @param array $data
+     * @return  \Illuminate\Validation\Validator
      */
-    public function __construct($data = [])
+    public function getValidator ()
     {
-        $this->name                     = AU::get($data['name']);
-        $this->description              = AU::get($data['description']);
+        return Validator::make(parent::toArray(), [
+            'name'                      => 'required|max:255',
+            'description'               => 'required|max:255',
+            'advertiser_id'             => 'required|integer',
+        ]);
     }
 
     /**

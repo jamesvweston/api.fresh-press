@@ -324,4 +324,36 @@
  *             example="Notes about my campaign"
  *         )
  *     )
+ *
+ *
+ * @SWG\Definition(
+ *         definition="UpdateCampaign",
+ *         @SWG\Property(
+ *             property="name",
+ *             type="string",
+ *             example="My campaign"
+ *         ),
+ *         @SWG\Property(
+ *             property="description",
+ *             type="string",
+ *             example="Notes about my campaign"
+ *         )
+ *     )
+ *
+ *
+ *
+ * @SWG\Definition(
+ *      definition="CreateOpportunity",
+ *      required={"name", "description"},
+ *      properties={
+ *          @SWG\Property(
+ *              property="name",
+ *              type="string"
+ *          ),
+ *          @SWG\Property(
+ *              property="cover_photo",
+ *              type="string"
+ *          )
+ *      }
+ *  )
  */

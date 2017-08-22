@@ -4,8 +4,6 @@ namespace App\Http\Controllers\CMS;
 
 
 use App\Models\CMS\Influencer;
-use App\Repositories\CMS\InfluencerRepository;
-use App\Requests\GetInfluencers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -13,23 +11,10 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class InfluencerController extends Controller
 {
 
-    /**
-     * @var InfluencerRepository
-     */
-    private $influencer_repo;
-
-
-    public function __construct(InfluencerRepository $influencer_repo)
-    {
-        $this->influencer_repo                  = $influencer_repo;
-    }
 
     public function index (Request $request)
     {
-        $params                             = new GetInfluencers($request->input());
-        $params->validate();
-
-        return $this->influencer_repo->where($params, true);
+        return Influencer::search($request->input(), true);
     }
 
     public function show (Request $request)
@@ -70,7 +55,7 @@ class InfluencerController extends Controller
     {
         $id                                 = $request->route('id');
 
-        $influencer                         = $this->influencer_repo->find($id);
+        $influencer                         = Influencer::find($id);
         if (is_null($influencer))
             throw new NotFoundHttpException('Influencer not found');
         return $influencer;

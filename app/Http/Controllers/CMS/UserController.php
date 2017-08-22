@@ -4,8 +4,6 @@ namespace App\Http\Controllers\CMS;
 
 
 use App\Models\CMS\User;
-use App\Repositories\CMS\UserRepository;
-use App\Requests\GetUsers;
 use Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -14,23 +12,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class UserController extends Controller
 {
 
-    /**
-     * @var UserRepository
-     */
-    private $user_repo;
-
-
-    public function __construct(UserRepository $user_repo)
-    {
-        $this->user_repo                    = $user_repo;
-    }
-
     public function index (Request $request)
     {
-        $params                             = new GetUsers($request->input());
-        $params->validate();
-
-        return $this->user_repo->where($params, true);
+        return User::search($request->input(), true);
     }
 
     public function me (Request $request)
@@ -59,7 +43,7 @@ class UserController extends Controller
     {
         $id                                 = $request->route('id');
 
-        $user                               = $this->user_repo->find($id);
+        $user                               = User::find($id);
         if (is_null($user))
             throw new NotFoundHttpException('User not found');
         return $user;

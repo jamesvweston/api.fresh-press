@@ -5,7 +5,7 @@ namespace App\Models\Locations;
 
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Model;
-use jamesvweston\Utilities\ArrayUtil AS AU;
+use Validator;
 
 /**
  * @property    int                             $id
@@ -26,20 +26,15 @@ class Address extends Model
 
     protected $with = ['country'];
 
-    /**
-     * @param array $data
-     */
-    public function __construct($data = [])
-    {
-        $this->created_at               = new \DateTime();
-        $this->updated_at               = new \DateTime();
-        $this->street1                  = AU::get($data['street1']);
-        $this->street2                  = AU::get($data['street2']);
-        $this->city                     = AU::get($data['city']);
-        $this->postal_code              = AU::get($data['postal_code']);
-        $this->phone                    = AU::get($data['phone']);
-        $this->state_province           = AU::get($data['state_province']);
-    }
+    protected $fillable = [
+        'street1',
+        'street2',
+        'city',
+        'postal_code',
+        'phone',
+        'state_province',
+        'country_id'
+    ];
 
     /**
      * @return array
@@ -56,6 +51,22 @@ class Address extends Model
         $object['country']              = $this->country->toArray();
 
         return $object;
+    }
+
+    /**
+     * @return  \Illuminate\Validation\Validator
+     */
+    public function getValidator ()
+    {
+        return Validator::make(parent::toArray(), [
+            'street1'                   => 'required|max:100',
+            'street2'                   => 'nullable|max:100',
+            'city'                      => 'required|max:100',
+            'postal_code'               => 'required|max:20',
+            'phone'                     => 'nullable|max:20',
+            'state_province'            => 'required|max:100',
+            'country_id'                => 'required|integer',
+        ]);
     }
 
     public function country()

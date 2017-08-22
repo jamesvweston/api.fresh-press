@@ -56,26 +56,7 @@ class Opportunity extends Model
      */
     public function __construct($data = [])
     {
-        $this->name                     = AU::get($data['name']);
-        $this->cover_photo              = AU::get($data['cover_photo']);
-        $this->keywords                 = AU::get($data['keywords']);
-        $this->notes                    = AU::get($data['notes']);
-        $this->pitch                    = AU::get($data['pitch']);
-        $this->rejected_reason          = AU::get($data['rejected_reason']);
-        $this->deliverable_deadline_days= AU::get($data['deliverable_deadline_days']);
-        $this->apply_by                 = AU::get($data['apply_by']);
-        $this->published_at             = AU::get($data['published_at']);
-        $this->closed_at                = AU::get($data['closed_at']);
-        $this->paused_at                = AU::get($data['paused_at']);
-        $this->submitted_at             = AU::get($data['submitted_at']);
-        $this->rejected_at              = AU::get($data['rejected_at']);
-        $this->advertiser               = AU::get($data['advertiser']);
-        $this->campaign                 = AU::get($data['campaign']);
-        $this->product_line             = AU::get($data['product_line']);
-        $this->deliverable_type         = AU::get($data['deliverable_type']);
-        $this->bids                     = AU::get($data['bids']);
-        $this->creatives                = AU::get($data['creatives']);
-        $this->compensation_models      = AU::get($data['compensation_models']);
+        parent::__construct($data);
     }
 
     /**
@@ -151,6 +132,47 @@ class Opportunity extends Model
     public function creatives ()
     {
         return $this->hasMany(OpportunityCreative::class);
+    }
+
+    /**
+     * @param array $params
+     * @param bool $paginate_results
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public static function search ($params = [], $paginate_results = false)
+    {
+        $qb                             = self::query();
+
+        if (!is_null(AU::get($params['ids'])))
+            $qb->whereIn('id', explode(',', AU::get($params['ids'])));
+
+        if (!is_null(AU::get($params['advertiser_ids'])))
+            $qb->whereIn('advertiser_id', explode(',', AU::get($params['advertiser_ids'])));
+
+        if (!is_null(AU::get($params['campaign_ids'])))
+            $qb->whereIn('campaign_id', explode(',', AU::get($params['campaign_ids'])));
+
+        if (!is_null(AU::get($params['deliverable_type_ids'])))
+            $qb->whereIn('deliverable_type_id', explode(',', AU::get($params['deliverable_type_ids'])));
+
+        if (!is_null(AU::get($params['product_line_ids'])))
+            $qb->whereIn('product_line_id', explode(',', AU::get($params['product_line_ids'])));
+
+        if (!is_null(AU::get($params['advertiser_ids'])))
+            $qb->whereIn('advertiser_id', explode(',', AU::get($params['advertiser_ids'])));
+
+        if (!is_null(AU::get($params['created_from'])))
+            $qb->where('created_at', '>=', new \Carbon\Carbon($params['created_from']));
+
+        if (!is_null(AU::get($params['created_to'])))
+            $qb->where('created_at', '<=', new \Carbon\Carbon($params['created_to']));
+
+        $qb->orderBy(AU::get($params['order_by'], 'id'), AU::get($params['direction'], 'asc'));
+
+        if ($paginate_results)
+            return $qb->paginate(AU::get($params['per_page'], 20));
+        else
+            return $qb->get();
     }
 
 }

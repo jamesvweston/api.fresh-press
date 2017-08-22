@@ -334,6 +334,55 @@
  *  )
  *
  *
+ *
+ * @SWG\Definition(
+ *      definition="CreateNetworkConnection",
+ *      properties={
+ *          @SWG\Property(
+ *              property="id",
+ *              type="integer"
+ *          )
+ *      }
+ *  )
+ *
+ *
+ * @SWG\Definition(
+ *      definition="CreateSphere",
+ *      properties={
+ *          @SWG\Property(
+ *              property="id",
+ *              type="integer",
+ *              example=1
+ *          )
+ *      }
+ *  )
+ *
+ *
+ * @SWG\Definition(
+ *      definition="UpdateSphere",
+ *      properties={
+ *          @SWG\Property(
+ *              property="id",
+ *              type="integer",
+ *              example=1
+ *          )
+ *      }
+ *  )
+ *
+ *
+ * @SWG\Definition(
+ *      definition="UpdateNetworkConnection",
+ *      properties={
+ *          @SWG\Property(
+ *              property="id",
+ *              type="integer",
+ *              example=1
+ *          )
+ *      }
+ *  )
+ *
+ *
+ *
  * @SWG\Definition(
  *      definition="Influencer",
  *      properties={

@@ -7,7 +7,7 @@ use App\Models\CMS\Advertiser;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use jamesvweston\Utilities\ArrayUtil AS AU;
+use Validator;
 
 /**
  * @property    int                             $id
@@ -21,11 +21,12 @@ use jamesvweston\Utilities\ArrayUtil AS AU;
  * @property    string|null                     $instagram
  * @property    string|null                     $news_url
  * @property    string|null                     $keywords
- * @property    Advertiser                      $advertiser
- * @property    Platform[]                      $platforms
  * @property    \Carbon\Carbon                  $created_at
  * @property    \Carbon\Carbon                  $updated_at
  * @property    \Carbon\Carbon|null             $deleted_at
+ *
+ * @property    Advertiser                      $advertiser
+ * @property    Platform[]                      $platforms
  */
 class ProductLine extends Model
 {
@@ -37,25 +38,34 @@ class ProductLine extends Model
         'name',
         'alias',
         'description',
+        'logo',
+        'website',
+        'facebook',
+        'instagram',
+        'news_url',
+        'keywords',
     ];
 
     protected $platforms;
 
+
     /**
-     * @param array $data
+     * @return  \Illuminate\Validation\Validator
      */
-    public function __construct($data = [])
+    public function getValidator ()
     {
-        $this->name                     = AU::get($data['name']);
-        $this->alias                    = AU::get($data['alias']);
-        $this->description              = AU::get($data['description']);
-        $this->logo                     = AU::get($data['logo']);
-        $this->website                  = AU::get($data['website']);
-        $this->facebook                 = AU::get($data['facebook']);
-        $this->twitter                  = AU::get($data['twitter']);
-        $this->instagram                = AU::get($data['instagram']);
-        $this->news_url                 = AU::get($data['news_url']);
-        $this->keywords                 = AU::get($data['keywords']);
+        return Validator::make(parent::toArray(), [
+            'name'                      => 'required|max:255',
+            'logo'                      => 'required|max:255',
+            'alias'                     => 'nullable|max:255',
+            'description'               => 'required',
+            'website'                   => 'nullable|url|max:255',
+            'facebook'                  => 'nullable|url|max:255',
+            'twitter'                   => 'nullable|url|max:255',
+            'instagram'                 => 'nullable|url|max:255',
+            'news_url'                  => 'nullable|url|max:255',
+            'keywords'                  => 'nullable|max:255',
+        ]);
     }
 
     /**

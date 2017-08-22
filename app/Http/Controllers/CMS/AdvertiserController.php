@@ -6,13 +6,6 @@ namespace App\Http\Controllers\CMS;
 use App\Models\CMS\Advertiser;
 use App\Models\Market\Campaign;
 use App\Models\Market\ProductLine;
-use App\Repositories\CMS\AdvertiserRepository;
-use App\Repositories\Market\CampaignRepository;
-use App\Repositories\Market\ProductLineRepository;
-use App\Requests\CreateCampaign;
-use App\Requests\CreateProductLine;
-use App\Requests\GetAdvertisers;
-use App\Requests\UpdateCampaign;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -21,28 +14,10 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class AdvertiserController extends Controller
 {
 
-    /**
-     * @var AdvertiserRepository
-     */
-    private $advertiser_repo;
-
-    /**
-     * @var CampaignRepository
-     */
-    private $campaign_repo;
-
-
-    public function __construct(AdvertiserRepository $advertiser_repo, CampaignRepository $campaign_repo)
-    {
-        $this->advertiser_repo              = $advertiser_repo;
-        $this->campaign_repo                = $campaign_repo;
-    }
 
     public function index (Request $request)
     {
-        $params                             = new GetAdvertisers($request->input());
-        $params->validate();
-        return $this->advertiser_repo->where($params, true);
+        return Advertiser::search($request->input(), true);
     }
 
     public function show (Request $request)
@@ -60,15 +35,11 @@ class AdvertiserController extends Controller
     public function createCampaign (Request $request)
     {
         $advertiser                         = $this->getFromRoute($request);
-        $create_campaign                    = new CreateCampaign($request->input());
-        $create_campaign->validate();
 
-        $campaign                           = new Campaign();
+        $campaign                           = new Campaign($request->all());
         $campaign->advertiser_id            = $advertiser->id;
-        $campaign->name                     = $create_campaign->getName();
-        $campaign->description              = $create_campaign->getDescription();
-
-        $this->campaign_repo->save($campaign);
+        $campaign->getValidator()->validate();
+        $campaign->save();
 
         return response($campaign, 201);
     }
@@ -81,13 +52,10 @@ class AdvertiserController extends Controller
         if ($advertiser->id != $campaign->advertiser_id)
             throw new BadRequestHttpException('Cannot update campaigns for other Advertisers');
 
-        $update_campaign                    = new UpdateCampaign($request->input());
-        if (!is_null($update_campaign->getName()))
-            $campaign->name             = $update_campaign->getName();
-        if (!is_null($update_campaign->getDescription()))
-            $campaign->description      = $update_campaign->getDescription();
+        $campaign->fill($request->all());
+        $campaign->getValidator()->validate();
 
-        $this->campaign_repo->update($campaign);
+        $campaign->update();
 
         return response($campaign);
     }
@@ -104,20 +72,20 @@ class AdvertiserController extends Controller
         return response($advertiser->product_lines);
     }
 
-    public function createProductLine (Request $request, ProductLineRepository $product_line_repo)
+    public function createProductLine (Request $request)
     {
         $advertiser                         = $this->getFromRoute($request);
-        $create_product_line                = new CreateProductLine($request->input());
-        $create_product_line->validate();
 
         $product_line                       = new ProductLine($request->input());
         $product_line->advertiser_id        = $advertiser->id;
-        $product_line_repo->save($product_line);
+        $product_line->getValidator()->validate();
+
+        $product_line->save();
         return response($product_line, 201);
     }
 
 
-    public function updateProductLine (Request $request, ProductLineRepository $product_line_repo)
+    public function updateProductLine (Request $request)
     {
         $advertiser                         = $this->getFromRoute($request);
 
@@ -125,7 +93,7 @@ class AdvertiserController extends Controller
         if (is_null($product_line_id))
             throw new BadRequestHttpException('product_line_id is required');
 
-        $product_line                       = $product_line_repo->find($product_line_id);
+        $product_line                       = ProductLine::find($product_line_id);
         if (is_null($product_line))
             throw new NotFoundHttpException('ProductLine not found');
 
@@ -133,7 +101,8 @@ class AdvertiserController extends Controller
             throw new BadRequestHttpException('Cannot update product_lines for other Advertisers');
 
         $product_line->fill($request->input());
-        $product_line_repo->update($product_line);
+        $product_line->getValidator()->validate();
+        $product_line->update();
         return response($product_line);
     }
 
@@ -145,7 +114,7 @@ class AdvertiserController extends Controller
     {
         $id                                 = $request->route('id');
 
-        $advertiser                         = $this->advertiser_repo->find($id);
+        $advertiser                         = Advertiser::find($id);
         if (is_null($advertiser))
             throw new NotFoundHttpException('Advertiser not found');
         return $advertiser;
@@ -161,7 +130,7 @@ class AdvertiserController extends Controller
         if (is_null($campaign_id))
             throw new BadRequestHttpException('campaign_id is required');
 
-        $campaign                           = $this->campaign_repo->find($campaign_id);
+        $campaign                           = Campaign::find($campaign_id);
         if (is_null($campaign))
             throw new NotFoundHttpException('Campaign not found');
         return $campaign;
