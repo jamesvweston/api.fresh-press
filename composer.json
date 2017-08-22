@@ -19,6 +19,7 @@
         "guzzlehttp/guzzle": "^6.3",
         "jamesvweston/php-utilities": "dev-master",
         "laravel/framework": "5.4.*",
+        "laravel/passport": "^3.0",
         "laravel/tinker": "~1.0",
         "soapbox/laravel-formatter": "^2.0"
     },

@@ -184,7 +184,7 @@ return [
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         L5Swagger\L5SwaggerServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
-
+        Laravel\Passport\PassportServiceProvider::class,
 
     ],
 

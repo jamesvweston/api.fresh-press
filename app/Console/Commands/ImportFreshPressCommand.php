@@ -109,7 +109,7 @@ class ImportFreshPressCommand extends Command
 
 
         $this->performInitialActions();
-
+        $this->initializeOAuth();
 
         try
         {
@@ -165,6 +165,47 @@ class ImportFreshPressCommand extends Command
             $this->FRESH_PRESS_GROUP_ADDED  = false;
             $this->info('The fresh press user already has the influencer role.');
         }
+    }
+
+    private function initializeOAuth ()
+    {
+        $clients                        = [];
+
+        $clients[]                      = [
+            'id'                        => 1,
+            'user_id'                   => null,
+            'name'                      => 'Laravel Personal Access Client',
+            'secret'                    => 'CyJgRn75oIBSoxsKhKHc2wreWseGH1J33AOHga30',
+            'redirect'                  => config('app.url'),
+            'personal_access_client'    => 1,
+            'password_client'           => 0,
+            'revoked'                   => 0,
+            'created_at'                => '2017-08-21 23:54:34',
+            'updated_at'                => '2017-08-21 23:54:34',
+        ];
+
+        $clients[]                      = [
+            'id'                        => 2,
+            'user_id'                   => null,
+            'name'                      => 'Laravel Password Grant Clien',
+            'secret'                    => 'a7s63ysn0E9dmy4PNGAO4Vzi5Yl8gjaux6zuyDrc',
+            'redirect'                  => config('app.url'),
+            'personal_access_client'    => 0,
+            'password_client'           => 1,
+            'revoked'                   => 0,
+            'created_at'                => '2017-08-21 23:54:34',
+            'updated_at'                => '2017-08-21 23:54:34',
+        ];
+        DB::table('oauth_clients')->insert($clients);
+
+        $personal_access_clients        = [];
+        $personal_access_clients[]      = [
+            'id'                        => 1,
+            'client_id'                 => 1,
+            'created_at'                => '2017-08-21 23:54:34',
+            'updated_at'                => '2017-08-21 23:54:34',
+        ];
+        DB::table('oauth_personal_access_clients')->insert($personal_access_clients);
     }
 
     private function performFinalActions ()

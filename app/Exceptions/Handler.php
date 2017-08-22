@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -89,10 +90,13 @@ class Handler extends ExceptionHandler
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
-        if ($request->expectsJson()) {
-            return response()->json(['error' => 'Unauthenticated.'], 401);
-        }
+        $auth_header                    = $request->header('Authorization');
+        if (is_null($auth_header))
+            throw new BadRequestHttpException('Authorization is required in header');
+        $auth_header                    = explode('Bearer ', $auth_header);
+        if (sizeof($auth_header) != 2)
+            throw new BadRequestHttpException('Authorization parameter is incorrect. Start the value with "Bearer "');
 
-        return redirect()->guest(route('login'));
+        return response()->json(['error' => 'Unauthenticated.'], 401);
     }
 }
