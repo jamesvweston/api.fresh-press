@@ -3,6 +3,7 @@
 namespace App\Models\Locations;
 
 
+use App\Models\Traits\DBTransactions;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Model;
 use Validator;
@@ -22,7 +23,7 @@ use Validator;
 class Address extends Model
 {
 
-    use HasTimestamps;
+    use HasTimestamps, DBTransactions;
 
     protected $with = ['country'];
 

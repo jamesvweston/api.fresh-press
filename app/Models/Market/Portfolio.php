@@ -3,6 +3,7 @@
 namespace App\Models\Market;
 
 
+use App\Models\Traits\DBTransactions;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Model;
 use jamesvweston\Utilities\ArrayUtil AS AU;
@@ -10,7 +11,7 @@ use jamesvweston\Utilities\ArrayUtil AS AU;
 class Portfolio extends Model
 {
 
-    use HasTimestamps;
+    use HasTimestamps, DBTransactions;
 
     /**
      * @var int

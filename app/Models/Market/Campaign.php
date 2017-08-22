@@ -4,7 +4,7 @@ namespace App\Models\Market;
 
 
 use App\Models\CMS\Advertiser;
-use App\Models\Traits\UseTransactions;
+use App\Models\Traits\DBTransactions;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -23,7 +23,7 @@ use Validator;
 class Campaign extends Model
 {
 
-    use HasTimestamps, SoftDeletes, UseTransactions;
+    use HasTimestamps, SoftDeletes, DBTransactions;
 
 
     protected $fillable = [

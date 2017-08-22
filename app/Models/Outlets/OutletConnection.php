@@ -4,6 +4,7 @@ namespace App\Models\Outlets;
 
 
 use App\Models\Market\Sphere;
+use App\Models\Traits\DBTransactions;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,7 +13,7 @@ use jamesvweston\Utilities\ArrayUtil AS AU;
 class OutletConnection extends Model
 {
 
-    use HasTimestamps, SoftDeletes;
+    use HasTimestamps, SoftDeletes, DBTransactions;
 
 
     /**

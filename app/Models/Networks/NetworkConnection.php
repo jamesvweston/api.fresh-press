@@ -4,6 +4,7 @@ namespace App\Models\Networks;
 
 
 use App\Models\CMS\Influencer;
+use App\Models\Traits\DBTransactions;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Model;
 use jamesvweston\Utilities\ArrayUtil AS AU;
@@ -25,7 +26,7 @@ use jamesvweston\Utilities\ArrayUtil AS AU;
 class NetworkConnection extends Model
 {
 
-    use HasTimestamps;
+    use HasTimestamps, DBTransactions;
 
     protected $with = ['network'];
 

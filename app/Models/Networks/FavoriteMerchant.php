@@ -4,12 +4,16 @@ namespace App\Models\Networks;
 
 
 use App\Models\CMS\Influencer;
+use App\Models\Traits\DBTransactions;
 use Illuminate\Database\Eloquent\Model;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
 
 class FavoriteMerchant extends Model
 {
+
+    use DBTransactions;
+
 
     /**
      * @var int

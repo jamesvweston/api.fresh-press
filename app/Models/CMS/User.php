@@ -3,6 +3,7 @@
 namespace App\Models\CMS;
 
 
+use App\Models\Traits\DBTransactions;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
@@ -22,7 +23,7 @@ use Laravel\Passport\HasApiTokens;
 class User extends Authenticatable
 {
 
-    use HasApiTokens, HasTimestamps, Notifiable, SoftDeletes;
+    use HasApiTokens, HasTimestamps, Notifiable, SoftDeletes, DBTransactions;
 
 
     /**

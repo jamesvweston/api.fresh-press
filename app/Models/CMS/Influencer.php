@@ -7,6 +7,7 @@ use App\Models\Locations\Address;
 use App\Models\Market\Sphere;
 use App\Models\Networks\FavoriteMerchant;
 use App\Models\Networks\NetworkConnection;
+use App\Models\Traits\DBTransactions;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -26,7 +27,7 @@ use jamesvweston\Utilities\ArrayUtil AS AU;
 class Influencer extends Model
 {
 
-    use HasTimestamps, SoftDeletes;
+    use HasTimestamps, SoftDeletes, DBTransactions;
 
 
     /**

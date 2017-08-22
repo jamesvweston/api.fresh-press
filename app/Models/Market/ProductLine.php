@@ -4,6 +4,7 @@ namespace App\Models\Market;
 
 
 use App\Models\CMS\Advertiser;
+use App\Models\Traits\DBTransactions;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -31,7 +32,7 @@ use Validator;
 class ProductLine extends Model
 {
 
-    use HasTimestamps, SoftDeletes;
+    use HasTimestamps, SoftDeletes, DBTransactions;
 
 
     protected $fillable = [

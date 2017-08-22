@@ -5,7 +5,7 @@ namespace App\Models\Traits;
 
 use DB;
 
-trait UseTransactions
+trait DBTransactions
 {
 
     public function save (array $options = [])

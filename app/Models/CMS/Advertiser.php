@@ -6,6 +6,7 @@ namespace App\Models\CMS;
 use App\Models\Market\Campaign;
 use App\Models\Market\Opportunity;
 use App\Models\Market\ProductLine;
+use App\Models\Traits\DBTransactions;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -26,7 +27,7 @@ use jamesvweston\Utilities\ArrayUtil AS AU;
 class Advertiser extends Model
 {
 
-    use HasTimestamps, SoftDeletes;
+    use HasTimestamps, SoftDeletes, DBTransactions;
 
 
     /**
