@@ -13,7 +13,7 @@ class OpportunityController extends Controller
 
     public function index (Request $request)
     {
-        return Opportunity::search($request->input(), true);
+        return Opportunity::search($request->input(), true, true);
     }
 
     public function show (Request $request)

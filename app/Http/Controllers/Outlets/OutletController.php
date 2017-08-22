@@ -13,7 +13,7 @@ class OutletController extends Controller
 
     public function index (Request $request)
     {
-        return Outlet::search($request->input(), true);
+        return Outlet::search($request->input(), true, true);
     }
 
 

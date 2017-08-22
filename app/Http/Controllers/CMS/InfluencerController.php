@@ -14,7 +14,7 @@ class InfluencerController extends Controller
 
     public function index (Request $request)
     {
-        return Influencer::search($request->input(), true);
+        return Influencer::search($request->input(), true, true);
     }
 
     public function show (Request $request)

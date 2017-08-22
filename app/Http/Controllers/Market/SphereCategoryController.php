@@ -12,7 +12,7 @@ class SphereCategoryController extends Controller
 
     public function index (Request $request)
     {
-        return SphereCategory::search($request->input(), true);
+        return SphereCategory::search($request->input(), true, true);
     }
 
     public function show (Request $request)

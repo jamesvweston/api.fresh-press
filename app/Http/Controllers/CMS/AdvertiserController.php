@@ -17,7 +17,7 @@ class AdvertiserController extends Controller
 
     public function index (Request $request)
     {
-        return Advertiser::search($request->input(), true);
+        return Advertiser::search($request->input(), true, true);
     }
 
     public function show (Request $request)

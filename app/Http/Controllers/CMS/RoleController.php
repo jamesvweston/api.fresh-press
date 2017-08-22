@@ -13,7 +13,7 @@ class RoleController extends Controller
 
     public function index (Request $request)
     {
-        return Role::search($request->input(), true);
+        return Role::search($request->input(), true, true);
     }
 
     public function show (Request $request)

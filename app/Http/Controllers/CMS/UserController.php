@@ -14,7 +14,7 @@ class UserController extends Controller
 
     public function index (Request $request)
     {
-        return User::search($request->input(), true);
+        return User::search($request->input(), true, true);
     }
 
     public function me (Request $request)

@@ -13,7 +13,7 @@ class AgeRangeController extends Controller
 
     public function index (Request $request)
     {
-        return AgeRange::search($request->input(), true);
+        return AgeRange::search($request->input(), true, true);
     }
 
     public function show (Request $request)

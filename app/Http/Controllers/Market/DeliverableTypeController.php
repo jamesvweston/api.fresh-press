@@ -14,7 +14,7 @@ class DeliverableTypeController extends Controller
 
     public function index (Request $request)
     {
-        return DeliverableType::search($request->input(), true);
+        return DeliverableType::search($request->input(), true, true);
     }
 
     public function show (Request $request)

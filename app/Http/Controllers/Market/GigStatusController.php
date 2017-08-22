@@ -13,7 +13,7 @@ class GigStatusController extends Controller
 
     public function index (Request $request)
     {
-        return GigStatus::search($request->input(), true);
+        return GigStatus::search($request->input(), true, true);
     }
 
     public function show (Request $request)

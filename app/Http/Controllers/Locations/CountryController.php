@@ -12,7 +12,7 @@ class CountryController extends Controller
 
     public function index (Request $request)
     {
-        return Country::search($request->input(), true);
+        return Country::search($request->input(), true, true);
     }
 
     public function show (Request $request)

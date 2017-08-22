@@ -13,7 +13,7 @@ class PlatformController extends Controller
 
     public function index (Request $request)
     {
-        return Platform::search($request->input(), true);
+        return Platform::search($request->input(), true, true);
     }
 
     public function show (Request $request)

@@ -12,7 +12,7 @@ class PortfolioTypeController extends Controller
 
     public function index (Request $request)
     {
-        return PortfolioType::search($request->input(), true);
+        return PortfolioType::search($request->input(), true, true);
     }
 
     public function show (Request $request)
