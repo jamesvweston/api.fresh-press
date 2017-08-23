@@ -3,20 +3,25 @@
 namespace App\Services\Networks\Connections;
 
 
+use App\Models\Networks\NetworkConnection;
 use App\Utilities\NetworkUtility;
 
 class OmnyverseService extends BaseNetworkConnectionService
 {
 
-    public function __construct()
+    /**
+     * @param   NetworkConnection   $network_connection
+     * @return  bool
+     */
+    protected function testConnectionCredentials ($network_connection)
     {
-        parent::__construct();
+        return false;
     }
 
     /**
      * @return int
      */
-    public function getNetworkId ()
+    protected function getNetworkId ()
     {
         return NetworkUtility::OMNYVERSE;
     }

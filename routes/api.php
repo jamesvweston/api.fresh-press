@@ -52,6 +52,8 @@ Route::group(['prefix'     => 'influencers'], function () {
     Route::get('/{id}/billing_address', 'CMS\InfluencerController@getBillingAddress');
     Route::get('/{id}/favorite_merchants', 'CMS\InfluencerController@getFavoriteMerchants');
     Route::get('/{id}/network_connections', 'CMS\InfluencerController@getNetworkConnections');
+    Route::get('/{id}/network_connections/{network_connection_id}/fields', 'CMS\InfluencerController@getNetworkConnectionFields');
+    Route::get('/{id}/network_connections/{network_connection_id}/connect', 'CMS\InfluencerController@testNetworkConnection');
     Route::get('/{id}/spheres', 'CMS\InfluencerController@getSpheres');
 });
 

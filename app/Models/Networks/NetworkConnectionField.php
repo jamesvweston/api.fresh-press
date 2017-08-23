@@ -6,106 +6,48 @@ namespace App\Models\Networks;
 use Illuminate\Database\Eloquent\Model;
 use jamesvweston\Utilities\ArrayUtil AS AU;
 
+/**
+ * @SWG\Definition()
+ *
+ * @property    int                             $id
+ * @property    int                             $network_connection_id
+ * @property    int                             $network_field_id
+ * @property    string                          $value
+ *
+ * @property    NetworkField                    $network_field
+ * @property    NetworkConnection               $network_connection
+ */
 class NetworkConnectionField extends Model
 {
 
-    /**
-     * @var int
-     */
-    protected $id;
-
-    /**
-     * @var NetworkConnection
-     */
-    protected $network_connection;
-
-    /**
-     * @var NetworkConnectionField
-     */
-    protected $network_field;
-
-    /**
-     * @var string
-     */
-    protected $value;
-
-
-    /**
-     * @param array $data
-     */
-    public function __construct($data = [])
-    {
-        $this->network_connection       = AU::get($data['network_connection']);
-        $this->network_field            = AU::get($data['network_field']);
-        $this->value                    = AU::get($data['value']);
-    }
+    protected $with = ['network_field'];
 
     /**
      * @return array
      */
     public function toArray()
     {
-        $object['id']                   = $this->getId();
-        $object['network_field']        = $this->getNetworkField()->toArray();
-        $object['value']                = $this->getValue();
+        $object['id']                   = $this->id;
+        $object['network_field']        = $this->network_field->toArray();
+        $object['value']                = $this->value;
 
         return $object;
     }
 
     /**
-     * @return int
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function getId()
+    public function network_field ()
     {
-        return $this->id;
+        return $this->hasOne(NetworkField::class, 'id', 'network_field_id');
     }
 
     /**
-     * @return NetworkConnection
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function getNetworkConnection()
+    public function network_connection ()
     {
-        return $this->network_connection;
-    }
-
-    /**
-     * @param NetworkConnection $network_connection
-     */
-    public function setNetworkConnection($network_connection)
-    {
-        $this->network_connection = $network_connection;
-    }
-
-    /**
-     * @return NetworkConnectionField
-     */
-    public function getNetworkField()
-    {
-        return $this->network_field;
-    }
-
-    /**
-     * @param NetworkConnectionField $network_field
-     */
-    public function setNetworkField($network_field)
-    {
-        $this->network_field = $network_field;
-    }
-
-    /**
-     * @return string
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
-     * @param string $value
-     */
-    public function setValue($value)
-    {
-        $this->value = $value;
+        return $this->belongsTo(NetworkConnection::class);
     }
 
 }

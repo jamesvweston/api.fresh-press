@@ -3,20 +3,37 @@
 namespace App\Services\Networks\Connections;
 
 
+use App\Models\Networks\NetworkConnection;
 use App\Utilities\NetworkUtility;
+use FMTCco\Integrations\Apis\ImpactRadius\ImpactRadiusApi;
 
 class ImpactRadiusService extends BaseNetworkConnectionService
 {
 
-    public function __construct()
+    /**
+     * @param   NetworkConnection   $network_connection
+     * @return  bool
+     */
+    protected function testConnectionCredentials ($network_connection)
     {
-        parent::__construct();
+        $api                        = $this->getApi($network_connection);
+        $api->getCampaigns(['PageSize' => 1, 'Page' => 1]);
+        return true;
+    }
+
+    /**
+     * @param   NetworkConnection $network_connection
+     * @return  ImpactRadiusApi
+     */
+    public function getApi ($network_connection)
+    {
+        return new ImpactRadiusApi($network_connection->getFieldByName('account_sid')->value, $network_connection->getFieldByName('auth_token')->value);
     }
 
     /**
      * @return int
      */
-    public function getNetworkId ()
+    protected function getNetworkId ()
     {
         return NetworkUtility::IMPACT_RADIUS;
     }

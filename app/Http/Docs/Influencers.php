@@ -156,6 +156,27 @@
  *
  *
  *
+ * @SWG\Get(
+ *      path="/influencers/{id}/network_connections/{network_connection_id}/fields",
+ *      summary="Get NetworkConnectionFields",
+ *      description="Returns NetworkConnectionFields",
+ *      tags={"influencers"},
+ *      operationId="GetNetworkConnectionFields",
+ *      produces={"application/json"},
+ *      @SWG\Parameter(ref="#/parameters/influencer_id"),
+ *      @SWG\Parameter(ref="#/parameters/network_connection_id"),
+ *      @SWG\Response(
+ *          response=200,
+ *          description="Successful operation",
+ *          @SWG\Schema(
+ *              type="array",
+ *              @SWG\Items(ref="#/definitions/NetworkConnectionField")
+ *          )
+ *      )
+ *  )
+ *
+ *
+ *
  * @SWG\Post(
  *      path="/influencers/{id}/network_connections",
  *      summary="Create a NetworkConnection for the Influencer",

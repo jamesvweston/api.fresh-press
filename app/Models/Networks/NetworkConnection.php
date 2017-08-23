@@ -22,6 +22,8 @@ use jamesvweston\Utilities\ArrayUtil AS AU;
  * @property    \Carbon\Carbon|null             $sync_failed_at
  * @property    \Carbon\Carbon                  $created_at
  * @property    \Carbon\Carbon                  $updated_at
+ *
+ * @property    NetworkConnectionField[]        $fields
  */
 class NetworkConnection extends Model
 {
@@ -30,21 +32,6 @@ class NetworkConnection extends Model
 
     protected $with = ['network'];
 
-
-    /**
-     * @param array $data
-     */
-    public function __construct($data = [])
-    {
-        $this->affiliate_id             = AU::get($data['affiliate_id']);
-        $this->publisher_id             = AU::get($data['publisher_id']);
-        $this->is_sync                  = AU::get($data['is_sync'], false);
-        $this->network                  = AU::get($data['network']);
-        $this->influencer               = AU::get($data['influencer']);
-        $this->sync_failed_at           = AU::get($data['sync_failed_at']);
-        $this->sync_failed_message      = AU::get($data['sync_failed_message']);
-        $this->fields                   = AU::get($data['fields']);
-    }
 
     /**
      * @return array
@@ -81,7 +68,36 @@ class NetworkConnection extends Model
      */
     public function fields ()
     {
-        return $this->hasMany(NetworkField::class);
+        return $this->hasMany(NetworkConnectionField::class);
+    }
+
+    public function clearSyncFailures()
+    {
+        $this->sync_failed_at           = null;
+        $this->sync_failed_message      = null;
+    }
+
+    /**
+     * @param   string  $errorMessage
+     */
+    public function recordSyncFailure ($errorMessage)
+    {
+        $this->sync_failed_message      = $errorMessage;
+        $this->sync_failed_at           = $this->freshTimestamp();
+    }
+
+    /**
+     * @param   string  $name
+     * @return  NetworkConnectionField
+     */
+    public function getFieldByName ($name)
+    {
+        foreach ($this->fields AS $field)
+        {
+            if ($field->network_field->field == $name)
+                return $field;
+        }
+        return null;
     }
 
 }

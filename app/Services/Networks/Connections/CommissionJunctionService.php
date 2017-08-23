@@ -3,20 +3,37 @@
 namespace App\Services\Networks\Connections;
 
 
+use App\Models\Networks\NetworkConnection;
 use App\Utilities\NetworkUtility;
+use FMTCco\Integrations\Apis\CommissionJunction\CommissionJunctionApi;
 
 class CommissionJunctionService extends BaseNetworkConnectionService
 {
 
-    public function __construct()
+    /**
+     * @param   NetworkConnection   $network_connection
+     * @return  bool
+     */
+    protected function testConnectionCredentials ($network_connection)
     {
-        parent::__construct();
+        $api                        = $this->getApi($network_connection);
+        $api->makeHttpRequest('get', 'languages');
+
+    }
+
+    /**
+     * @param   NetworkConnection   $network_connection
+     * @return  CommissionJunctionApi
+     */
+    protected function getApi ($network_connection)
+    {
+        return new CommissionJunctionApi($network_connection->getFieldByName('api_key')->value);
     }
 
     /**
      * @return int
      */
-    public function getNetworkId ()
+    protected function getNetworkId ()
     {
         return NetworkUtility::COMMISSION_JUNCTION;
     }

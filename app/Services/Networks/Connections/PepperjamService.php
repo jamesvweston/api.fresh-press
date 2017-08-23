@@ -3,20 +3,42 @@
 namespace App\Services\Networks\Connections;
 
 
+use App\Models\Networks\NetworkConnection;
 use App\Utilities\NetworkUtility;
+use FMTCco\Integrations\Apis\PepperJam\PepperJamApi;
+use FMTCco\Integrations\Apis\PepperJam\Requests\GetTransactionSummary;
 
 class PepperjamService extends BaseNetworkConnectionService
 {
 
-    public function __construct()
+    /**
+     * @param   NetworkConnection   $network_connection
+     * @return  bool
+     */
+    protected function testConnectionCredentials ($network_connection)
     {
-        parent::__construct();
+        $api                    = $this->getApi($network_connection);
+        $request                = new GetTransactionSummary();
+        $request->setStartDate('2016-01-01');
+        $request->setEndDate('2016-01-02');
+
+        $api->getTransactionSummary($request);
+        return true;
+    }
+
+    /**
+     * @param   NetworkConnection   $network_connection
+     * @return  PepperJamApi
+     */
+    public function getApi ($network_connection)
+    {
+        return new PepperJamApi($network_connection->getFieldByName('api_key')->value);
     }
 
     /**
      * @return int
      */
-    public function getNetworkId ()
+    protected function getNetworkId ()
     {
         return NetworkUtility::PEPPER_JAM;
     }

@@ -418,7 +418,10 @@ class ImportFreshPressCommand extends Command
                     $fp_network_conn  = DB::connection('fresh_press')->select('select * from connection_cj where id = ' . $fp_network_connection->connectable_id)[0];
 
                     if (is_null($fp_network_conn->api_key))
+                    {
+                        //  dd($fp_network_connection);
                         continue;
+                    }
 
                     foreach ($network_connection_service->getFields() AS $network_field)
                     {
@@ -507,6 +510,7 @@ class ImportFreshPressCommand extends Command
                     break;
                 case 'App\Models\Networks\Connections\ShareASale':
                     $fp_network_conn  = DB::connection('fresh_press')->select('select * from connection_sas where id = ' . $fp_network_connection->connectable_id)[0];
+
                     if (is_null($fp_network_conn->token) || is_null($fp_network_conn->secret_key))
                         continue;
 
@@ -600,7 +604,7 @@ class ImportFreshPressCommand extends Command
                     }
                     break;
                 default:
-                    dd($fp_network_connection->connectable_type . ' is not mapped in importNetworkConnections');
+                    $this->error($fp_network_connection->connectable_type . ' is not mapped in importNetworkConnections');
             }
             if (sizeof($network_connection_fields_data) != 0)
                 DB::table('network_connection_fields')->insert($network_connection_fields_data);
