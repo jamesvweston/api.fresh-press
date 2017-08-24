@@ -26,7 +26,12 @@ class Network extends Model
 
         static::addGlobalScope('column_mapping', function (Builder $builder)
         {
-            $builder->select(['networkid AS id', 'name']);
+            $builder->select(
+                [
+                    'networkid AS id',
+                    'name'
+                ]
+            );
         });
 
         static::addGlobalScope('only_active', function (Builder $builder)
