@@ -52,7 +52,6 @@ class CommissionJunctionService extends BaseNetworkConnectionService implements 
     {
         $api                        = $this->getApi($network_connection);
         $api->makeHttpRequest('get', 'languages');
-
     }
 
     /**

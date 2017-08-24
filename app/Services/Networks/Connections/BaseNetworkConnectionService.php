@@ -61,7 +61,9 @@ abstract class BaseNetworkConnectionService
     public function syncRelations($network_connection)
     {
         if ($this instanceof Syncable)
+        {
             return $this->getProgramIds($network_connection);
+        }
     }
 
     /**

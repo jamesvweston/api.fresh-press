@@ -19,7 +19,6 @@ class NetworkConnectionTest extends TestCase
     public function testConnections ()
     {
         return;
-
         $network_connections                = NetworkConnection::all();
 
         foreach ($network_connections AS $connection)

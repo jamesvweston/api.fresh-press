@@ -69,6 +69,20 @@ return [
             'engine' => null,
         ],
 
+        'fmtc' => [
+            'driver' => 'mysql',
+            'host' => env('FMTC_DB_HOST', 'localhost'),
+            'port' => env('FMTC_DB_PORT', '3306'),
+            'database' => env('FMTC_DB_DATABASE', 'forge'),
+            'username' => env('FMTC_DB_USERNAME', 'forge'),
+            'password' => env('FMTC_DB_PASSWORD', ''),
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix' => '',
+            'strict' => false,
+            'engine' => null,
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST', '127.0.0.1'),
