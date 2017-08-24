@@ -4,12 +4,27 @@ namespace App\Services\Networks\Connections;
 
 
 use App\Models\Networks\NetworkConnection;
+use App\Services\Networks\Connections\Contracts\Syncable;
 use App\Utilities\NetworkUtility;
+use FMTCco\Integrations\Apis\LinkConnector\LinkConnectorApi;
 use FMTCco\Integrations\Exceptions\InvalidNetworkCredentialsException;
-use \GuzzleHttp\Client;
 
-class LinkConnectorService extends BaseNetworkConnectionService
+class LinkConnectorService extends BaseNetworkConnectionService implements Syncable
 {
+
+    public function getProgramIds($network_connection)
+    {
+        $api                    = $this->getApi($network_connection);
+        $response               = $api->getApprovedCampaigns();
+
+        $program_ids            = [];
+        foreach ($response AS $campaign)
+        {
+            $program_ids[]      = $campaign->getMerchantID();
+        }
+
+        return $program_ids;
+    }
 
     /**
      * @param   NetworkConnection   $network_connection
@@ -18,33 +33,18 @@ class LinkConnectorService extends BaseNetworkConnectionService
      */
     protected function testConnectionCredentials ($network_connection)
     {
-        $api                    = $this->getApi($network_connection, 'getCampaignApproved');
-        $res                    = $api->request('POST');
-
-        if ($res->getBody()->getContents() == 'Unable to complete request: Invalid API Key')
-        {
-            throw new InvalidNetworkCredentialsException($res->getBody()->getContents());
-        }
+        $api                    = $this->getApi($network_connection);
+        $api->getReportAccountBalance();
         return true;
     }
 
     /**
      * @param   NetworkConnection   $network_connection
-     * @param   string              $action
-     * @return  Client
+     * @return  LinkConnectorApi
      */
-    public function getApi ($network_connection, $action)
+    public function getApi ($network_connection)
     {
-        $config     = [
-            'base_uri'          => 'http://www.linkconnector.com/api/',
-            'form_params'       => [
-                'Key'       => $network_connection->getFieldByName('api_key')->value,
-                'Function'  => $action,
-                'Format' => 'JSON',
-            ]
-        ];
-        $client                 = new Client($config);
-        return $client;
+        return new LinkConnectorApi($network_connection->getFieldByName('api_key')->value);
     }
 
     /**
@@ -53,22 +53,6 @@ class LinkConnectorService extends BaseNetworkConnectionService
     protected function getNetworkId ()
     {
         return NetworkUtility::LINK_CONNECTOR;
-    }
-
-    /**
-     * @return string
-     */
-    public function getHelpLink()
-    {
-        return 'http://support.fmtc.co/solution/articles/221679-network-setup-linkconnector';
-    }
-
-    /**
-     * @return string
-     */
-    public function getAffiliateIdRegex ()
-    {
-        return '/^\d+$/';
     }
 
 }

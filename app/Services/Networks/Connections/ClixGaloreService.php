@@ -26,22 +26,4 @@ class ClixGaloreService extends BaseNetworkConnectionService
         return NetworkUtility::CLIX_GALORE;
     }
 
-    /**
-     * @return string
-     */
-    public function getHelpLink()
-    {
-        return 'http://support.fmtc.co/solution/articles/221675-network-setup-clixgalore';
-    }
-
-    /**
-     * @return string
-     */
-    public function getAffiliateIdRegex ()
-    {
-        return '/^[\w\@\.]+$/';
-    }
-
-
-
 }

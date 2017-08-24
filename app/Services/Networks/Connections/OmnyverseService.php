@@ -26,22 +26,4 @@ class OmnyverseService extends BaseNetworkConnectionService
         return NetworkUtility::OMNYVERSE;
     }
 
-    /**
-     * @return string
-     */
-    public function getHelpLink()
-    {
-        return 'http://support.fmtc.co/solution/articles/221682-network-setup-omnyverse';
-    }
-
-    /**
-     * @return string
-     */
-    public function getAffiliateIdRegex ()
-    {
-        return '/^\d+$/';
-    }
-
-
-
 }

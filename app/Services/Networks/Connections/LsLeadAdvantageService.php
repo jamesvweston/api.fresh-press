@@ -26,22 +26,4 @@ class LsLeadAdvantageService extends BaseNetworkConnectionService
         return NetworkUtility::LS_LEAD_ADVANTAGE;
     }
 
-    /**
-     * @return string
-     */
-    public function getHelpLink()
-    {
-        return 'http://support.fmtc.co/solution/articles/221681-network-setup-ls-lead-advantage';
-    }
-
-    /**
-     * @return string
-     */
-    public function getAffiliateIdRegex ()
-    {
-        return '/^[\w\*\/]+$/';
-    }
-
-
-
 }

@@ -4,11 +4,38 @@ namespace App\Services\Networks\Connections;
 
 
 use App\Models\Networks\NetworkConnection;
+use App\Services\Networks\Connections\Contracts\Syncable;
 use App\Utilities\NetworkUtility;
 use FMTCco\Integrations\Apis\ImpactRadius\ImpactRadiusApi;
+use FMTCco\Integrations\Apis\ImpactRadius\Requests\GetCampaigns;
 
-class ImpactRadiusService extends BaseNetworkConnectionService
+class ImpactRadiusService extends BaseNetworkConnectionService implements Syncable
 {
+
+    /**
+     * @param   NetworkConnection   $network_connection
+     * @return  int[]
+     */
+    public function getProgramIds($network_connection)
+    {
+        $api                        = $this->getApi($network_connection);
+        $request                    = new GetCampaigns();
+        $request->setPageSize(100);
+        $page                       = 1;
+        $programIds                 = [];
+
+        do {
+            $request->setPage($page);
+            $response               = $api->getCampaigns($request);
+            foreach ($response->getData() AS $item)
+            {
+                $programIds[]       = $item->getCampaignId();
+            }
+            $page++;
+        } while ($response->getPage() < $response->getNumpages());
+
+        return $programIds;
+    }
 
     /**
      * @param   NetworkConnection   $network_connection
@@ -37,23 +64,5 @@ class ImpactRadiusService extends BaseNetworkConnectionService
     {
         return NetworkUtility::IMPACT_RADIUS;
     }
-
-    /**
-     * @return string
-     */
-    public function getHelpLink()
-    {
-        return 'http://support.fmtc.co/solution/articles/221721-network-setup-impact-radius';
-    }
-
-    /**
-     * @return string
-     */
-    public function getAffiliateIdRegex ()
-    {
-        return '/^\d+$/';
-    }
-
-
 
 }

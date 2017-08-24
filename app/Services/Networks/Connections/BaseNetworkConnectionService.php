@@ -61,7 +61,7 @@ abstract class BaseNetworkConnectionService
     public function syncRelations($network_connection)
     {
         if ($this instanceof Syncable)
-            $this->syncRelations($network_connection);
+            return $this->getProgramIds($network_connection);
     }
 
     /**
@@ -111,16 +111,6 @@ abstract class BaseNetworkConnectionService
      * @return int
      */
     protected abstract function getNetworkId ();
-
-    /**
-     * @return string
-     */
-    abstract function getHelpLink ();
-
-    /**
-     * @return string
-     */
-    abstract function getAffiliateIdRegex ();
 
     /**
      * @param   NetworkConnection   $network_connection

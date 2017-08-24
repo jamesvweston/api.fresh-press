@@ -26,22 +26,4 @@ class FreshPressService extends BaseNetworkConnectionService
         return NetworkUtility::FRESH_PRESS;
     }
 
-    /**
-     * @return string
-     */
-    public function getHelpLink()
-    {
-        return 'http://support.fmtc.co';
-    }
-
-    /**
-     * @return string
-     */
-    public function getAffiliateIdRegex ()
-    {
-        return '/^\d+$/';
-    }
-
-
-
 }

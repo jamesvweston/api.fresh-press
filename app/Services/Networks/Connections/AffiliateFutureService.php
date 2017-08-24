@@ -26,20 +26,4 @@ class AffiliateFutureService extends BaseNetworkConnectionService
         return NetworkUtility::AFFILIATE_FUTURE;
     }
 
-    /**
-     * @return string
-     */
-    public function getHelpLink()
-    {
-        return 'http://support.fmtc.co/solution/articles/221671-network-setup-affiliate-future';
-    }
-
-    /**
-     * @return string
-     */
-    public function getAffiliateIdRegex ()
-    {
-        return '/^\d+$/';
-    }
-
 }

@@ -26,20 +26,4 @@ class AsiaPacificDigitalService extends BaseNetworkConnectionService
         return NetworkUtility::ASIA_PACIFIC_DIGITAL;
     }
 
-    /**
-     * @return string
-     */
-    public function getHelpLink()
-    {
-        return 'http://support.fmtc.co/solution/articles/221673-network-setup-asia-pacific-digital';
-    }
-
-    /**
-     * @return string
-     */
-    public function getAffiliateIdRegex ()
-    {
-        return '/^\d+$/';
-    }
-
 }

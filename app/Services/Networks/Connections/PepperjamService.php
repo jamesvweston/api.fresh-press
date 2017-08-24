@@ -4,12 +4,36 @@ namespace App\Services\Networks\Connections;
 
 
 use App\Models\Networks\NetworkConnection;
+use App\Services\Networks\Connections\Contracts\Syncable;
 use App\Utilities\NetworkUtility;
 use FMTCco\Integrations\Apis\PepperJam\PepperJamApi;
+use FMTCco\Integrations\Apis\PepperJam\Requests\GetAdvertisers;
 use FMTCco\Integrations\Apis\PepperJam\Requests\GetTransactionSummary;
 
-class PepperjamService extends BaseNetworkConnectionService
+class PepperjamService extends BaseNetworkConnectionService implements Syncable
 {
+
+
+    public function getProgramIds($network_connection)
+    {
+        $api                    = $this->getApi($network_connection);
+        $page                   = 1;
+        $program_ids            = [];
+        $request                = new GetAdvertisers();
+        $request->setStatus('joined');
+
+        do {
+            $request->setPage($page);
+            $response           = $api->getAdvertisers($request);
+
+            foreach ($response->getData() AS $advertiser)
+                $program_ids[]  = $advertiser->getId();
+
+            $page++;
+        } while ($page < $response->getPagination()->getTotalPages());
+
+        return $program_ids;
+    }
 
     /**
      * @param   NetworkConnection   $network_connection
@@ -42,23 +66,5 @@ class PepperjamService extends BaseNetworkConnectionService
     {
         return NetworkUtility::PEPPER_JAM;
     }
-
-    /**
-     * @return string
-     */
-    public function getHelpLink()
-    {
-        return 'http://support.fmtc.co/solution/articles/221684-network-setup-pepperjam';
-    }
-
-    /**
-     * @return string
-     */
-    public function getAffiliateIdRegex ()
-    {
-        return '/^\d+$/';
-    }
-
-
 
 }

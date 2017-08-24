@@ -26,22 +26,4 @@ class ShopHerMediaService extends BaseNetworkConnectionService
         return NetworkUtility::SHOP_HER_MEDIA;
     }
 
-    /**
-     * @return string
-     */
-    public function getHelpLink()
-    {
-        return 'http://support.fmtc.co/solution/articles/221688-network-setup-shopher-media';
-    }
-
-    /**
-     * @return string
-     */
-    public function getAffiliateIdRegex ()
-    {
-        return '/^\w+$/';
-    }
-
-
-
 }

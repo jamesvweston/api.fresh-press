@@ -35,6 +35,7 @@ class LinkShareService extends BaseNetworkConnectionService
      */
     public function getApi ($network_connection, $action, $url_tail = '/')
     {
+
         $config     = [
             'base_uri'          => 'http://lld2.linksynergy.com/services/restLinks/' . $action . '/' . $network_connection->getFieldByName('web_services_token')->value . $url_tail,
         ];
@@ -48,22 +49,6 @@ class LinkShareService extends BaseNetworkConnectionService
     protected function getNetworkId ()
     {
         return NetworkUtility::RAKUTEN_LINKSHARE;
-    }
-
-    /**
-     * @return string
-     */
-    public function getHelpLink()
-    {
-        return 'http://support.fmtc.co/solution/articles/221680-network-setup-linkshare';
-    }
-
-    /**
-     * @return string
-     */
-    public function getAffiliateIdRegex ()
-    {
-        return '/^[\w\/]+$/';
     }
 
 }

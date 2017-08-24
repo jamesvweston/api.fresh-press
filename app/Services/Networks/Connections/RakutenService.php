@@ -26,22 +26,4 @@ class RakutenService extends BaseNetworkConnectionService
         return NetworkUtility::RAKUTEN;
     }
 
-    /**
-     * @return string
-     */
-    public function getHelpLink()
-    {
-        return '';
-    }
-
-    /**
-     * @return string
-     */
-    public function getAffiliateIdRegex ()
-    {
-        return '/^\d+$/';
-    }
-
-
-
 }

@@ -26,20 +26,4 @@ class AffiliateFutureUkService extends BaseNetworkConnectionService
         return NetworkUtility::AFFILIATE_FUTURE_UK;
     }
 
-    /**
-     * @return string
-     */
-    public function getHelpLink()
-    {
-        return 'http://support.fmtc.co/solution/articles/221672-network-setup-affiliate-future-uk';
-    }
-
-    /**
-     * @return string
-     */
-    public function getAffiliateIdRegex ()
-    {
-        return '/^\w+$/';
-    }
-
 }

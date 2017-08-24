@@ -49,22 +49,4 @@ class WebgainsService extends BaseNetworkConnectionService
         return NetworkUtility::WEBGAINS;
     }
 
-    /**
-     * @return string
-     */
-    public function getHelpLink()
-    {
-        return 'http://support.fmtc.co/solution/articles/223376-network-setup-webgains';
-    }
-
-    /**
-     * @return string
-     */
-    public function getAffiliateIdRegex ()
-    {
-        return '/^\d+$/';
-    }
-
-
-
 }

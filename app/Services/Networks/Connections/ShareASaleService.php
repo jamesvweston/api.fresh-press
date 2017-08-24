@@ -4,12 +4,28 @@ namespace App\Services\Networks\Connections;
 
 
 use App\Models\Networks\NetworkConnection;
+use App\Services\Networks\Connections\Contracts\Syncable;
 use App\Utilities\NetworkUtility;
 use FMTCco\Integrations\Apis\ShareASale\Requests\GetActivity;
+use FMTCco\Integrations\Apis\ShareASale\Requests\GetBalance;
+use FMTCco\Integrations\Apis\ShareASale\Requests\GetMerchantStatus;
 use FMTCco\Integrations\Apis\ShareASale\ShareASaleApi;
 
-class ShareASaleService extends BaseNetworkConnectionService
+class ShareASaleService extends BaseNetworkConnectionService implements Syncable
 {
+
+    public function getProgramIds($network_connection)
+    {
+        $api                        = $this->getApi($network_connection);
+        $program_ids                = [];
+        $request                    = new GetMerchantStatus();
+        $response                   = $api->getMerchantStatus($request);
+
+        foreach ($response AS $merchantStatus)
+            $program_ids[]          = $merchantStatus->getMerchantid();
+
+        return $program_ids;
+    }
 
     /**
      * @param   NetworkConnection   $network_connection
@@ -19,10 +35,9 @@ class ShareASaleService extends BaseNetworkConnectionService
     {
         $api                        = $this->getApi($network_connection);
 
-        $getActivity                = new GetActivity();
-        $getActivity->setDateStart('01/01/2016');
-        $getActivity->setDateEnd('01/02/2016');
-        $api->getActivity($getActivity);
+        $request                    = new GetBalance();
+        $api->getBalance($request);
+
         return true;
     }
 
@@ -43,23 +58,5 @@ class ShareASaleService extends BaseNetworkConnectionService
     {
         return NetworkUtility::SHARE_A_SALE;
     }
-
-    /**
-     * @return string
-     */
-    public function getHelpLink()
-    {
-        return 'http://support.fmtc.co/solution/articles/221686-network-setup-shareasale';
-    }
-
-    /**
-     * @return string
-     */
-    public function getAffiliateIdRegex ()
-    {
-        return '/^\d+$/';
-    }
-
-
 
 }

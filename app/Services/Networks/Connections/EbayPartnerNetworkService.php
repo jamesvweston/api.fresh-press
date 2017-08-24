@@ -26,22 +26,4 @@ class EbayPartnerNetworkService extends BaseNetworkConnectionService
         return NetworkUtility::EBAY_PARTNER_NETWORK;
     }
 
-    /**
-     * @return string
-     */
-    public function getHelpLink()
-    {
-        return 'http://support.fmtc.co/solution/articles/221677-network-setup-ebay-partner-network';
-    }
-
-    /**
-     * @return string
-     */
-    public function getAffiliateIdRegex ()
-    {
-        return '/^[\w\|]+$/';
-    }
-
-
-
 }

@@ -11,6 +11,6 @@ interface Syncable
     /**
      * @param   NetworkConnection   $network_connection
      */
-    function syncRelations ($network_connection);
+    function getProgramIds ($network_connection);
 
 }

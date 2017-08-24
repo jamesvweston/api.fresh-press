@@ -26,22 +26,4 @@ class TradeDoublerService extends BaseNetworkConnectionService
         return NetworkUtility::TRADE_DOUBLER;
     }
 
-    /**
-     * @return string
-     */
-    public function getHelpLink()
-    {
-        return 'http://support.fmtc.co/solution/articles/221689-network-setup-tradedoubler';
-    }
-
-    /**
-     * @return string
-     */
-    public function getAffiliateIdRegex ()
-    {
-        return '/^\d+$/';
-    }
-
-
-
 }

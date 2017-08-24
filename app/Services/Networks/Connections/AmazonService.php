@@ -26,21 +26,4 @@ class AmazonService extends BaseNetworkConnectionService
         return NetworkUtility::AMAZON;
     }
 
-    /**
-     * @return string
-     */
-    public function getHelpLink()
-    {
-        return 'http://support.fmtc.co/solution/articles/221670-network-setup-amazon';
-    }
-
-    /**
-     * @return string
-     */
-    public function getAffiliateIdRegex ()
-    {
-        return '/^[\w-]+$/';
-    }
-
-
 }

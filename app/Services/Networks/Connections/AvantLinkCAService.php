@@ -26,22 +26,4 @@ class AvantLinkCAService extends BaseNetworkConnectionService
         return NetworkUtility::AVANT_LINK_CA;
     }
 
-    /**
-     * @return string
-     */
-    public function getHelpLink()
-    {
-        return 'http://support.fmtc.co/solution/articles/221674-network-setup-avantlink';
-    }
-
-    /**
-     * @return string
-     */
-    public function getAffiliateIdRegex ()
-    {
-        return '/^\d+$/';
-    }
-
-
-
 }
