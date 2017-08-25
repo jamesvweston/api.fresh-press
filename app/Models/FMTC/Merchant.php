@@ -24,6 +24,8 @@ use Illuminate\Database\Eloquent\Builder;
  * @property    bool                            $canada
  * @property    bool                            $bAustralia
  * @property    bool                            $bWorldWide
+ * @property    string                          $logo
+ * @property    string                          $homepage_url
  */
 class Merchant extends Model
 {
@@ -39,7 +41,7 @@ class Merchant extends Model
     {
         parent::boot();
 
-        static::addGlobalScope('column_mapping', function (Builder $builder)
+        static::addGlobalScope('tblMerchants_column_mapping', function (Builder $builder)
         {
             $builder->select(
                 [
@@ -60,9 +62,21 @@ class Merchant extends Model
                     'canada',
                     'bAustralia',
                     'bWorldWide',
+                    '120x60 AS logo',
+                    'homepageurl AS homepage_url',
                     ]
             );
         });
+
+        static::addGlobalScope('tblMerchants_only_active', function (Builder $builder)
+        {
+            $builder
+                ->where('display', '1')
+                ->where('deleted', '0')
+                ->where('exclusiveid', 0)
+                ->where('bPrivateMerchantHub', 0);
+        });
+
     }
 
     /**
@@ -112,6 +126,8 @@ class Merchant extends Model
         $object['redirect_url']         = $this->cRedirectURL;
         $object['redirect_supported']   = $this->bRedirectSupported;
         $object['primary_country']      = $this->cPrimaryCountry;
+        $object['logo']                 = 'https://logos.fmtc.co/120x60/' . $this->logo;
+        $object['homepage_url']          = $this->homepage_url;
 
         $object['shipTos']              = [];
 

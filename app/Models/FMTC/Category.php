@@ -26,7 +26,7 @@ class Category extends Model
     {
         parent::boot();
 
-        static::addGlobalScope('column_mapping', function (Builder $builder)
+        static::addGlobalScope('tblCategoriesV2_column_mapping', function (Builder $builder)
         {
             $builder->select(
                 [

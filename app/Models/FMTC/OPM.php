@@ -35,7 +35,7 @@ class OPM extends Model
     {
         parent::boot();
 
-        static::addGlobalScope('column_mapping', function (Builder $builder)
+        static::addGlobalScope('tblOPMs_column_mapping', function (Builder $builder)
         {
             $builder->select(
                 [
@@ -62,6 +62,13 @@ class OPM extends Model
         });
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function master_merchants ()
+    {
+        return $this->hasMany(MasterMerchant::class, 'nOPMID', 'nOPMID');
+    }
 
     /**
      * @return array
@@ -70,7 +77,7 @@ class OPM extends Model
     {
         $object['id']                   = $this->nOPMID;
         $object['name']                 = $this->cName;
-        $object['logo']                 = $this->cLogo;
+        $object['logo']                 = 'https://account.fmtc.co/assets/images/opm_logos/' . $this->cLogo;
         $object['website']              = $this->cWebsite;
         $object['description']          = $this->cDescription;
         $object['email']                = $this->cEmail;

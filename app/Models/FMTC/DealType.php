@@ -24,7 +24,7 @@ class DealType extends Model
     {
         parent::boot();
 
-        static::addGlobalScope('column_mapping', function (Builder $builder)
+        static::addGlobalScope('tblTypes_column_mapping', function (Builder $builder)
         {
             $builder->select(
                 [

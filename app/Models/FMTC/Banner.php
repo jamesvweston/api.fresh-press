@@ -27,7 +27,7 @@ class Banner extends Model
     {
         parent::boot();
 
-        static::addGlobalScope('column_mapping', function (Builder $builder)
+        static::addGlobalScope('tblMerchantsBanners_column_mapping', function (Builder $builder)
         {
             $builder->select(
                 [

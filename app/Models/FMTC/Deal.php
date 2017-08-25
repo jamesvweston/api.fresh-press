@@ -38,7 +38,7 @@ class Deal extends Model
     {
         parent::boot();
 
-        static::addGlobalScope('column_mapping', function (Builder $builder)
+        static::addGlobalScope('tblCouponsActive_column_mapping', function (Builder $builder)
         {
             $builder->select(
                 [

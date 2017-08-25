@@ -24,7 +24,7 @@ class Network extends Model
     {
         parent::boot();
 
-        static::addGlobalScope('column_mapping', function (Builder $builder)
+        static::addGlobalScope('tblNetworks_column_mapping', function (Builder $builder)
         {
             $builder->select(
                 [
@@ -38,6 +38,14 @@ class Network extends Model
         {
             $builder->where('bActive', 1);
         });
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function merchants ()
+    {
+        return $this->hasMany(Merchant::class, 'networkid', 'networkid');
     }
 
     /**

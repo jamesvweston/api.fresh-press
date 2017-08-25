@@ -26,7 +26,7 @@ class MasterMerchantDomain extends Model
     {
         parent::boot();
 
-        static::addGlobalScope('column_mapping', function (Builder $builder)
+        static::addGlobalScope('tblMerchantsMasterDomains_column_mapping', function (Builder $builder)
         {
             $builder->select(
                 [

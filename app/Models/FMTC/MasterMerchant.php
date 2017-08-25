@@ -13,6 +13,9 @@ use Illuminate\Database\Eloquent\Builder;
  * @property    string                          $cHomepageURL
  * @property    int                             $nSkimlinksID
  * @property    string                          $nOPMID
+ *
+ *
+ * @property    Merchant                        $merchant
  */
 class MasterMerchant extends Model
 {
@@ -28,25 +31,25 @@ class MasterMerchant extends Model
     {
         parent::boot();
 
-        static::addGlobalScope('column_mapping', function (Builder $builder)
+        static::addGlobalScope('tblMerchantsMaster_column_mapping', function (Builder $builder)
         {
-            $builder->select(
-                [
+            $builder
+                ->select([
                     'nMasterID',
                     'cName',
                     'cPrimaryCountry',
                     'cHomepageURL',
                     'nSkimlinksID',
-                    'nOPMID',
-                ]
-            );
+                    'nOPMID']);
         });
     }
 
 
     public function networks ()
     {
-        return $this->hasManyThrough(Network::class, Merchant::class);
+        return $this->belongsToMany(Network::class, 'tblMerchants', 'nMasterID', 'networkid')
+            ->withoutGlobalScope('tblNetworks_column_mapping')
+            ->select(['tblNetworks.networkid', 'tblNetworks.name']);
     }
 
     /**
@@ -66,6 +69,22 @@ class MasterMerchant extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function program_details ()
+    {
+        return $this->hasMany(ProgramDetail::class, 'nMasterID', 'nMasterID');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function opm ()
+    {
+        return $this->belongsTo(OPM::class, 'nOPMID', 'nOPMID');
+    }
+
+    /**
      * @return array
      */
     public function toArray()
@@ -76,6 +95,7 @@ class MasterMerchant extends Model
         $object['homepage_url']         = $this->cHomepageURL;
         $object['skimlinks_id']         = $this->nSkimlinksID;
         $object['opm_id']               = $this->nOPMID;
+        $object['merchant']             = $this->merchants->first()->toArray();
 
         return $object;
     }

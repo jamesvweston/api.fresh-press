@@ -30,7 +30,7 @@ class ProgramDetail extends Model
     {
         parent::boot();
 
-        static::addGlobalScope('column_mapping', function (Builder $builder)
+        static::addGlobalScope('tblProgramDetails_column_mapping', function (Builder $builder)
         {
             $builder->select(
                 [
@@ -43,6 +43,15 @@ class ProgramDetail extends Model
                 ]
             );
         });
-
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function master_merchant ()
+    {
+        return $this->belongsTo(MasterMerchant::class, 'nMasterID', 'nMasterID');
+    }
+
+
 }
