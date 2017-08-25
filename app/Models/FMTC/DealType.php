@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * @property    int                             $id
+ * @property    int                             $typeid
  * @property    string                          $name
  */
 class DealType extends Model
@@ -28,7 +28,7 @@ class DealType extends Model
         {
             $builder->select(
                 [
-                    'typeid AS id',
+                    'typeid',
                     'name'
                 ]
             );
@@ -41,6 +41,17 @@ class DealType extends Model
                 ->where('bV2', 1)
                 ->whereNotIn('typeid', [27, 34]);
         });
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $object['id']                   = $this->typeid;
+        $object['name']                 = $this->name;
+
+        return $object;
     }
 
 }

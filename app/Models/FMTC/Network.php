@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * @property    int                             $id
+ * @property    int                             $networkid
  * @property    string                          $name
  */
 class Network extends Model
@@ -28,7 +28,7 @@ class Network extends Model
         {
             $builder->select(
                 [
-                    'networkid AS id',
+                    'networkid',
                     'name'
                 ]
             );
@@ -38,6 +38,17 @@ class Network extends Model
         {
             $builder->where('bActive', 1);
         });
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $object['id']                   = $this->networkid;
+        $object['name']                 = $this->name;
+
+        return $object;
     }
 
 }

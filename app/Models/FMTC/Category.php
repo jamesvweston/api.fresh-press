@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * @property    int                             $id
- * @property    string                          $name
- * @property    int                             $parent_id
- * @property    bool                            $restricted
+ * @property    int                             $nCategoryID
+ * @property    string                          $cName
+ * @property    int                             $nParentID
+ * @property    bool                            $bRestricted
+ * @property    int                             $nRecripicalID
  */
 class Category extends Model
 {
@@ -29,10 +30,11 @@ class Category extends Model
         {
             $builder->select(
                 [
-                    'nCategoryID AS id',
-                    'cName AS name',
-                    'nParentID AS parent_id',
-                    'bRestricted AS restricted'
+                    'nCategoryID',
+                    'cName',
+                    'nParentID',
+                    'bRestricted',
+                    'nRecripicalID',
                 ]
             );
         });
@@ -43,5 +45,19 @@ class Category extends Model
         });
     }
 
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $object['id']                   = $this->nCategoryID;
+        $object['name']                 = $this->cName;
+        $object['parent_id']            = $this->nParentID;
+        $object['restricted']           = $this->bRestricted;
+        $object['recripical_id']        = $this->nRecripicalID;
+
+        return $object;
+    }
 
 }

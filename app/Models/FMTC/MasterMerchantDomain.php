@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * @property    int                             $id
- * @property    int                             $merchant_id
- * @property    string                          $domain
- * @property    string                          $homepage_url
+ * @property    int                             $nDomainID
+ * @property    int                             $nMasterID
+ * @property    string                          $cDomain
+ * @property    string                          $cHomepageURL
  */
 class MasterMerchantDomain extends Model
 {
@@ -30,13 +30,32 @@ class MasterMerchantDomain extends Model
         {
             $builder->select(
                 [
-                    'nDomainID AS id',
-                    'nMasterID AS merchant_id',
-                    'cDomain AS domain',
-                    'cHomepageURL AS homepage_url',
+                    'nDomainID',
+                    'nMasterID',
+                    'cDomain',
+                    'cHomepageURL',
                 ]
             );
         });
+    }
+
+
+    public function master_merchant ()
+    {
+        return $this->belongsTo(MasterMerchant::class);
+    }
+
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $object['id']                   = $this->nDomainID;
+        $object['domain']               = $this->cDomain;
+        $object['homepage_url']         = $this->cHomepageURL;
+
+        return $object;
     }
 
 }

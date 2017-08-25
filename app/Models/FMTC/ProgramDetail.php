@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * @property    int                             $id
- * @property    int                             $merchant_id
- * @property    int                             $manager_id
- * @property    string                          $manager_name
- * @property    string                          $manager_email
- * @property    string                          $manager_phone
+ * @property    int                             $nMasterID
+ * @property    int                             $nMerchantID
+ * @property    int                             $nManagerID
+ * @property    string                          $cManagerName
+ * @property    string                          $cManagerEmail
+ * @property    string                          $cManagerPhone
  */
 class ProgramDetail extends Model
 {
@@ -21,7 +21,9 @@ class ProgramDetail extends Model
 
     protected $table = 'tblProgramDetails';
 
-    protected $primaryKey = 'nMasterID';
+
+    protected $primaryKey = 'nMasterID';    //  It's a composite primary with nMasterID & nMerchantID
+
 
 
     protected static function boot()
@@ -32,12 +34,12 @@ class ProgramDetail extends Model
         {
             $builder->select(
                 [
-                    'nMasterID AS id',
-                    'nMerchantID AS merchant_id',
-                    'nManagerID AS manager_id',
-                    'cManagerName AS manager_name',
-                    'cManagerEmail AS manager_email',
-                    'cManagerPhone AS manager_phone'
+                    'nMasterID',
+                    'nMerchantID',
+                    'nManagerID',
+                    'cManagerName',
+                    'cManagerEmail',
+                    'cManagerPhone'
                 ]
             );
         });

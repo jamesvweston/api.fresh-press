@@ -7,18 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * @property    int                             $id
- * @property    string                          $name
- * @property    string                          $logo
- * @property    string                          $website
- * @property    string                          $description
- * @property    string                          $email
- * @property    string                          $phone
- * @property    string                          $facebook
- * @property    string                          $twitter
- * @property    string                          $linkedin
- * @property    string                          $pinterest
- * @property    string                          $google_plus
+ * @property    int                             $nOPMID
+ * @property    string                          $cName
+ * @property    string                          $cLogo
+ * @property    string                          $cWebsite
+ * @property    string                          $cDescription
+ * @property    string                          $cEmail
+ * @property    string                          $cPhone
+ * @property    string                          $cFacebook
+ * @property    string                          $cTwitter
+ * @property    string                          $cLinkedIn
+ * @property    string                          $cInstagram
+ * @property    string                          $cPinterest
+ * @property    string                          $cGooglePlus
  */
 class OPM extends Model
 {
@@ -38,19 +39,19 @@ class OPM extends Model
         {
             $builder->select(
                 [
-                    'nOPMID AS id',
-                    'cName AS name',
-                    'cLogo AS logo',
-                    'cWebsite AS website',
-                    'cDescription AS description',
-                    'cEmail AS email',
-                    'cPhone AS phone',
-                    'cFacebook AS facebook',
-                    'cTwitter AS twitter',
-                    'cLinkedIn AS linkedin',
-                    'cInstagram AS instagram',
-                    'cPinterest AS pinterest',
-                    'cGooglePlus AS google_plus',
+                    'nOPMID',
+                    'cName',
+                    'cLogo',
+                    'cWebsite',
+                    'cDescription',
+                    'cEmail',
+                    'cPhone',
+                    'cFacebook',
+                    'cTwitter',
+                    'cLinkedIn',
+                    'cInstagram',
+                    'cPinterest',
+                    'cGooglePlus',
                 ]
             );
         });
@@ -61,5 +62,27 @@ class OPM extends Model
         });
     }
 
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $object['id']                   = $this->nOPMID;
+        $object['name']                 = $this->cName;
+        $object['logo']                 = $this->cLogo;
+        $object['website']              = $this->cWebsite;
+        $object['description']          = $this->cDescription;
+        $object['email']                = $this->cEmail;
+        $object['phone']                = $this->cPhone;
+        $object['facebook']             = $this->cFacebook;
+        $object['twitter']              = $this->cTwitter;
+        $object['linkedin']             = $this->cLinkedIn;
+        $object['instagram']            = $this->cInstagram;
+        $object['pinterest']            = $this->cPinterest;
+        $object['google_plus']          = $this->cGooglePlus;
+
+        return $object;
+    }
 
 }

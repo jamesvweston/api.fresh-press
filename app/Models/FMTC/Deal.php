@@ -7,21 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * @property    int                             $id
- * @property    int                             $merchant_id
+ * @property    int                             $couponid
+ * @property    int                             $merchantid
  * @property    string                          $label
  * @property    string                          $restrictions
  * @property    string                          $coupon
- * @property    string                          $no_code
+ * @property    string                          $nocode
  * @property    string                          $link
- * @property    string                          $direct_link
- * @property    string                          $restrictions
- * @property    string                          $link
- * @property    string                          $coupon
- * @property    \Carbon\Carbon                  $starts_at
- * @property    \Carbon\Carbon|null             $expires_at
- * @property    \Carbon\Carbon                  $created_at
- * @property    \Carbon\Carbon                  $updated_at
+ * @property    string                          $directlink
+ * @property    \Carbon\Carbon                  $begin
+ * @property    \Carbon\Carbon|null             $expire
+ * @property    \Carbon\Carbon                  $addedstamp
+ * @property    \Carbon\Carbon                  $lastupdated
+ *
+ * @property    Merchant                        $merchant
  */
 class Deal extends Model
 {
@@ -32,7 +31,7 @@ class Deal extends Model
 
     protected $primaryKey = 'couponid';
 
-    protected $dates = ['starts_at, expires_at', 'created_at', 'updated_at'];
+    protected $with = ['merchant'];
 
 
     protected static function boot()
@@ -43,21 +42,19 @@ class Deal extends Model
         {
             $builder->select(
                 [
-                    'couponid AS id',
-                    'merchantid AS merchant_id',
+                    'couponid',
+                    'merchantid',
                     'label',
                     'restrictions',
                     'coupon',
-                    'nocode AS no_code',
+                    'nocode',
                     'link',
-                    'directlink AS direct_link',
-                    'restrictions',
-                    'link',
+                    'directlink',
                     'coupon',
-                    \DB::raw('from_unixtime(begin) AS starts_at'),
-                    \DB::raw('from_unixtime(expire) AS expires_at'),
-                    \DB::raw('from_unixtime(addedstamp) AS created_at'),
-                    \DB::raw('from_unixtime(lastupdated) AS updated_at'),
+                    'begin',
+                    'expire',
+                    'addedstamp',
+                    'lastupdated',
                 ]
             );
         });
@@ -72,6 +69,35 @@ class Deal extends Model
                 ->where('deleted', '0');
         });
 
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function merchant ()
+    {
+        return $this->belongsTo(Merchant::class, 'merchantid', 'merchantid');
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $object['id']                   = $this->couponid;
+        $object['label']                = $this->label;
+        $object['restrictions']         = $this->restrictions;
+        $object['no_code']              = $this->nocode;
+        $object['link']                 = $this->link;
+        $object['direct_link']          = $this->directlink;
+        $object['coupon']               = $this->coupon;
+        $object['starts_at']            = $this->begin;
+        $object['expires_at']           = $this->expire;
+        $object['created_at']           = $this->addedstamp;
+        $object['updated_at']           = $this->lastupdated;
+        $object['merchant']             = $this->merchant->toArray();
+
+        return $object;
     }
 
 }
