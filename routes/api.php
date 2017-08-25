@@ -38,6 +38,74 @@ Route::group(['prefix'     => 'deliverable_types'], function () {
 });
 
 
+Route::group(['prefix'     => 'fmtc_categories'], function () {
+
+    Route::get('/', 'FMTC\CategoryController@index');
+    Route::get('/{id}', 'FMTC\CategoryController@show');
+
+});
+
+
+Route::group(['prefix'     => 'fmtc_deal_types'], function () {
+
+    Route::get('/', 'FMTC\DealTypeController@index');
+    Route::get('/{id}', 'FMTC\DealTypeController@show');
+
+});
+
+
+Route::group(['prefix'     => 'fmtc_deals'], function () {
+
+    Route::get('/', 'FMTC\DealController@index');
+    Route::get('/{id}', 'FMTC\DealController@show');
+
+});
+
+
+Route::group(['prefix'     => 'fmtc_master_merchants'], function () {
+
+    Route::get('/', 'FMTC\MasterMerchantController@index');
+    Route::get('/{id}', 'FMTC\MasterMerchantController@show');
+    Route::get('/{id}/domains', 'FMTC\MasterMerchantController@getDomains');
+    Route::get('/{id}/opm', 'FMTC\MasterMerchantController@getOPM');
+    Route::get('/{id}/program_details', 'FMTC\MasterMerchantController@getProgramDetails');
+
+});
+
+
+Route::group(['prefix'     => 'fmtc_merchants'], function () {
+
+    Route::get('/', 'FMTC\MerchantController@index');
+    Route::get('/{id}', 'FMTC\MerchantController@show');
+    Route::get('/{id}/banners', 'FMTC\MerchantController@getBanners');
+
+});
+
+
+Route::group(['prefix'     => 'fmtc_networks'], function () {
+
+    Route::get('/', 'FMTC\NetworkController@index');
+    Route::get('/{id}', 'FMTC\NetworkController@show');
+
+});
+
+
+Route::group(['prefix'     => 'fmtc_opms'], function () {
+
+    Route::get('/', 'FMTC\OPMController@index');
+    Route::get('/{id}', 'FMTC\OPMController@show');
+
+});
+
+
+Route::group(['prefix'     => 'fmtc_program_details'], function () {
+
+    Route::get('/', 'FMTC\ProgramDetailController@index');
+    Route::get('/{id}', 'FMTC\ProgramDetailController@show');
+
+});
+
+
 Route::group(['prefix'     => 'gig_statuses'], function () {
 
     Route::get('/', 'Market\GigStatusController@index');
