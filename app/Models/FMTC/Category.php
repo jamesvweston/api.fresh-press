@@ -39,7 +39,7 @@ class Category extends Model
             );
         });
 
-        static::addGlobalScope('only_active', function (Builder $builder)
+        static::addGlobalScope('tblCategoriesV2_only_active', function (Builder $builder)
         {
             $builder->where('bActive', 1);
         });

@@ -34,7 +34,7 @@ class Network extends Model
             );
         });
 
-        static::addGlobalScope('only_active', function (Builder $builder)
+        static::addGlobalScope('tblNetworks_only_active', function (Builder $builder)
         {
             $builder->where('bActive', 1);
         });

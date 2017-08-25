@@ -126,7 +126,7 @@ class Merchant extends Model
         $object['redirect_url']         = $this->cRedirectURL;
         $object['redirect_supported']   = $this->bRedirectSupported;
         $object['primary_country']      = $this->cPrimaryCountry;
-        $object['logo']                 = 'https://logos.fmtc.co/120x60/' . $this->logo;
+        $object['logo']                 = trim($this->logo) == '' ? null : 'https://logos.fmtc.co/120x60/' . $this->logo;
         $object['homepage_url']          = $this->homepage_url;
 
         $object['shipTos']              = [];

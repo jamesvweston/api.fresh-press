@@ -5,7 +5,6 @@ namespace App\Models\CMS;
 
 use App\Models\Locations\Address;
 use App\Models\Market\Sphere;
-use App\Models\Networks\FavoriteMerchant;
 use App\Models\Networks\NetworkConnection;
 use App\Models\Traits\DBTransactions;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
@@ -20,7 +19,6 @@ use Validator;
  * @property    Address|null                    $billing_address
  * @property    NetworkConnection[]             $network_connections
  * @property    Sphere[]                        $spheres
- * @property    FavoriteMerchant[]              $favorite_merchants
  * @property    \Carbon\Carbon                  $created_at
  * @property    \Carbon\Carbon                  $updated_at
  * @property    \Carbon\Carbon|null             $deleted_at
@@ -28,20 +26,10 @@ use Validator;
 class Influencer extends Model
 {
 
+    protected $connection = 'mysql';    //  This is needed to facilitate cross database relations
+
     use HasTimestamps, SoftDeletes, DBTransactions;
 
-
-    /**
-     * @param array $data
-     */
-    public function __construct($data = [])
-    {
-        $this->user                     = AU::get($data['user']);
-        $this->billing_address          = AU::get($data['billing_address']);
-        $this->favorite_merchants       = AU::get($data['favorite_merchants']);
-        $this->network_connections      = AU::get($data['network_connections']);
-        $this->spheres                  = AU::get($data['spheres']);
-    }
 
     /**
      * @return array
@@ -62,11 +50,12 @@ class Influencer extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function favorite_merchants ()
     {
-        return $this->hasMany(FavoriteMerchant::class);
+        $connection                     = config('database.connections.mysql.database');
+        return $this->belongsToMany(\App\Models\FMTC\MasterMerchant::class, $connection . '.favorite_merchants', 'influencer_id', 'fmtc_master_merchant_id');
     }
 
     /**

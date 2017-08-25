@@ -341,7 +341,6 @@ class ImportFreshPressCommand extends Command
         foreach ($fp_favorites_result AS $fp_favorite)
         {
             $favorite_merchant_data[]   = [
-                'id'                => $fp_favorite->id,
                 'fmtc_master_merchant_id'   => $fp_favorite->fmtc_master_merchant_id,
                 'influencer_id'     => $fp_favorite->user_id,
             ];

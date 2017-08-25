@@ -59,7 +59,7 @@ class Deal extends Model
             );
         });
 
-        static::addGlobalScope('only_active', function (Builder $builder)
+        static::addGlobalScope('tblCouponsActive_only_active', function (Builder $builder)
         {
             $builder
                 ->where('exclusiveid', '0')

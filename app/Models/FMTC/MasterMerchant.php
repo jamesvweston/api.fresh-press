@@ -26,6 +26,8 @@ class MasterMerchant extends Model
 
     protected $primaryKey = 'nMasterID';
 
+    protected $with = ['merchants'];
+
 
     protected static function boot()
     {
@@ -41,15 +43,31 @@ class MasterMerchant extends Model
                     'cHomepageURL',
                     'nSkimlinksID',
                     'nOPMID']);
+            //  ->leftJoin('tblMerchants', 'm.nMasterID', '=', 'tblMerchantsMaster.nMasterID')
+            //  ->groupBy('tblMerchantsMaster.nMasterID')
+            //  ->withoutGlobalScope('tblMerchants_only_active');
+            //  ->where('M.display', '1')
+            //  ->where('M.deleted', '0')
+            //  ->where('M.exclusiveid', 0)
+            //  ->where('M.bPrivateMerchantHub', 0)
         });
     }
-
 
     public function networks ()
     {
         return $this->belongsToMany(Network::class, 'tblMerchants', 'nMasterID', 'networkid')
             ->withoutGlobalScope('tblNetworks_column_mapping')
             ->select(['tblNetworks.networkid', 'tblNetworks.name']);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function influencers ()
+    {
+        $connection                     = config('database.connections.mysql.database');
+        return $this->belongsToMany(\App\Models\CMS\Influencer::class,
+            $connection . '.favorite_merchants', 'fmtc_master_merchant_id', 'influencer_id');
     }
 
     /**
@@ -95,7 +113,7 @@ class MasterMerchant extends Model
         $object['homepage_url']         = $this->cHomepageURL;
         $object['skimlinks_id']         = $this->nSkimlinksID;
         $object['opm_id']               = $this->nOPMID;
-        $object['merchant']             = $this->merchants->first()->toArray();
+        $object['merchant']             = is_null($this->merchants->first()) ? null : $this->merchants->first()->toArray();
 
         return $object;
     }

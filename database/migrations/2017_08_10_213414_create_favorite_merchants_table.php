@@ -14,7 +14,6 @@ class CreateFavoriteMerchantsTable extends Migration
     public function up()
     {
         Schema::create('favorite_merchants', function (Blueprint $table) {
-            $table->increments('id');
 
             $table->integer('fmtc_master_merchant_id')->unsigned()->index();
 

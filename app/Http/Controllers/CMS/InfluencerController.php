@@ -34,7 +34,7 @@ class InfluencerController extends Controller
     public function getFavoriteMerchants (Request $request)
     {
         $influencer                         = $this->getFromRoute($request);
-        return response($influencer->favorite_merchants);
+        return $influencer->favorite_merchants;
     }
 
     public function getNetworkConnections (Request $request)
