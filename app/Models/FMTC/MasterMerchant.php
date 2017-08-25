@@ -48,7 +48,7 @@ class MasterMerchant extends Model
     {
         return $this->hasManyThrough(Network::class, Merchant::class);
     }
-//  select `networkid`, `name` from `tblNetworks` inner join `tblMerchants` on `tblMerchants`.`merchantid` = `tblNetworks`.`merchant_merchantid` where `tblMerchants`.`master_merchant_nMasterID` = 2
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
